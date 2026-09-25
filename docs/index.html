@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Place Value Boutique</title>
+  <meta name="description" content="A shopping-themed place value game for grade 3.">
+  <meta name="theme-color" content="#ff5fa2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="PV Boutique">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="icon-btn" id="homeBtn" aria-label="Back to the mall">🏬</button>
+    <h1 id="title">Place Value Boutique</h1>
+    <div class="topbar-right">
+      <div class="coin-pill" id="coinPill" aria-label="Sparkle Coins"><span class="coin-icon">🪙</span><span id="coinCount">0</span></div>
+      <button class="icon-btn" id="soundBtn" aria-label="Sound on or off">🔔</button>
+    </div>
+  </header>
+  <main id="screen" aria-live="polite"></main>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
