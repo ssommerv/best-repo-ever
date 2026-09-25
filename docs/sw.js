@@ -1,5 +1,5 @@
 // Offline support: serve from cache right away, refresh the cache in the background.
-const CACHE = 'pvb-v1';
+const CACHE = 'pvb-v2';
 const ASSETS = [
   './', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png',

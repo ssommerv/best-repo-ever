@@ -682,6 +682,7 @@
     const redraw = () => {
       $('#matWrap').innerHTML = matHTML(R.counts, R.places, true);
       screen.querySelectorAll('.mat-bill').forEach((b) => {
+        b.disabled = R.locked;
         b.onclick = () => { if (R.locked) return; R.counts[b.dataset.p]--; sfx.tap(); redraw(); };
       });
     };
@@ -697,14 +698,25 @@
     $('#payBtn').onclick = () => {
       if (R.locked) return;
       const paid = R.counts.h * 100 + R.counts.t * 10 + R.counts.o, n = R.q.n, d = digitsOf(n);
-      if (paid === n) return onCorrect();
+      if (paid === n) { onCorrect(); lockRegister(); return; }
       const need = placesFor(n).map((p) => unit(d[p], p)).join(', ');
-      const dir = paid < n ? 'not enough' : 'too much';
-      if (onWrong(`You paid ${money(paid)}. That's ${dir}. ${money(n)} needs ${need}.${pvChart(n)}`)) {
+      const paidMsg = `You paid <b>${money(paid)}</b>. That's ${paid < n ? 'not enough' : 'too much'}.`;
+      const revealed = onWrong(`${paidMsg} ${money(n)} needs ${need}.${pvChart(n)}`, {
+        title: `Here's how to pay ${money(n)} 💡`,
+        body: `${paidMsg} Now the counter shows the right money: <b>${need}</b>.`,
+      });
+      if (revealed) {
         R.counts = { h: d.h, t: d.t, o: d.o };
         redraw();
+        lockRegister();
+        $('#matWrap').classList.add('mat-answer');
       }
     };
+  }
+
+  // Once a register question is finished, make the controls look finished too.
+  function lockRegister() {
+    screen.querySelectorAll('.tray-btn, #clearBtn, #payBtn, .mat-bill').forEach((b) => { b.disabled = true; });
   }
 
   function answerMC(btn, value) {
@@ -740,7 +752,7 @@
   }
 
   // Returns true when the answer is revealed (second miss).
-  function onWrong(hint) {
+  function onWrong(hint, reveal = {}) {
     R.attempts++;
     sfx.bad();
     const card = screen.querySelector('.play');
@@ -751,7 +763,7 @@
     }
     R.locked = true;
     recordResult(R.id, false);
-    showFeedback('reveal', `<div class="fb-title">Let's learn this one together 💡</div><div class="fb-body">${R.q.explain}</div>`);
+    showFeedback('reveal', `<div class="fb-title">${reveal.title || "Let's learn this one together 💡"}</div><div class="fb-body">${reveal.body || R.q.explain}</div>`);
     return true;
   }
 
@@ -761,7 +773,7 @@
     fb.className = `feedback fb-${kind}`;
     fb.innerHTML = html + (withNext ? `<button class="btn primary big" id="nextBtn">${R.index + 1 >= ROUND_LEN ? 'Finish ➜' : 'Next ➜'}</button>` : '');
     if (withNext) $('#nextBtn').onclick = () => { sfx.tap(); R.index++; nextQuestion(); };
-    fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    (withNext ? $('#nextBtn') : fb).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function renderRoundEnd() {
