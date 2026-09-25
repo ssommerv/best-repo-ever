@@ -257,6 +257,14 @@ main {
 .tray-btn { border: 0; background: #fdf2f8; border-radius: 18px; padding: 14px; line-height: 0; }
 .tray-btn:active { transform: scale(0.92); }
 .register-side .actions { margin-top: 0; }
+.tray-btn:disabled { opacity: 0.35; }
+.mat-bill:disabled { cursor: default; }
+#matWrap { position: relative; }
+#matWrap.mat-answer .mat { box-shadow: 0 0 0 5px var(--green), var(--shadow); }
+#matWrap.mat-answer::before {
+  content: "✔ The right money"; position: absolute; z-index: 1; top: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--green); color: #fff; font-weight: 900; font-size: 17px; padding: 4px 14px; border-radius: 12px; white-space: nowrap;
+}
 
 /* Choices */
 .choices { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
