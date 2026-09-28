@@ -16,10 +16,16 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div id="splash" class="splash" role="button" tabindex="0" aria-label="Tap to start">
+    <div class="splash-bg" style="background-image:url(img/hannah-splash.jpg)"></div>
+    <img class="splash-art" src="img/hannah-splash.jpg" alt="Hannah's Mall Spree">
+    <div class="splash-start">Tap to start shopping! ➜</div>
+  </div>
   <header class="topbar">
     <button class="icon-btn" id="homeBtn" aria-label="Back to the mall">🏬</button>
     <h1 id="title">Place Value Boutique</h1>
     <div class="topbar-right">
+      <button class="avatar-btn" id="avatarBtn" aria-label="My Boutique"><img class="avatar" src="img/hannah-head.jpg" alt=""></button>
       <div class="coin-pill" id="coinPill" aria-label="Sparkle Coins"><span class="coin-icon">🪙</span><span id="coinCount">0</span></div>
       <button class="icon-btn" id="soundBtn" aria-label="Sound on or off">🔔</button>
     </div>
