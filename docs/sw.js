@@ -1,5 +1,5 @@
 // Offline support: serve from cache right away, refresh the cache in the background.
-const CACHE = 'pvb-v4';
+const CACHE = 'pvb-v5';
 const ASSETS = [
   './', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './img/hannah-splash.jpg', './img/hannah-head.jpg',
