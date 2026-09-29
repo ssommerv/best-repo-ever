@@ -541,6 +541,7 @@
 
   // ---------- Screens ----------
   const screen = $('#screen');
+  const avatar = (cls = '') => `<img class="avatar ${cls}" src="img/hannah-head.jpg" alt="">`;
   const mallName = () => (S.name ? `${S.name}'s Mall` : 'Place Value Boutique');
 
   function updateTopbar() {
@@ -560,7 +561,7 @@
   function renderWelcome() {
     setScreen(`
       <section class="welcome">
-        <div class="welcome-art">🛍️👛🎀</div>
+        ${avatar('xl')}
         <h2>Welcome, shopper!</h2>
         <p>Every store in this mall is a place value puzzle. Solve them to earn <b>🪙 Sparkle Coins</b> and decorate your very own boutique.</p>
         <label class="field">What's your name?
@@ -588,7 +589,7 @@
     }).join('');
     setScreen(`
       <section class="mall">
-        <p class="mall-hello">Hi${S.name ? ' ' + escapeHTML(S.name) : ''}! Pick a store to play. 👋</p>
+        <div class="guide">${avatar('lg')}<p class="bubble">Hi${S.name ? ' ' + escapeHTML(S.name) : ''}! Pick a store to play. 👋</p></div>
         <div class="store-grid">${cards}</div>
         <div class="mall-extras">
           <button class="extra c-pink" id="shopBtn"><span>🛍️</span>Sparkle Shop<small>Spend your coins</small></button>
@@ -771,7 +772,7 @@
     const fb = $('#fb');
     fb.hidden = false;
     fb.className = `feedback fb-${kind}`;
-    fb.innerHTML = html + (withNext ? `<button class="btn primary big" id="nextBtn">${R.index + 1 >= ROUND_LEN ? 'Finish ➜' : 'Next ➜'}</button>` : '');
+    fb.innerHTML = `<div class="fb-guide">${avatar('md')}<div class="fb-text">${html}</div></div>` + (withNext ? `<button class="btn primary big" id="nextBtn">${R.index + 1 >= ROUND_LEN ? 'Finish ➜' : 'Next ➜'}</button>` : '');
     if (withNext) $('#nextBtn').onclick = () => { sfx.tap(); R.index++; nextQuestion(); };
     (withNext ? $('#nextBtn') : fb).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
@@ -784,6 +785,7 @@
     const msg = starsWon === 3 ? 'Perfect shopping trip!' : starsWon === 2 ? 'Great job!' : 'Nice work, keep practicing!';
     setScreen(`
       <section class="round-end">
+        ${avatar('xl')}
         <div class="big-stars">${'<span>★</span>'.repeat(starsWon)}${'<span class="off">★</span>'.repeat(3 - starsWon)}</div>
         <h2>${msg}</h2>
         <p>You got <b>${R.firstTries} of ${ROUND_LEN}</b> on the first try.</p>
@@ -817,7 +819,7 @@
     }).join('');
     setScreen(`
       <section class="shop">
-        <p class="mall-hello">You have <b>🪙 ${S.coins}</b> Sparkle Coins. What will you buy?</p>
+        <div class="guide">${avatar('lg')}<p class="bubble">You have <b>🪙 ${S.coins}</b> Sparkle Coins. What will you buy?</p></div>
         <h3>Decorations</h3><div class="shop-grid">${decor}</div>
         <h3>Wallpaper</h3><div class="shop-grid">${walls}</div>
         <button class="btn primary big center" id="roomBtn">🏠 See my boutique</button>
@@ -847,7 +849,7 @@
     setScreen(`
       <section class="room-wrap">
         <div class="room wall-${S.wall}">
-          <div class="room-sign">${escapeHTML(S.name || 'My')}${S.name ? "'s" : ''} Boutique</div>
+          <div class="room-sign">${avatar('sm')}${escapeHTML(S.name || 'My')}${S.name ? "'s" : ''} Boutique</div>
           <div class="room-items">${items}</div>
           <div class="room-floor"></div>
         </div>
@@ -922,6 +924,18 @@
   $('#homeBtn').onclick = () => { sfx.tap(); renderMall(); };
   $('#soundBtn').onclick = () => { S.sound = !S.sound; save(); if (S.sound) sfx.tap(); };
   $('#coinPill').onclick = () => renderShop();
+  $('#avatarBtn').onclick = () => { sfx.tap(); renderRoom(); };
+
+  // Loading screen: a tap also unlocks sound on iPad.
+  const splash = $('#splash');
+  const closeSplash = () => {
+    if (splash.classList.contains('out')) return;
+    audio(); if (S.sound) sfx.fanfare();
+    splash.classList.add('out');
+    setTimeout(() => splash.remove(), 500);
+  };
+  splash.onclick = closeSplash;
+  splash.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') closeSplash(); };
   document.addEventListener('gesturestart', (e) => e.preventDefault());
 
   if (S.started || S.name) renderMall(); else renderWelcome();
