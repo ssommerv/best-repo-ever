@@ -1,5 +1,7 @@
 'use strict';
 (() => {
+  const APP_VERSION = '6 (Sept 30, 2026)';
+
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
   const rand = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
@@ -1434,6 +1436,7 @@
     setScreen(`
       <section class="parent">
         <h2>Progress report</h2>
+        <p class="subtle">App version ${APP_VERSION}</p>
         <p class="subtle">Accuracy counts only answers that were right on the first try. Each store levels up after 5 first-try answers in a row and steps back down after 3 misses in a row. You can also set the level yourself.</p>
         <div class="table-wrap"><table>
           <thead><tr><th>Store</th><th>First-try accuracy</th><th>Level</th></tr></thead>
@@ -1498,7 +1501,15 @@
   if (S.started || S.name) renderMall(); else renderWelcome();
 
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {}));
+    // When a newer version takes over, reload right away if she's still on the loading screen.
+    if (navigator.serviceWorker.controller) {
+      let reloading = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (reloading) return;
+        if ($('#splash')) { reloading = true; location.reload(); } else toast('✨ The game was updated! Close and reopen it to see what\'s new.');
+      });
+    }
   }
 
   // Exposed for automated checks of the question generators.
