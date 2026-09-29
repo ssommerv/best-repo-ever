@@ -428,8 +428,19 @@
     make(level) { return spellQuestion(pickSpellWord(), level <= 1 || !canSpeak); },
     home: () => renderSpellHome(),
   };
-  const GAME_IDS = Object.keys(GAMES).filter((id) => !GAMES[id].featured);
-  const ALL_IDS = ['spelling', ...GAME_IDS];
+  GAMES.sell = {
+    name: 'Open for Business', emoji: '🛎️', color: 'yellow', hidden: true,
+    skill: 'Sell to customers and make change (subtraction)',
+    levels: {
+      1: { label: 'Change from $20 and $50', short: '$20 & $50' },
+      2: { label: 'Change from $100s', short: '$100s' },
+      3: { label: 'Two items and big bills', short: 'Big bills' },
+    },
+    make: (level) => changeQuestion(level),
+    home: () => renderRoom(), homeLabel: 'Back to My Boutique',
+  };
+  const GAME_IDS = Object.keys(GAMES).filter((id) => !GAMES[id].featured && !GAMES[id].hidden);
+  const ALL_IDS = ['spelling', ...GAME_IDS, 'sell'];
   const maxLevel = (id) => GAMES[id].maxLevel || 3;
   const levelInfo = (id, lv) => (GAMES[id].levels || LEVELS)[lv];
 
@@ -445,6 +456,62 @@
     { id: 'gem', e: '💎', name: 'Giant gem', cost: 80 }, { id: 'crown', e: '👑', name: 'Golden crown', cost: 100 },
     { id: 'unicorn', e: '🦄', name: 'Real unicorn', cost: 120 }, { id: 'castle', e: '🏰', name: 'Castle', cost: 150 },
   ];
+
+  // ---------- Merchandise: buy it, stock a shelf, sell it ----------
+  const MERCH_CATS = [
+    { id: 'fashion', name: 'Fashion', e: '👗' }, { id: 'accessories', name: 'Accessories', e: '👜' },
+    { id: 'toys', name: 'Toys', e: '🧸' }, { id: 'treats', name: 'Treats', e: '🧁' },
+    { id: 'beauty', name: 'Beauty', e: '💅' }, { id: 'art', name: 'Art & Music', e: '🎨' },
+    { id: 'sports', name: 'Sports', e: '🛼' }, { id: 'pets', name: 'Pets', e: '🐹' },
+  ];
+  const MERCH = [
+    ['fashion', '👗', 'Party dress', 20], ['fashion', '👚', 'Flowy blouse', 12], ['fashion', '👕', 'Graphic tee', 10],
+    ['fashion', '👖', 'Jeans', 14], ['fashion', '🩳', 'Shorts', 10], ['fashion', '🧥', 'Puffy coat', 22],
+    ['fashion', '🩱', 'Swimsuit', 12], ['fashion', '👘', 'Kimono', 24], ['fashion', '🧦', 'Fuzzy socks', 6],
+    ['fashion', '🧣', 'Cozy scarf', 8], ['fashion', '🧤', 'Mittens', 8], ['fashion', '🥋', 'Karate uniform', 18],
+    ['accessories', '👜', 'Handbag', 18], ['accessories', '👛', 'Coin purse', 9], ['accessories', '🎒', 'Backpack', 15],
+    ['accessories', '🕶️', 'Sunglasses', 11], ['accessories', '👒', 'Sun hat', 12], ['accessories', '🎀', 'Hair bow', 5],
+    ['accessories', '👑', 'Tiara', 30], ['accessories', '💍', 'Sparkly ring', 28], ['accessories', '📿', 'Bead bracelet', 7],
+    ['accessories', '⌚', 'Watch', 25], ['accessories', '👟', 'Sneakers', 16], ['accessories', '🩰', 'Ballet shoes', 14],
+    ['accessories', '👢', 'Boots', 18], ['accessories', '👠', 'Fancy shoes', 20], ['accessories', '🌂', 'Umbrella', 9],
+    ['toys', '🧸', 'Teddy bear', 12], ['toys', '🦄', 'Unicorn plush', 16], ['toys', '🪀', 'Yo-yo', 5],
+    ['toys', '🪁', 'Kite', 9], ['toys', '🎲', 'Board game', 11], ['toys', '🧩', 'Puzzle', 9],
+    ['toys', '🪅', 'Piñata', 14], ['toys', '🎮', 'Video game', 35], ['toys', '🤖', 'Robot', 22],
+    ['toys', '🪆', 'Nesting dolls', 13], ['toys', '🎈', 'Balloon', 4], ['toys', '🔮', 'Magic ball', 15],
+    ['treats', '🧁', 'Cupcake', 4], ['treats', '🍩', 'Donut', 3], ['treats', '🍪', 'Cookie', 3],
+    ['treats', '🍭', 'Lollipop', 2], ['treats', '🍫', 'Chocolate bar', 4], ['treats', '🍦', 'Ice cream', 5],
+    ['treats', '🍓', 'Strawberries', 6], ['treats', '🎂', 'Birthday cake', 18], ['treats', '🥤', 'Smoothie', 6],
+    ['treats', '🍿', 'Popcorn', 4], ['treats', '🧋', 'Bubble tea', 7], ['treats', '🍬', 'Candy', 2],
+    ['beauty', '💅', 'Nail polish', 6], ['beauty', '💄', 'Lip gloss', 7], ['beauty', '🧴', 'Lotion', 8],
+    ['beauty', '🪞', 'Hand mirror', 10], ['beauty', '🌸', 'Flower spray', 9], ['beauty', '🧼', 'Fancy soap', 4],
+    ['beauty', '🫧', 'Bubble bath', 8], ['beauty', '🪥', 'Sparkle toothbrush', 3], ['beauty', '💎', 'Gem stickers', 5],
+    ['art', '🎨', 'Paint set', 12], ['art', '🖍️', 'Crayons', 5], ['art', '✏️', 'Pencil', 2],
+    ['art', '📓', 'Notebook', 4], ['art', '📚', 'Book set', 15], ['art', '✂️', 'Scissors', 5],
+    ['art', '🖊️', 'Gel pen', 3], ['art', '🎹', 'Keyboard', 40], ['art', '🎸', 'Guitar', 45],
+    ['art', '📷', 'Camera', 38], ['art', '🎧', 'Headphones', 30], ['art', '🎤', 'Microphone', 20],
+    ['sports', '🛼', 'Roller skates', 24], ['sports', '⚽', 'Soccer ball', 10], ['sports', '🏀', 'Basketball', 10],
+    ['sports', '🏐', 'Volleyball', 10], ['sports', '🏸', 'Badminton set', 12], ['sports', '🛹', 'Skateboard', 26],
+    ['sports', '⛸️', 'Ice skates', 24], ['sports', '🚲', 'Bike', 60], ['sports', '🥏', 'Flying disc', 6],
+    ['sports', '🎳', 'Bowling set', 16], ['sports', '🤸', 'Gym mat', 14], ['sports', '🏊', 'Swim goggles', 7],
+    ['pets', '🐹', 'Hamster', 20], ['pets', '🐰', 'Bunny', 25], ['pets', '🐠', 'Goldfish', 8],
+    ['pets', '🐢', 'Turtle', 22], ['pets', '🦜', 'Parrot', 40], ['pets', '🐱', 'Kitten plush', 14],
+    ['pets', '🦴', 'Dog bone', 3], ['pets', '🐾', 'Paw-print leash', 6], ['pets', '🐶', 'Puppy plush', 14],
+  ].map(([cat, e, name, cost]) => ({ cat, e, name, cost, id: name.toLowerCase().replace(/[^a-z]+/g, '-') }));
+  const MERCH_BY_ID = Object.fromEntries(MERCH.map((m) => [m.id, m]));
+  // Selling earns back the cost plus about 50% profit.
+  const sellValue = (m) => m.cost + Math.ceil(m.cost / 2) + 1;
+
+  const SLOTS_PER_SHELF = 4, MAX_SHELVES = 5;
+  function shelves() {
+    const n = S.shelfCount * SLOTS_PER_SHELF;
+    while (S.shelves.length < n) S.shelves.push(null);
+    return S.shelves;
+  }
+  const onShelf = (id) => shelves().filter((x) => x === id).length;
+  const inStockroom = (id) => (S.inv[id] || 0) - onShelf(id);
+  const stockedSlots = () => shelves().map((id, i) => [id, i]).filter(([id]) => id && MERCH_BY_ID[id]);
+  const shelfCost = () => 40 + (S.shelfCount - 2) * 20;
+
   const WALLS = [
     { id: 'pink', name: 'Bubblegum', cost: 0 }, { id: 'mint', name: 'Mint', cost: 30 },
     { id: 'lavender', name: 'Lavender', cost: 30 }, { id: 'ocean', name: 'Ocean', cost: 40 },
@@ -453,7 +520,7 @@
 
   // ---------- Saved progress ----------
   const KEY = 'pvb-v1';
-  const DEFAULT = { started: false, name: '', coins: 0, levels: {}, streaks: {}, stats: {}, owned: [], walls: ['pink'], wall: 'pink', sound: true, autoRead: false, spell: {}, spellList: null };
+  const DEFAULT = { started: false, name: '', coins: 0, levels: {}, streaks: {}, stats: {}, owned: [], walls: ['pink'], wall: 'pink', sound: true, autoRead: false, spell: {}, spellList: null, inv: {}, shelves: [], shelfCount: 2 };
   const fresh = () => JSON.parse(JSON.stringify(DEFAULT));
   let S = load();
   function load() {
@@ -625,7 +692,7 @@
         <div class="store-grid">${cards}</div>
         <div class="mall-extras">
           <button class="extra c-pink" id="shopBtn"><span>🛍️</span>Sparkle Shop<small>Spend your coins</small></button>
-          <button class="extra c-purple" id="roomBtn"><span>🏠</span>My Boutique<small>See your stuff</small></button>
+          <button class="extra c-purple" id="roomBtn"><span>🏠</span>My Boutique<small>Stock shelves & sell</small></button>
         </div>
         <button class="grownups" id="parentBtn">🔒 Grown-ups</button>
       </section>`, { home: false });
@@ -646,7 +713,8 @@
   let R = null;
 
   function startRound(id) {
-    R = { id, index: 0, firstTries: 0, coins: 0, len: ROUND_LEN, used: [] };
+    const len = id === 'sell' ? Math.min(ROUND_LEN, stockedSlots().length) : ROUND_LEN;
+    R = { id, index: 0, firstTries: 0, coins: 0, len, used: [] };
     nextQuestion();
   }
 
@@ -658,7 +726,7 @@
   }
 
   function nextQuestion() {
-    if (R.index >= R.len) return R.test ? renderTestEnd() : renderRoundEnd();
+    if (R.index >= R.len || (R.id === 'sell' && !stockedSlots().length)) return R.test ? renderTestEnd() : renderRoundEnd();
     R.q = R.test ? spellQuestion(R.order[R.index], false) : GAMES[R.id].make(levelOf(R.id));
     if (R.q.w) R.used.push(R.q.w.word);
     R.attempts = 0;
@@ -703,6 +771,8 @@
         </div>`;
     } else if (q.kind === 'spell') {
       body = spellBody(q);
+    } else if (q.kind === 'change') {
+      body = changeBody(q);
     } else {
       const cls = q.layout === 'deal' ? 'choices deal' : `choices ${q.big ? 'big' : ''} ${q.tags ? 'tags' : ''} n${q.choices.length}`;
       body = `
@@ -718,6 +788,7 @@
     }
     setScreen(`${head}${body}<div id="fb" class="feedback" hidden></div>`, { title: g.name });
     if (q.kind === 'spell') { wireSpell(); return; }
+    if (q.kind === 'change') { wireChange(); return; }
     if (canSpeak) $('#sayBtn').onclick = () => speak(q.speak);
     if (q.kind === 'register') wireRegister();
     else screen.querySelectorAll('.choice').forEach((b) => { b.onclick = () => answerMC(b, q.choices[+b.dataset.i].value); });
@@ -785,14 +856,15 @@
 
   function onCorrect() {
     R.locked = true;
-    const first = R.attempts === 0, earned = first ? 3 : 1;
+    const first = R.attempts === 0, earned = R.q.payout ? R.q.payout(first) : first ? 3 : 1;
     if (first) R.firstTries++;
     R.coins += earned;
     S.coins += earned;
     const change = R.test ? (save(), 0) : recordResult(R.id, first);
     sfx.good(); confetti();
     const cheer = pick(CHEERS);
-    showFeedback('good', `<div class="fb-title">${cheer} <span class="earned">+${earned} 🪙</span></div><div class="fb-body">${R.q.explain}</div>`);
+    const sold = R.q.kind === 'change' ? `<br>🛍️ Sold! ${first ? 'Right on the first try, so you got a tip!' : ''}` : '';
+    showFeedback('good', `<div class="fb-title">${cheer} <span class="earned">+${earned} 🪙</span></div><div class="fb-body">${R.q.explain}${sold}</div>`);
     if (S.sound) setTimeout(() => speak(cheer), 350);
     if (change > 0) setTimeout(() => { sfx.fanfare(); toast(`🎉 Level up! Now playing <b>${levelInfo(R.id, levelOf(R.id)).label}</b>`); }, 700);
   }
@@ -817,13 +889,14 @@
     const fb = $('#fb');
     fb.hidden = false;
     fb.className = `feedback fb-${kind}`;
-    fb.innerHTML = `<div class="fb-guide">${avatar('md')}<div class="fb-text">${html}</div></div>` + (withNext ? `<button class="btn primary big" id="nextBtn">${R.index + 1 >= R.len ? 'Finish ➜' : 'Next ➜'}</button>` : '');
+    fb.innerHTML = `<div class="fb-guide">${avatar('md')}<div class="fb-text">${html}</div></div>` + (withNext ? `<button class="btn primary big" id="nextBtn">${R.index + 1 >= R.len || (R.id === 'sell' && !stockedSlots().length) ? 'Finish ➜' : R.id === 'sell' ? 'Next customer ➜' : 'Next ➜'}</button>` : '');
     if (withNext) $('#nextBtn').onclick = () => { sfx.tap(); R.index++; nextQuestion(); };
     (withNext ? $('#nextBtn') : fb).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function renderRoundEnd() {
-    const g = GAMES[R.id], starsWon = R.firstTries >= 5 ? 3 : R.firstTries >= 3 ? 2 : 1;
+    const g = GAMES[R.id], played = Math.max(1, R.index);
+    const starsWon = R.firstTries >= played ? 3 : R.firstTries / played >= 0.6 ? 2 : 1;
     const bonus = 2 + starsWon * 2;
     S.coins += bonus;
     save();
@@ -833,7 +906,7 @@
         ${avatar('xl')}
         <div class="big-stars">${'<span>★</span>'.repeat(starsWon)}${'<span class="off">★</span>'.repeat(3 - starsWon)}</div>
         <h2>${msg}</h2>
-        <p>You got <b>${R.firstTries} of ${R.len}</b> on the first try.</p>
+        <p>You got <b>${R.firstTries} of ${played}</b> on the first try.</p>
         <div class="coin-total">🪙 ${R.coins} + ${bonus} bonus = <b>${R.coins + bonus} Sparkle Coins</b></div>
         <div class="actions">
           <button class="btn primary big" id="againBtn">Play ${g.name} again</button>
@@ -844,7 +917,12 @@
     if (starsWon === 3) confetti();
     $('#againBtn').onclick = () => startRound(R.id);
     $('#mallBtn').onclick = () => (g.home ? g.home() : renderMall());
-    if (g.home) $('#mallBtn').textContent = `Back to the ${g.name}`;
+    if (g.home) $('#mallBtn').textContent = g.homeLabel || `Back to the ${g.name}`;
+    if (R.id === 'sell') {
+      const more = stockedSlots().length > 0;
+      $('#againBtn').textContent = more ? 'Serve more customers 🛎️' : 'Restock my shelves 📦';
+      $('#againBtn').onclick = more ? startSelling : renderRoom;
+    }
   }
 
   // ---------- Spelling (Letter Bead Bar) ----------
@@ -1048,38 +1126,63 @@
   }
 
   // ---------- Shop & boutique ----------
+  let shopTab = 'fashion';
+  // Re-render a screen without jumping back to the top.
+  function rerenderKeepScroll(fn) { const y = window.scrollY; fn(); window.scrollTo(0, y); }
+
   function renderShop() {
-    const decor = DECOR.map((d) => {
-      const own = S.owned.includes(d.id);
-      return `<div class="shop-item ${own ? 'owned' : ''}">
-        <span class="shop-emoji">${d.e}</span><span class="shop-name">${d.name}</span>
-        ${own ? '<span class="owned-chip">✔ Yours</span>' : `<button class="btn buy" data-kind="decor" data-id="${d.id}" ${S.coins < d.cost ? 'disabled' : ''}>🪙 ${d.cost}</button>`}
-      </div>`;
-    }).join('');
-    const walls = WALLS.filter((w) => w.cost > 0).map((w) => {
-      const own = S.walls.includes(w.id);
-      return `<div class="shop-item ${own ? 'owned' : ''}">
-        <span class="swatch wall-${w.id}"></span><span class="shop-name">${w.name} walls</span>
-        ${own ? '<span class="owned-chip">✔ Yours</span>' : `<button class="btn buy" data-kind="wall" data-id="${w.id}" ${S.coins < w.cost ? 'disabled' : ''}>🪙 ${w.cost}</button>`}
-      </div>`;
-    }).join('');
+    const tabs = [...MERCH_CATS, { id: 'decor', name: 'Decorations', e: '🪴' }, { id: 'walls', name: 'Walls & shelves', e: '🎨' }];
+    const buyBtn = (kind, id, cost) => `<button class="btn buy" data-kind="${kind}" data-id="${id}" ${S.coins < cost ? 'disabled' : ''}>🪙 ${cost}</button>`;
+    let grid, note;
+    if (shopTab === 'decor') {
+      note = 'Decorations make your boutique pretty. They are not for sale.';
+      grid = DECOR.map((d) => {
+        const own = S.owned.includes(d.id);
+        return `<div class="shop-item ${own ? 'owned' : ''}"><span class="shop-emoji">${d.e}</span><span class="shop-name">${d.name}</span>
+          ${own ? '<span class="owned-chip">✔ Yours</span>' : buyBtn('decor', d.id, d.cost)}</div>`;
+      }).join('');
+    } else if (shopTab === 'walls') {
+      note = 'More shelves means more things to sell!';
+      const shelf = S.shelfCount < MAX_SHELVES
+        ? `<div class="shop-item"><span class="shop-emoji">🗄️</span><span class="shop-name">Extra shelf</span><small class="sells">+${SLOTS_PER_SHELF} spots · you have ${S.shelfCount}</small>${buyBtn('shelf', 'shelf', shelfCost())}</div>`
+        : `<div class="shop-item owned"><span class="shop-emoji">🗄️</span><span class="shop-name">Shelves</span><span class="owned-chip">✔ All ${MAX_SHELVES}!</span></div>`;
+      grid = shelf + WALLS.filter((w) => w.cost > 0).map((w) => {
+        const own = S.walls.includes(w.id);
+        return `<div class="shop-item ${own ? 'owned' : ''}"><span class="swatch wall-${w.id}"></span><span class="shop-name">${w.name} walls</span>
+          ${own ? '<span class="owned-chip">✔ Yours</span>' : buyBtn('wall', w.id, w.cost)}</div>`;
+      }).join('');
+    } else {
+      note = 'Buy things for your stockroom, put them on your shelves, then sell them for more coins!';
+      grid = MERCH.filter((m) => m.cat === shopTab).map((m) => `<div class="shop-item">
+          ${S.inv[m.id] ? `<span class="have-chip">You have ${S.inv[m.id]}</span>` : ''}
+          <span class="shop-emoji">${m.e}</span><span class="shop-name">${m.name}</span>
+          <small class="sells">Sells for 🪙 ${sellValue(m)}</small>
+          ${buyBtn('merch', m.id, m.cost)}</div>`).join('');
+    }
     setScreen(`
       <section class="shop">
         <div class="guide">${avatar('lg')}<p class="bubble">You have <b>🪙 ${S.coins}</b> Sparkle Coins. What will you buy?</p></div>
-        <h3>Decorations</h3><div class="shop-grid">${decor}</div>
-        <h3>Wallpaper</h3><div class="shop-grid">${walls}</div>
-        <button class="btn primary big center" id="roomBtn">🏠 See my boutique</button>
+        <div class="shop-tabs" role="tablist">${tabs.map((t) => `<button class="shop-tab ${t.id === shopTab ? 'on' : ''}" data-tab="${t.id}" role="tab" aria-selected="${t.id === shopTab}"><span>${t.e}</span>${t.name}</button>`).join('')}</div>
+        <p class="subtle shop-note">${note}</p>
+        <div class="shop-grid">${grid}</div>
+        <button class="btn primary big center" id="roomBtn">🏠 Go to my boutique</button>
       </section>`, { title: 'Sparkle Shop' });
+    screen.querySelectorAll('.shop-tab').forEach((b) => { b.onclick = () => { sfx.tap(); shopTab = b.dataset.tab; renderShop(); }; });
     screen.querySelectorAll('.buy').forEach((b) => {
       b.onclick = () => {
-        const list = b.dataset.kind === 'wall' ? WALLS : DECOR;
-        const it = list.find((x) => x.id === b.dataset.id);
+        const { kind, id } = b.dataset;
+        const it = kind === 'wall' ? WALLS.find((x) => x.id === id) : kind === 'decor' ? DECOR.find((x) => x.id === id)
+          : kind === 'merch' ? MERCH_BY_ID[id] : { name: 'Extra shelf', e: '🗄️', cost: shelfCost() };
         if (S.coins < it.cost) return;
         S.coins -= it.cost;
-        if (b.dataset.kind === 'wall') { S.walls.push(it.id); S.wall = it.id; } else S.owned.push(it.id);
-        save(); sfx.coin(); confetti();
-        toast(`You bought ${it.e || '🎨'} <b>${it.name}</b>!`);
-        renderShop();
+        if (kind === 'wall') { S.walls.push(id); S.wall = id; }
+        else if (kind === 'decor') S.owned.push(id);
+        else if (kind === 'merch') S.inv[id] = (S.inv[id] || 0) + 1;
+        else { S.shelfCount++; shelves(); }
+        save(); sfx.coin();
+        if (kind !== 'merch') confetti();
+        toast(kind === 'merch' ? `${it.e} <b>${it.name}</b> is in your stockroom! Put it on a shelf to sell it.` : `You bought ${it.e || '🎨'} <b>${it.name}</b>!`);
+        rerenderKeepScroll(renderShop);
       };
     });
     $('#roomBtn').onclick = renderRoom;
@@ -1087,26 +1190,215 @@
 
   function renderRoom() {
     const owned = DECOR.filter((d) => S.owned.includes(d.id));
-    const items = owned.length
-      ? owned.map((d) => `<button class="room-item" data-name="${d.name}" aria-label="${d.name}">${d.e}</button>`).join('')
-      : '<p class="room-empty">Your boutique is empty! Play in the stores to earn 🪙 Sparkle Coins, then visit the Sparkle Shop.</p>';
+    const decor = owned.map((d) => `<button class="room-item" data-name="${d.name}" aria-label="${d.name}">${d.e}</button>`).join('');
+    const slots = shelves(), stocked = stockedSlots().length;
+    const rows = [];
+    for (let r = 0; r < S.shelfCount; r++) {
+      rows.push(`<div class="shelf">${slots.slice(r * SLOTS_PER_SHELF, (r + 1) * SLOTS_PER_SHELF).map((id, j) => {
+        const i = r * SLOTS_PER_SHELF + j, m = id && MERCH_BY_ID[id];
+        return m
+          ? `<button class="slot full" data-slot="${i}" aria-label="${m.name}, tap to take it off the shelf"><span class="slot-emoji">${m.e}</span><span class="slot-tag">🪙 ${sellValue(m)}</span></button>`
+          : `<button class="slot empty" data-slot="${i}" aria-label="Empty shelf spot">+</button>`;
+      }).join('')}</div>`);
+    }
+    const stock = MERCH.filter((m) => inStockroom(m.id) > 0);
+    const stockHTML = stock.length
+      ? stock.map((m) => `<button class="stock-item" data-id="${m.id}" aria-label="${m.name}"><span>${m.e}</span>${inStockroom(m.id) > 1 ? `<b class="stock-count">×${inStockroom(m.id)}</b>` : ''}<small>${m.name}</small></button>`).join('')
+      : '<p class="room-empty">Your stockroom is empty. Buy things in the 🛍️ Sparkle Shop, then put them on your shelves to sell!</p>';
     const walls = WALLS.filter((w) => S.walls.includes(w.id)).map((w) =>
       `<button class="wall-pick ${S.wall === w.id ? 'on' : ''}" data-id="${w.id}"><span class="swatch wall-${w.id}"></span>${w.name}</button>`).join('');
+    const lv = levelOf('sell');
     setScreen(`
       <section class="room-wrap">
         <div class="room wall-${S.wall}">
           <div class="room-sign">${avatar('sm')}${escapeHTML(S.name || 'My')}${S.name ? "'s" : ''} Boutique</div>
-          <div class="room-items">${items}</div>
+          ${decor ? `<div class="room-items">${decor}</div>` : ''}
+          <div class="shelves">${rows.join('')}</div>
           <div class="room-floor"></div>
         </div>
+        <div class="open-row">
+          <button class="btn primary big" id="openBtn" ${stocked ? '' : 'disabled'}>🛎️ Open for business!</button>
+          <small>${stocked ? `${stocked} item${stocked === 1 ? '' : 's'} on your shelves · ${stars(lv)} ${GAMES.sell.levels[lv].label}` : 'Put items on your shelves to open your store.'}</small>
+        </div>
+        <h3 class="stock-title">📦 Stockroom</h3>
+        <p class="subtle">Tap an item to put it on a shelf. Tap an item on a shelf to take it back off.</p>
+        <div class="stockroom">${stockHTML}</div>
         <div class="wall-row">${walls}</div>
-        <button class="btn primary big center" id="shopBtn">🛍️ Go to the Sparkle Shop</button>
+        <button class="btn ghost big center" id="shopBtn">🛍️ Go to the Sparkle Shop</button>
       </section>`, { title: 'My Boutique' });
     screen.querySelectorAll('.room-item').forEach((b) => {
       b.onclick = () => { b.classList.remove('bounce'); void b.offsetWidth; b.classList.add('bounce'); sfx.tap(); if (S.sound) speak(b.dataset.name); };
     });
-    screen.querySelectorAll('.wall-pick').forEach((b) => { b.onclick = () => { S.wall = b.dataset.id; save(); renderRoom(); }; });
+    screen.querySelectorAll('.stock-item').forEach((b) => {
+      b.onclick = () => {
+        const free = shelves().indexOf(null);
+        if (free < 0) return toast(S.shelfCount < MAX_SHELVES ? 'Your shelves are full! Buy another shelf in the Sparkle Shop.' : 'Your shelves are full! Sell some things first.');
+        S.shelves[free] = b.dataset.id; save(); sfx.coin();
+        rerenderKeepScroll(renderRoom);
+      };
+    });
+    screen.querySelectorAll('.slot').forEach((b) => {
+      b.onclick = () => {
+        const i = +b.dataset.slot;
+        if (!S.shelves[i]) return toast(stock.length ? 'Tap something in your stockroom to put it here.' : 'Buy things in the Sparkle Shop to fill your shelves!');
+        S.shelves[i] = null; save(); sfx.tap();
+        rerenderKeepScroll(renderRoom);
+      };
+    });
+    screen.querySelectorAll('.wall-pick').forEach((b) => { b.onclick = () => { S.wall = b.dataset.id; save(); rerenderKeepScroll(renderRoom); }; });
+    $('#openBtn').onclick = () => { sfx.fanfare(); startSelling(); };
     $('#shopBtn').onclick = renderShop;
+  }
+
+  // ---------- Open for Business: making change ----------
+  const CUSTOMERS = [['👩', 'Mia'], ['👧', 'Ava'], ['👵', 'Grandma Rose'], ['👨', 'Mr. Lee'], ['🧒', 'Sam'], ['👦', 'Leo'],
+    ['👩‍🦰', 'Ruby'], ['🧕', 'Amira'], ['👱‍♀️', 'Lily'], ['👩‍🦳', 'Mrs. Green'], ['🧑', 'Jordan'], ['👸', 'Princess Pearl']];
+
+  // Jumps for counting up from the price to the money paid: to the next ten, the next hundred, then the rest.
+  function countUpSteps(from, to) {
+    const steps = [];
+    let cur = from;
+    const jump = (next) => { if (next > cur && next <= to) { steps.push([cur, next]); cur = next; } };
+    if (cur % 10) jump(Math.ceil(cur / 10) * 10);
+    if (cur % 100) jump(Math.ceil(cur / 100) * 100);
+    jump(to);
+    return steps;
+  }
+  const columnSub = (a, b) => `<div class="colsub"><div>${a}</div><div>− ${b}</div><div class="line">${a - b}</div></div>`;
+  const CASH = { 20: 'c20', 50: 'c50', 100: 'c100', 500: 'c500', 1000: 'c1000' };
+  const cashBill = (v) => `<span class="cash ${CASH[v] || 'c100'}"><span>${money(v)}</span></span>`;
+
+  function changeQuestion(level) {
+    let slots = stockedSlots();
+    if (!slots.length) slots = [[pick(MERCH).id, -1]]; // nothing stocked (e.g. automated checks)
+    const two = level >= 3 && slots.length >= 2 && Math.random() < 0.4;
+    const items = shuffle(slots).slice(0, two ? 2 : 1).map(([id, slot]) => ({ m: MERCH_BY_ID[id], slot }));
+    let prices, paid;
+    if (two) {
+      const a = rand(105, 450), b = rand(21, Math.min(399, 950 - a));
+      prices = [a, b];
+      paid = a + b < 500 ? pick([500, 1000]) : 1000;
+    } else if (level <= 1) {
+      paid = pick([20, 50, 50]);
+      prices = [paid === 20 ? rand(11, 19) : rand(21, 49)];
+    } else if (level === 2) {
+      if (Math.random() < 0.45) { prices = [rand(12, 99)]; paid = 100; } else {
+        prices = [rand(101, 899)];
+        paid = Math.ceil(prices[0] / 100) * 100;
+        if (paid === prices[0]) paid += 100;
+      }
+    } else {
+      prices = [rand(101, 989)];
+      paid = prices[0] < 500 ? pick([500, 1000]) : 1000;
+    }
+    const total = prices.reduce((x, y) => x + y, 0), answer = paid - total;
+    const [ce, cname] = pick(CUSTOMERS);
+    const steps = countUpSteps(total, paid);
+    const jumps = `<div class="jumps">${steps.map(([a, b]) => `<span class="jump">${money(a)} → ${money(b)} <b>+${money(b - a)}</b></span>`).join('')}</div>`;
+    const totalLine = two ? `First add: ${money(prices[0])} + ${money(prices[1])} = <b>${money(total)}</b>.<br>` : '';
+    const wants = items.map((it) => `${it.m.e} <b>${it.m.name.toLowerCase()}</b>`).join(' and the ');
+    return {
+      kind: 'change', items, prices, total, paid, answer, customer: [ce, cname],
+      wantsHTML: `Hi! I'd like the ${wants}, please. Here's <b>${money(paid)}</b>.`,
+      speak: `Hi! I'd like the ${items.map((it) => it.m.name).join(' and the ')}, please. Here's ${paid} dollars. How much change do I get?`,
+      hintSteps: two
+        ? `Two things! First add ${money(prices[0])} + ${money(prices[1])}. Then count up from your total to ${money(paid)}: to the next ten, then the next hundred, then to ${money(paid)}.`
+        : `Count up from the price: ${[total, ...steps.map(([, b]) => b)].map(money).join(' → ')}. How much did you add in all?`,
+      explain: `${totalLine}Count up from ${money(total)} to ${money(paid)}:${jumps}${steps.map(([a, b]) => b - a).join(' + ')} = <b>${money(answer)}</b> change.`,
+      work: columnSub(paid, total),
+    };
+  }
+
+  function changeBody(q) {
+    const [ce, cname] = q.customer;
+    const itemsHTML = q.items.map((it, i) => `<div class="sale-item"><span class="sale-emoji">${it.m.e}</span>${priceTag(q.prices[i])}</div>`)
+      .join('<span class="sale-plus">+</span>');
+    const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '⌫', '0'].map((k) =>
+      `<button class="pad-key" data-k="${k}" aria-label="${k === '⌫' ? 'Delete' : k}">${k}</button>`).join('');
+    return `
+      <div class="play split sell">
+        <div class="q-card">
+          <div class="customer"><span class="cust-emoji" aria-label="${cname}">${ce}</span>
+            <p class="bubble cust-bubble"><small>${cname}</small>${q.wantsHTML}${canSpeak ? ' <button class="say" id="sayBtn" aria-label="Read it to me">🔊</button>' : ''}</p></div>
+          <div class="sale-row">
+            <div class="sale-items">${itemsHTML}</div>
+            <div class="paid"><small>${cname} pays</small>${cashBill(q.paid)}</div>
+          </div>
+        </div>
+        <div class="register-side">
+          <p class="prompt">How much change do you give back?</p>
+          <div class="change-box"><span class="cb-display" id="cbDisplay">$<span id="cbDigits"></span><span class="cb-cursor">▌</span></span></div>
+          <div class="keypad">${keys}<button class="pad-key give" id="giveBtn">Give change ✔</button></div>
+        </div>
+      </div>`;
+  }
+
+  // Take sold items off the shelves.
+  function sellItems(q) {
+    for (const it of q.items) {
+      if (it.slot < 0 || S.shelves[it.slot] !== it.m.id) continue;
+      S.shelves[it.slot] = null;
+      S.inv[it.m.id] = Math.max(0, (S.inv[it.m.id] || 0) - 1);
+      if (!S.inv[it.m.id]) delete S.inv[it.m.id];
+    }
+    save();
+  }
+  const saleValue = (q) => q.items.reduce((a, it) => a + sellValue(it.m), 0);
+  const saleCost = (q) => q.items.reduce((a, it) => a + it.m.cost, 0);
+
+  function wireChange() {
+    const q = R.q;
+    R.typed = '';
+    const draw = () => { $('#cbDigits').textContent = R.typed; };
+    const add = (k) => {
+      if (R.locked) return;
+      if (k === '⌫') R.typed = R.typed.slice(0, -1);
+      else if (R.typed.length < 4) R.typed = (R.typed + k).replace(/^0+(?=\d)/, '');
+      sfx.tap(); draw();
+    };
+    const give = () => {
+      if (R.locked) return;
+      if (!R.typed) return toast('Type the change on the keypad first!');
+      const typed = +R.typed;
+      if (typed === q.answer) {
+        sellItems(q);
+        q.payout = (first) => saleValue(q) + (first ? 2 : 0);
+        lockChange(); onCorrect();
+        return;
+      }
+      const dir = typed > q.answer ? 'That is too much change. 😮' : 'That is not enough change.';
+      const revealed = onWrong(`${dir} ${q.hintSteps}`, {
+        title: `Here's how to make change 💡`,
+        body: `You gave ${money(typed)}. ${q.explain}${q.work}<br>🛍️ ${q.customer[1]} still bought it. You got your 🪙 ${saleCost(q)} back.`,
+      });
+      if (revealed) {
+        sellItems(q);
+        S.coins += saleCost(q); R.coins += saleCost(q); save();
+        R.typed = String(q.answer); draw();
+        lockChange();
+      } else { R.typed = ''; draw(); }
+    };
+    screen.querySelectorAll('.pad-key[data-k]').forEach((b) => { b.onclick = () => add(b.dataset.k); });
+    $('#giveBtn').onclick = give;
+    R.keyHandler = (e) => {
+      if (/^\d$/.test(e.key)) add(e.key);
+      else if (e.key === 'Backspace') add('⌫');
+      else if (e.key === 'Enter') give();
+    };
+    if (canSpeak) $('#sayBtn').onclick = () => speak(q.speak);
+    if (S.autoRead) speak(q.speak);
+  }
+
+  function lockChange() {
+    screen.querySelectorAll('.pad-key').forEach((b) => { b.disabled = true; });
+    const cur = screen.querySelector('.cb-cursor');
+    if (cur) cur.remove();
+  }
+
+  function startSelling() {
+    const n = stockedSlots().length;
+    if (!n) { toast('Put some items on your shelves first!'); return renderRoom(); }
+    startRound('sell');
   }
 
   // ---------- Grown-ups ----------
@@ -1199,7 +1491,8 @@
   splash.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') closeSplash(); };
   document.addEventListener('gesturestart', (e) => e.preventDefault());
   document.addEventListener('keydown', (e) => {
-    if (R && R.q && R.q.kind === 'spell' && $('#bracelet') && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) R.keyHandler(e);
+    if (!R || !R.q || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    if ((R.q.kind === 'spell' && $('#bracelet')) || (R.q.kind === 'change' && $('#cbDigits'))) R.keyHandler(e);
   });
 
   if (S.started || S.name) renderMall(); else renderWelcome();
@@ -1209,5 +1502,5 @@
   }
 
   // Exposed for automated checks of the question generators.
-  window.__PVB = { GAMES, words, price, get round() { return R; } };
+  window.__PVB = { GAMES, words, price, MERCH_BY_ID, get round() { return R; } };
 })();
