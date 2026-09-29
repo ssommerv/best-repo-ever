@@ -420,7 +420,18 @@
       },
     },
   };
-  const GAME_IDS = Object.keys(GAMES);
+  GAMES.spelling = {
+    name: 'Letter Bead Bar', emoji: '📿', color: 'pink', featured: true,
+    skill: 'Spell your weekly spelling words',
+    maxLevel: 2,
+    levels: { 1: { label: 'Peek, then spell', short: 'Peek first' }, 2: { label: 'Listen only (like the test)', short: 'Test style' } },
+    make(level) { return spellQuestion(pickSpellWord(), level <= 1 || !canSpeak); },
+    home: () => renderSpellHome(),
+  };
+  const GAME_IDS = Object.keys(GAMES).filter((id) => !GAMES[id].featured);
+  const ALL_IDS = ['spelling', ...GAME_IDS];
+  const maxLevel = (id) => GAMES[id].maxLevel || 3;
+  const levelInfo = (id, lv) => (GAMES[id].levels || LEVELS)[lv];
 
   // ---------- Rewards ----------
   const DECOR = [
@@ -442,7 +453,7 @@
 
   // ---------- Saved progress ----------
   const KEY = 'pvb-v1';
-  const DEFAULT = { started: false, name: '', coins: 0, levels: {}, streaks: {}, stats: {}, owned: [], walls: ['pink'], wall: 'pink', sound: true, autoRead: false };
+  const DEFAULT = { started: false, name: '', coins: 0, levels: {}, streaks: {}, stats: {}, owned: [], walls: ['pink'], wall: 'pink', sound: true, autoRead: false, spell: {}, spellList: null };
   const fresh = () => JSON.parse(JSON.stringify(DEFAULT));
   let S = load();
   function load() {
@@ -466,7 +477,7 @@
     const lv = levelOf(id);
     if (firstTry) {
       s = s >= 0 ? s + 1 : 1;
-      if (s >= 5 && lv < 3) { S.levels[id] = lv + 1; s = 0; change = 1; }
+      if (s >= 5 && lv < maxLevel(id)) { S.levels[id] = lv + 1; s = 0; change = 1; }
     } else {
       s = s <= 0 ? s - 1 : -1;
       if (s <= -3 && lv > 1) { S.levels[id] = lv - 1; s = 0; change = -1; }
@@ -509,6 +520,16 @@
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'en-US'; u.rate = 0.9; u.pitch = 1.1;
     speechSynthesis.speak(u);
+  }
+
+  function speakSeq(parts) {
+    if (!canSpeak) return;
+    speechSynthesis.cancel();
+    for (const [text, rate] of parts) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US'; u.rate = rate || 0.9; u.pitch = 1.1;
+      speechSynthesis.speak(u);
+    }
   }
 
   function confetti() {
@@ -574,7 +595,7 @@
     $('#nameInput').onkeydown = (e) => { if (e.key === 'Enter') go(); };
   }
 
-  function stars(n) { return '★'.repeat(n) + '☆'.repeat(3 - n); }
+  function stars(n, max = 3) { return '★'.repeat(n) + '☆'.repeat(max - n); }
 
   function renderMall() {
     const cards = GAME_IDS.map((id) => {
@@ -587,9 +608,20 @@
         <span class="store-level" aria-label="Level ${lv}">${stars(lv)} <small>${LEVELS[lv].short}</small></span>
       </button>`;
     }).join('');
+    const sp = GAMES.spelling, spLv = levelOf('spelling');
+    const featured = `<button class="store featured c-${sp.color}" data-game="spelling">
+        <span class="store-awning"></span>
+        <span class="store-emoji">${sp.emoji}</span>
+        <span class="featured-text">
+          <span class="store-name">${sp.name}</span>
+          <span class="store-skill">${sp.skill}: ${spellWords().length} words</span>
+          <span class="store-level" aria-label="Level ${spLv}">${stars(spLv, 2)} <small>${sp.levels[spLv].short}</small></span>
+        </span>
+      </button>`;
     setScreen(`
       <section class="mall">
         <div class="guide">${avatar('lg')}<p class="bubble">Hi${S.name ? ' ' + escapeHTML(S.name) : ''}! Pick a store to play. 👋</p></div>
+        ${featured}
         <div class="store-grid">${cards}</div>
         <div class="mall-extras">
           <button class="extra c-pink" id="shopBtn"><span>🛍️</span>Sparkle Shop<small>Spend your coins</small></button>
@@ -597,7 +629,9 @@
         </div>
         <button class="grownups" id="parentBtn">🔒 Grown-ups</button>
       </section>`, { home: false });
-    screen.querySelectorAll('.store').forEach((b) => { b.onclick = () => { sfx.tap(); startRound(b.dataset.game); }; });
+    screen.querySelectorAll('.store').forEach((b) => {
+      b.onclick = () => { sfx.tap(); const g = GAMES[b.dataset.game]; if (g.home) g.home(); else startRound(b.dataset.game); };
+    });
     $('#shopBtn').onclick = () => { sfx.tap(); renderShop(); };
     $('#roomBtn').onclick = () => { sfx.tap(); renderRoom(); };
     $('#parentBtn').onclick = renderParentGate;
@@ -612,20 +646,28 @@
   let R = null;
 
   function startRound(id) {
-    R = { id, index: 0, firstTries: 0, coins: 0 };
+    R = { id, index: 0, firstTries: 0, coins: 0, len: ROUND_LEN, used: [] };
+    nextQuestion();
+  }
+
+  // Spelling practice test: every word once, one try each, no hints.
+  function startSpellTest() {
+    const order = shuffle(spellWords());
+    R = { id: 'spelling', test: true, order, results: [], index: 0, firstTries: 0, coins: 0, len: order.length, used: [] };
     nextQuestion();
   }
 
   function nextQuestion() {
-    if (R.index >= ROUND_LEN) return renderRoundEnd();
-    R.q = GAMES[R.id].make(levelOf(R.id));
+    if (R.index >= R.len) return R.test ? renderTestEnd() : renderRoundEnd();
+    R.q = R.test ? spellQuestion(R.order[R.index], false) : GAMES[R.id].make(levelOf(R.id));
+    if (R.q.w) R.used.push(R.q.w.word);
     R.attempts = 0;
     R.locked = false;
     renderQuestion();
   }
 
   function dotsHTML() {
-    return Array.from({ length: ROUND_LEN }, (_, i) =>
+    return Array.from({ length: R.len }, (_, i) =>
       `<span class="dot ${i < R.index ? 'done' : i === R.index ? 'now' : ''}"></span>`).join('');
   }
 
@@ -634,8 +676,8 @@
     const head = `
       <div class="game-head c-${g.color}">
         <span class="game-emoji">${g.emoji}</span>
-        <div class="dots" aria-label="Question ${R.index + 1} of ${ROUND_LEN}">${dotsHTML()}</div>
-        <span class="level-chip">${stars(lv)}</span>
+        <div class="dots ${R.len > 8 ? 'many' : ''}" aria-label="Question ${R.index + 1} of ${R.len}">${dotsHTML()}</div>
+        <span class="level-chip">${R.test ? 'Test' : stars(lv, maxLevel(R.id))}</span>
       </div>`;
     const sayBtn = canSpeak ? '<button class="say" id="sayBtn" aria-label="Read it to me">🔊</button>' : '';
     let body;
@@ -659,6 +701,8 @@
             </div>
           </div>
         </div>`;
+    } else if (q.kind === 'spell') {
+      body = spellBody(q);
     } else {
       const cls = q.layout === 'deal' ? 'choices deal' : `choices ${q.big ? 'big' : ''} ${q.tags ? 'tags' : ''} n${q.choices.length}`;
       body = `
@@ -673,6 +717,7 @@
         </div>`;
     }
     setScreen(`${head}${body}<div id="fb" class="feedback" hidden></div>`, { title: g.name });
+    if (q.kind === 'spell') { wireSpell(); return; }
     if (canSpeak) $('#sayBtn').onclick = () => speak(q.speak);
     if (q.kind === 'register') wireRegister();
     else screen.querySelectorAll('.choice').forEach((b) => { b.onclick = () => answerMC(b, q.choices[+b.dataset.i].value); });
@@ -744,12 +789,12 @@
     if (first) R.firstTries++;
     R.coins += earned;
     S.coins += earned;
-    const change = recordResult(R.id, first);
+    const change = R.test ? (save(), 0) : recordResult(R.id, first);
     sfx.good(); confetti();
     const cheer = pick(CHEERS);
     showFeedback('good', `<div class="fb-title">${cheer} <span class="earned">+${earned} 🪙</span></div><div class="fb-body">${R.q.explain}</div>`);
     if (S.sound) setTimeout(() => speak(cheer), 350);
-    if (change > 0) setTimeout(() => { sfx.fanfare(); toast(`🎉 Level up! Now playing <b>${LEVELS[levelOf(R.id)].label}</b>`); }, 700);
+    if (change > 0) setTimeout(() => { sfx.fanfare(); toast(`🎉 Level up! Now playing <b>${levelInfo(R.id, levelOf(R.id)).label}</b>`); }, 700);
   }
 
   // Returns true when the answer is revealed (second miss).
@@ -758,12 +803,12 @@
     sfx.bad();
     const card = screen.querySelector('.play');
     card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
-    if (R.attempts === 1) {
+    if (R.attempts === 1 && !R.test) {
       showFeedback('hint', `<div class="fb-title">${pick(['So close! Here is a clue:', 'Almost! Try again.', 'Hmm, not quite. Clue:'])}</div><div class="fb-body">${hint}</div>`, false);
       return false;
     }
     R.locked = true;
-    recordResult(R.id, false);
+    if (!R.test) recordResult(R.id, false);
     showFeedback('reveal', `<div class="fb-title">${reveal.title || "Let's learn this one together 💡"}</div><div class="fb-body">${reveal.body || R.q.explain}</div>`);
     return true;
   }
@@ -772,7 +817,7 @@
     const fb = $('#fb');
     fb.hidden = false;
     fb.className = `feedback fb-${kind}`;
-    fb.innerHTML = `<div class="fb-guide">${avatar('md')}<div class="fb-text">${html}</div></div>` + (withNext ? `<button class="btn primary big" id="nextBtn">${R.index + 1 >= ROUND_LEN ? 'Finish ➜' : 'Next ➜'}</button>` : '');
+    fb.innerHTML = `<div class="fb-guide">${avatar('md')}<div class="fb-text">${html}</div></div>` + (withNext ? `<button class="btn primary big" id="nextBtn">${R.index + 1 >= R.len ? 'Finish ➜' : 'Next ➜'}</button>` : '');
     if (withNext) $('#nextBtn').onclick = () => { sfx.tap(); R.index++; nextQuestion(); };
     (withNext ? $('#nextBtn') : fb).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
@@ -788,7 +833,7 @@
         ${avatar('xl')}
         <div class="big-stars">${'<span>★</span>'.repeat(starsWon)}${'<span class="off">★</span>'.repeat(3 - starsWon)}</div>
         <h2>${msg}</h2>
-        <p>You got <b>${R.firstTries} of ${ROUND_LEN}</b> on the first try.</p>
+        <p>You got <b>${R.firstTries} of ${R.len}</b> on the first try.</p>
         <div class="coin-total">🪙 ${R.coins} + ${bonus} bonus = <b>${R.coins + bonus} Sparkle Coins</b></div>
         <div class="actions">
           <button class="btn primary big" id="againBtn">Play ${g.name} again</button>
@@ -798,7 +843,208 @@
     sfx.fanfare();
     if (starsWon === 3) confetti();
     $('#againBtn').onclick = () => startRound(R.id);
-    $('#mallBtn').onclick = renderMall;
+    $('#mallBtn').onclick = () => (g.home ? g.home() : renderMall());
+    if (g.home) $('#mallBtn').textContent = `Back to the ${g.name}`;
+  }
+
+  // ---------- Spelling (Letter Bead Bar) ----------
+  // [bracketed] letters are the tricky part, highlighted when the answer is shown.
+  const SPELL_DEFAULT = [
+    ['pi[tch]', 'At the mall concert, the singer hit a high pitch.', 'After a short vowel, the “ch” sound is spelled <b>t-c-h</b>.'],
+    ['dri[nk]', 'I bought a cold drink at the food court.', 'Stretch it out: d-r-i-n-k. It ends with <b>n-k</b>.'],
+    ['sw[i]m', 'I need a new suit to swim in this summer.', 'Stretch it out: s-w-i-m. The <b>i</b> is short, like in “him”.'],
+    ['l[i]f[e]', 'This is the best shopping trip of my life!', 'The silent <b>e</b> at the end makes the <b>i</b> say its name.'],
+    ['[wh][i]l[e]', 'Wait here while I try on these shoes.', 'It starts with <b>w-h</b>, and the silent <b>e</b> makes the <b>i</b> say its name.'],
+    ['[I]', 'I love the sparkly store at the mall.', 'When <b>I</b> means me, it is always one capital letter.'],
+    ['m[y]', 'My bag is full of new clothes.', 'The <b>y</b> at the end says “i”, like in why and try.'],
+    ['t[igh]t', 'These jeans are too tight, so I need a bigger size.', '<b>i-g-h</b> together says “i”, like in night and light.'],
+    ['b[u]y', 'Can we buy a new backpack for school?', 'Tricky word! The <b>u</b> is silent: b-u-y.'],
+    ['[eye]', 'That shiny necklace caught my eye.', 'Tricky word! <b>e-y-e</b> is spelled the same forwards and backwards.'],
+    ['[wh]i[ch]', 'Which color shirt should I get?', 'It starts with <b>w-h</b> and ends with <b>c-h</b>.'],
+    ['f[i]nd', 'I cannot find my size in this store.', 'The <b>i</b> says its name before <b>n-d</b>, like in kind and mind.'],
+    ['[wh][y]', 'Why is the toy store so busy today?', 'It starts with <b>w-h</b>, and the <b>y</b> says “i”.'],
+    ['k[i]nd', 'The cashier was very kind to us.', 'The <b>i</b> says its name before <b>n-d</b>, like in find and mind.'],
+    ['tr[y]', "Let's try on the sunglasses!", 'The <b>y</b> at the end says “i”, like in my and why.'],
+  ];
+  const plainWord = (marked) => marked.replace(/[[\]]/g, '');
+  const SPELL_INFO = Object.fromEntries(SPELL_DEFAULT.map(([m, s, tip]) => [plainWord(m).toLowerCase(), { marked: m, sentence: s, tip }]));
+
+  // The active list: the default, or one a grown-up typed in ("word | sentence" per line).
+  function spellWords() {
+    const custom = Array.isArray(S.spellList) && S.spellList.length ? S.spellList : null;
+    const rows = custom || SPELL_DEFAULT.map(([m, s]) => [plainWord(m), s]);
+    return rows.map(([word, sentence]) => {
+      const info = SPELL_INFO[word.toLowerCase()] || {};
+      return { word, sentence: sentence || info.sentence || '', tip: info.tip || '', marked: info.marked || word };
+    });
+  }
+  const markHTML = (marked) => escapeHTML(marked).replace(/\[([^\]]*)\]/g, '<mark>$1</mark>');
+  const sayWord = (w) => (w.sentence ? [[w.word, 0.75], [w.sentence, 0.9], [w.word, 0.75]] : [[w.word, 0.75], [w.word, 0.75]]);
+
+  function pickSpellWord() {
+    const list = spellWords(), used = (R && R.used) || [];
+    let pool = list.filter((w) => !used.includes(w.word));
+    if (!pool.length) pool = list;
+    // Words missed more often come up more often.
+    const weight = (w) => { const st = S.spell[w.word.toLowerCase()]; return 1 + (st ? (st.total - st.right) * 2 : 1); };
+    let r = Math.random() * pool.reduce((a, w) => a + weight(w), 0);
+    for (const w of pool) { r -= weight(w); if (r <= 0) return w; }
+    return pool[pool.length - 1];
+  }
+
+  function spellQuestion(w, peek) {
+    return {
+      kind: 'spell', w, peek, speakParts: sayWord(w), speak: `${w.word}. ${w.sentence} ${w.word}.`,
+      explain: `<span class="spelled">${markHTML(w.marked)}</span>${w.tip ? `<br>${w.tip}` : ''}`,
+    };
+  }
+
+  function recordSpell(word, ok, typed) {
+    const k = word.toLowerCase(), st = S.spell[k] || (S.spell[k] = { right: 0, total: 0 });
+    st.total++;
+    if (ok) st.right++; else st.last = typed;
+    save();
+  }
+
+  const KEY_ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  const BEAD_COLORS = ['#ff8cbf', '#b79bff', '#5ed8c6', '#fcd05b', '#fdae72', '#93c3fd'];
+  const beadColor = (ch) => BEAD_COLORS[(ch.charCodeAt(0) - 97 + 60) % BEAD_COLORS.length];
+
+  function spellBody(q) {
+    const keys = KEY_ROWS.map((row) => `<div class="key-row">${[...row].map((ch) =>
+      `<button class="bead-key" data-ch="${ch}" style="--bead:${beadColor(ch)}" aria-label="${ch}">${ch}</button>`).join('')}</div>`).join('');
+    const listen = canSpeak ? `
+      <div class="listen-row">
+        <button class="btn listen" id="hearBtn">🔊 Hear the word</button>
+        <button class="btn ghost slow" id="slowBtn">🐢 Slowly</button>
+      </div>` : '';
+    const peek = q.peek ? `<div class="peek" id="peek"><small>Look closely, then spell it!</small><span class="peek-word">${markHTML(q.w.marked)}</span><small>${escapeHTML(q.w.sentence)}</small></div>` : '';
+    return `
+      <div class="play spell">
+        <div class="q-card">
+          <p class="prompt">📿 A customer wants a bracelet that spells the word you hear.</p>
+          ${listen}${peek}
+        </div>
+        <div class="bracelet" id="bracelet"></div>
+        <div class="keyboard">${keys}</div>
+        <div class="actions">
+          <button class="btn ghost" id="backBtn">⌫ Take off a bead</button>
+          <button class="btn primary" id="doneBtn">Done ✔</button>
+        </div>
+      </div>`;
+  }
+
+  function drawBracelet(marks) {
+    const typed = R.typed;
+    const beads = [...typed].map((ch, i) => `<span class="bead ${marks ? (marks[i] ? 'ok' : 'bad') : ''}" style="--bead:${beadColor(ch.toLowerCase())}">${escapeHTML(ch)}</span>`).join('');
+    $('#bracelet').innerHTML = `<span class="clasp"></span>${beads || '<span class="bracelet-empty">Tap the letter beads to spell the word</span>'}<span class="clasp"></span>`;
+  }
+
+  function wireSpell() {
+    const q = R.q;
+    R.typed = '';
+    drawBracelet();
+    const add = (ch) => {
+      if (R.locked || R.typed.length >= 14) return;
+      const peek = $('#peek');
+      if (peek) peek.classList.add('covered');
+      R.typed += ch; sfx.tap(); drawBracelet();
+    };
+    const back = () => { if (R.locked || !R.typed) return; R.typed = R.typed.slice(0, -1); drawBracelet(); };
+    const done = () => {
+      if (R.locked) return;
+      if (!R.typed) return toast('Tap some letter beads first!');
+      const typed = R.typed, target = q.w.word.toLowerCase();
+      if (typed.toLowerCase() === target) {
+        recordSpell(q.w.word, R.attempts === 0 || R.test, typed);
+        R.typed = q.w.word; drawBracelet([...q.w.word].map(() => true));
+        if (R.test) R.results.push({ word: q.w.word, typed, ok: true });
+        lockSpell(); onCorrect();
+        return;
+      }
+      const marks = [...typed].map((ch, i) => ch.toLowerCase() === target[i]);
+      drawBracelet(marks);
+      const right = marks.filter(Boolean).length;
+      const hint = `The word has <b>${target.length}</b> letter${target.length === 1 ? '' : 's'}. ${right ? `The <span class="ok-txt">green</span> beads are in the right spot.` : ''} Listen again and fix the <span class="bad-txt">red</span> beads.${q.w.tip ? `<br>💡 ${q.w.tip}` : ''}`;
+      const revealed = onWrong(hint, {
+        title: `It's spelled like this 💡`,
+        body: `You spelled <s>${escapeHTML(typed)}</s>. ${q.explain}`,
+      });
+      if (revealed) {
+        recordSpell(q.w.word, false, typed);
+        if (R.test) R.results.push({ word: q.w.word, typed, ok: false });
+        R.typed = q.w.word; drawBracelet([...q.w.word].map(() => true));
+        lockSpell();
+      } else speakSeq([[q.w.word, 0.75]]);
+    };
+    screen.querySelectorAll('.bead-key').forEach((b) => { b.onclick = () => add(b.dataset.ch); });
+    $('#backBtn').onclick = back;
+    $('#doneBtn').onclick = done;
+    R.keyHandler = (e) => {
+      if (/^[a-z]$/i.test(e.key)) add(e.key.toLowerCase());
+      else if (e.key === 'Backspace') back();
+      else if (e.key === 'Enter') done();
+    };
+    if (canSpeak) {
+      $('#hearBtn').onclick = () => speakSeq(q.speakParts);
+      $('#slowBtn').onclick = () => speakSeq([[q.w.word, 0.45]]);
+      speakSeq(q.speakParts);
+    }
+  }
+
+  function lockSpell() {
+    screen.querySelectorAll('.bead-key, #backBtn, #doneBtn').forEach((b) => { b.disabled = true; });
+    const peek = $('#peek');
+    if (peek) peek.classList.remove('covered');
+  }
+
+  function renderSpellHome() {
+    const words = spellWords(), g = GAMES.spelling, lv = levelOf('spelling');
+    const chips = words.map((w, i) => {
+      const st = S.spell[w.word.toLowerCase()];
+      const cls = !st ? '' : st.right === st.total ? 'ok' : st.right / st.total >= 0.5 ? 'mid' : 'low';
+      return `<button class="word-chip ${cls}" data-i="${i}">${canSpeak ? '🔊 ' : ''}${escapeHTML(w.word)}</button>`;
+    }).join('');
+    setScreen(`
+      <section class="spell-home">
+        <div class="guide">${avatar('lg')}<p class="bubble">Customers want bracelets with your spelling words! Listen, then spell with beads. 📿</p></div>
+        <div class="spell-modes">
+          <button class="mode-card c-pink" id="practiceBtn"><span class="mode-emoji">📿</span><b>Practice</b><small>5 words with clues · ${g.levels[lv].label}</small></button>
+          <button class="mode-card c-purple" id="testBtn"><span class="mode-emoji">📝</span><b>Practice test</b><small>All ${words.length} words, one try each, just like Friday</small></button>
+        </div>
+        <h3>Study the list</h3>
+        <p class="subtle">Tap a word to hear it in a sentence. Colors show how you're doing: <span class="ok-txt">green</span> = always right, <span class="mid-txt">yellow</span> = sometimes, <span class="bad-txt">red</span> = needs practice.</p>
+        <div class="word-chips">${chips}</div>
+      </section>`, { title: g.name });
+    $('#practiceBtn').onclick = () => { sfx.tap(); startRound('spelling'); };
+    $('#testBtn').onclick = () => { sfx.tap(); startSpellTest(); };
+    screen.querySelectorAll('.word-chip').forEach((b) => { b.onclick = () => speakSeq(sayWord(words[+b.dataset.i])); });
+  }
+
+  function renderTestEnd() {
+    const n = R.results.length, right = R.results.filter((r) => r.ok).length;
+    const bonus = right * 2;
+    S.coins += bonus;
+    save();
+    const pct = n ? right / n : 0;
+    const msg = pct === 1 ? 'Perfect! You are ready for Friday! 🎉' : pct >= 0.8 ? 'Great job! Almost there!' : 'Good practice! Keep going!';
+    const rows = R.results.map((r) => `<li class="${r.ok ? 'ok' : 'bad'}"><span>${r.ok ? '✔' : '✘'}</span><b>${escapeHTML(r.word)}</b>${r.ok ? '' : ` <s>${escapeHTML(r.typed)}</s>`}</li>`).join('');
+    setScreen(`
+      <section class="round-end test-end">
+        ${avatar('xl')}
+        <h2>${msg}</h2>
+        <p>You spelled <b>${right} of ${n}</b> words correctly.</p>
+        <ul class="test-results">${rows}</ul>
+        <div class="coin-total">🪙 ${R.coins} + ${bonus} bonus = <b>${R.coins + bonus} Sparkle Coins</b></div>
+        <div class="actions">
+          <button class="btn primary big" id="againBtn">Take the test again</button>
+          <button class="btn ghost big" id="mallBtn">Back to the Letter Bead Bar</button>
+        </div>
+      </section>`, { title: 'Practice test' });
+    sfx.fanfare();
+    if (pct === 1) confetti();
+    $('#againBtn').onclick = startSpellTest;
+    $('#mallBtn').onclick = renderSpellHome;
   }
 
   // ---------- Shop & boutique ----------
@@ -882,7 +1128,7 @@
   }
 
   function renderParent() {
-    const rows = GAME_IDS.map((id) => {
+    const rows = ALL_IDS.map((id) => {
       const g = GAMES[id], st = S.stats[id] || { right: 0, total: 0 };
       const pct = st.total ? Math.round((st.right / st.total) * 100) : null;
       const bar = pct === null ? '<span class="subtle">Not played yet</span>'
@@ -890,7 +1136,7 @@
       return `<tr>
         <td><b>${g.emoji} ${g.name}</b><br><small>${g.skill}</small></td>
         <td class="bar-cell">${bar}<small>${st.right}/${st.total} first try</small></td>
-        <td><select data-id="${id}" aria-label="Level for ${g.name}">${[1, 2, 3].map((l) => `<option value="${l}" ${levelOf(id) === l ? 'selected' : ''}>${l}: ${LEVELS[l].label}</option>`).join('')}</select></td>
+        <td><select data-id="${id}" aria-label="Level for ${g.name}">${Array.from({ length: maxLevel(id) }, (_, i) => i + 1).map((l) => `<option value="${l}" ${levelOf(id) === l ? 'selected' : ''}>${l}: ${levelInfo(id, l).label}</option>`).join('')}</select></td>
       </tr>`;
     }).join('');
     setScreen(`
@@ -901,6 +1147,14 @@
           <thead><tr><th>Store</th><th>First-try accuracy</th><th>Level</th></tr></thead>
           <tbody>${rows}</tbody>
         </table></div>
+        <h3>Spelling words</h3>
+        <p class="subtle">One word per line. You can add a sentence after a <b>|</b> so the game can say it the way the teacher will, e.g. <code>light | Turn on the light, please.</code></p>
+        <div class="word-scores">${spellWords().map((w) => { const st = S.spell[w.word.toLowerCase()]; return `<span class="word-chip ${!st ? '' : st.right === st.total ? 'ok' : st.right / st.total >= 0.5 ? 'mid' : 'low'}">${escapeHTML(w.word)} <small>${st ? `${st.right}/${st.total}` : '–'}</small></span>`; }).join('')}</div>
+        <textarea id="wordList" rows="8" spellcheck="false">${escapeHTML(spellWords().map((w) => (w.sentence ? `${w.word} | ${w.sentence}` : w.word)).join('\n'))}</textarea>
+        <div class="actions left">
+          <button class="btn" id="saveWords">Save word list</button>
+          <button class="btn ghost" id="defaultWords">Use this week's list</button>
+        </div>
         <h3>Settings</h3>
         <label class="toggle"><input type="checkbox" id="optSound" ${S.sound ? 'checked' : ''}> Sound effects</label>
         ${canSpeak ? `<label class="toggle"><input type="checkbox" id="optRead" ${S.autoRead ? 'checked' : ''}> Read every question out loud automatically</label>` : ''}
@@ -911,6 +1165,13 @@
         </div>
       </section>`, { title: 'Grown-ups' });
     screen.querySelectorAll('select').forEach((s) => { s.onchange = () => { S.levels[s.dataset.id] = +s.value; S.streaks[s.dataset.id] = 0; save(); }; });
+    $('#saveWords').onclick = () => {
+      const list = $('#wordList').value.split('\n').map((line) => line.split('|')).map(([w, s]) => [(w || '').trim(), (s || '').trim()])
+        .filter(([w]) => /^[a-zA-Z]+$/.test(w)).slice(0, 40);
+      if (!list.length) return toast('Type at least one word (letters only).');
+      S.spellList = list; save(); toast(`Saved ${list.length} spelling words.`); renderParent();
+    };
+    $('#defaultWords').onclick = () => { S.spellList = null; save(); renderParent(); };
     $('#optSound').onchange = (e) => { S.sound = e.target.checked; save(); };
     if (canSpeak) $('#optRead').onchange = (e) => { S.autoRead = e.target.checked; save(); };
     $('#doneBtn').onclick = () => { S.name = $('#optName').value.trim().slice(0, 16); save(); renderMall(); };
@@ -937,6 +1198,9 @@
   splash.onclick = closeSplash;
   splash.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') closeSplash(); };
   document.addEventListener('gesturestart', (e) => e.preventDefault());
+  document.addEventListener('keydown', (e) => {
+    if (R && R.q && R.q.kind === 'spell' && $('#bracelet') && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) R.keyHandler(e);
+  });
 
   if (S.started || S.name) renderMall(); else renderWelcome();
 

@@ -14,6 +14,7 @@ A shopping-themed iPad game for practising **place value up to 1,000**. It lives
 | ⚖️ Best Deal | Compare numbers with <, > and = |
 | 🎯 Round-It Sale | Round to the nearest 10 or 100 using a number line |
 | 🏦 Change Machine | Regrouping (10 ones = 1 ten, 10 tens = 1 hundred) |
+| 📿 Letter Bead Bar | Weekly spelling words: hear the word in a sentence, spell it with letter beads. Includes a practice test like the real one. Grown-ups can edit the word list |
 
 Each round has 5 questions. A wrong answer gets a hint, and a second wrong answer shows a worked explanation. Each store adapts: 2-digit prices, then 3-digit, then "tricky" prices with zeros and look-alike digits. It moves up after 5 first-try answers in a row and steps back after 3 misses in a row. Coins earned buy decorations for her own boutique. A 🔒 Grown-ups page (behind a times-table question) shows accuracy per skill and lets you set levels.
 
