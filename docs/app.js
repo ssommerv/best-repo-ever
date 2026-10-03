@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '6 (Sept 30, 2026)';
+  const APP_VERSION = '7 (Oct 3, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -195,7 +195,7 @@
         return {
           kind: 'register', n, item: it,
           prompt: `Pay <b>exactly</b> ${money(n)} for the ${it.name}.`,
-          speak: `Pay exactly ${n} dollars for the ${it.name}.`,
+          speak: `Pay exactly ${n} dollars for the ${it.name}.`, voice: ['line/register', `p/${n}`],
           explain: `${money(n)} = ${placesFor(n).map((p) => unit(digitsOf(n)[p], p)).join(', ')}.`,
         };
       },
@@ -211,7 +211,7 @@
           return {
             kind: 'mc', visual: priceTag(n, p),
             prompt: `What is the <span class="hl-${p} hl-inline">${dig}</span> in ${money(n)} worth?`,
-            speak: `In the price ${n} dollars, what is the highlighted ${dig} worth?`,
+            speak: `In the price ${n} dollars, what is the highlighted ${dig} worth?`, voice: [`line/det-worth-${dig}`],
             choices: shuffle([dig, dig * 10, dig * 100]).map((v) => ({ value: v, label: money(v) })),
             answer: val,
             hint: `Which place is the ${dig} in? Check the chart:${pvChart(n, p)}`,
@@ -224,7 +224,7 @@
         return {
           kind: 'mc', visual: priceTag(n),
           prompt: `Which digit is in the <b>${PLACE[p].name}</b> place?`,
-          speak: `In the price ${n} dollars, which digit is in the ${PLACE[p].name} place?`,
+          speak: `In the price ${n} dollars, which digit is in the ${PLACE[p].name} place?`, voice: [`line/det-place-${p}`],
           choices: shuffle([...set]).map((v) => ({ value: v, label: String(v) })),
           answer: ans, big: true,
           hint: `From left to right the places go ${places.map((q) => PLACE[q].name).join(', ')}.`,
@@ -249,7 +249,7 @@
           return {
             kind: 'mc', visual: `<div class="word-tag">“${words(n)} dollars”</div>`,
             prompt: 'The shopper read the price out loud. Which tag matches?',
-            speak: `The shopper said: ${words(n)} dollars. Which tag matches?`,
+            speak: `The shopper said: ${words(n)} dollars. Which tag matches?`, voice: ['line/tag-w2s', `p/${n}`],
             choices: numChoices(n, cands), answer: n, tags: true,
             hint: three ? `“${words(n).split(' hundred')[0]} hundred” goes in the hundreds place. Then look at the tens and ones.` : 'The first word tells you the tens. The last word tells you the ones.',
             explain: `“${words(n)}” = ${expFull}.`,
@@ -262,7 +262,7 @@
           return {
             kind: 'mc', visual: priceTag(n),
             prompt: `Stretch it out! Which shows ${money(n)} in <b>expanded form</b>?`,
-            speak: `Which shows ${n} in expanded form?`,
+            speak: `Which shows ${n} in expanded form?`, voice: ['line/tag-s2e', `p/${n}`],
             choices: strChoices(exp, cands), answer: exp,
             hint: `Find what each digit is worth:${pvChart(n)}`,
             explain: `${pvChart(n)}${expFull}`,
@@ -273,7 +273,7 @@
         return {
           kind: 'mc', visual: `<div class="word-tag exp">${exp}</div>`,
           prompt: 'The cashier added up the money like this. What is the price?',
-          speak: `The cashier added ${expParts(n).join(' plus ')}. What is the price?`,
+          speak: `The cashier added ${expParts(n).join(' plus ')}. What is the price?`, voice: ['line/tag-e2s'],
           choices: numChoices(n, cands), answer: n, tags: true,
           hint: 'Put each part in its place on the chart, then read the digits.',
           explain: `${pvChart(n)}${expFull}`,
@@ -295,6 +295,7 @@
             kind: 'mc', layout: 'deal',
             prompt: `Which one costs <b>${wantLess ? 'less' : 'more'}</b>?`,
             speak: `Which one costs ${wantLess ? 'less' : 'more'}? The ${itA.name} for ${a} dollars, or the ${itB.name} for ${b} dollars?`,
+            voice: [wantLess ? 'line/deal-less' : 'line/deal-more'],
             choices: [{ value: 0, label: card(itA, a) }, { value: 1, label: card(itB, b) }],
             answer: ans,
             hint: 'Start with the biggest place. Compare the hundreds first, then the tens, then the ones.',
@@ -307,7 +308,7 @@
           kind: 'mc',
           visual: `<div class="compare-row">${priceTag(a)}<span class="compare-q">?</span>${priceTag(b)}</div>`,
           prompt: 'Pick the sign that makes it true.',
-          speak: `Is ${a} dollars less than, greater than, or equal to ${b} dollars?`,
+          speak: `Is ${a} dollars less than, greater than, or equal to ${b} dollars?`, voice: ['line/deal-sign'],
           choices: [
             { value: '<', label: '<span class="sym">&lt;</span><small>less than</small>' },
             { value: '=', label: '<span class="sym">=</span><small>equal to</small>' },
@@ -340,7 +341,7 @@
         return {
           kind: 'mc', visual: numberLine(n, low, high),
           prompt: `The ${it.emoji} ${it.name} costs ${money(n)}. Round it to the nearest <b>${place}</b>.`,
-          speak: `The ${it.name} costs ${n} dollars. Round it to the nearest ${place}.`,
+          speak: `The ${it.name} costs ${n} dollars. Round it to the nearest ${place}.`, voice: [`line/round-${to}`, `p/${n}`],
           choices: numChoices(ans, [low, high, other], money, 3).sort((x, y) => x.value - y.value),
           answer: ans,
           hint: `Is ${n} closer to ${low} or ${high}? The middle is ${mid}.`,
@@ -357,18 +358,18 @@
         const r = Math.random();
         if (r < 0.2) {
           const facts = [
-            ['Trade one $100 bill for $10 bills. How many $10 bills do you get?', 10, 'One hundred is the same as 10 tens.'],
-            ['Trade one $10 bill for $1 coins. How many coins do you get?', 10, 'One ten is the same as 10 ones.'],
+            ['Trade one $100 bill for $10 bills. How many $10 bills do you get?', 10, 'One hundred is the same as 10 tens.', 'fact-100-10'],
+            ['Trade one $10 bill for $1 coins. How many coins do you get?', 10, 'One ten is the same as 10 ones.', 'fact-10-1'],
           ];
           if (level >= 2) {
             const k = rand(2, 9);
-            facts.push([`How many $10 bills make ${money(k * 100)}?`, k * 10, `Each $100 is 10 tens, so ${k} hundreds = ${k * 10} tens.`]);
-            facts.push(['How many $1 coins make $100?', 100, '10 tens = 100 ones.']);
+            facts.push([`How many $10 bills make ${money(k * 100)}?`, k * 10, `Each $100 is 10 tens, so ${k} hundreds = ${k * 10} tens.`, `fact-tens-${k}`]);
+            facts.push(['How many $1 coins make $100?', 100, '10 tens = 100 ones.', 'fact-ones-100']);
           }
-          if (level >= 3) facts.push(['How many $10 bills make $1,000?', 100, '1,000 is 10 hundreds, and each hundred is 10 tens, so that is 100 tens!']);
-          const [q, ans, why] = pick(facts);
+          if (level >= 3) facts.push(['How many $10 bills make $1,000?', 100, '1,000 is 10 hundreds, and each hundred is 10 tens, so that is 100 tens!', 'fact-1000']);
+          const [q, ans, why, vkey] = pick(facts);
           return {
-            kind: 'mc', visual: '<div class="machine">🏦 ⇄ 💵</div>', prompt: q, speak: q.replace(/\$/g, ''),
+            kind: 'mc', visual: '<div class="machine">🏦 ⇄ 💵</div>', prompt: q, speak: q.replace(/\$/g, ''), voice: [`line/${vkey}`],
             choices: numChoices(ans, [ans / 10, ans * 10, ans + 1, ans - 1], String, 4), answer: ans, big: true,
             hint: 'Think about 10 of the smaller one making 1 of the bigger one.', explain: why,
           };
@@ -384,7 +385,7 @@
           return {
             kind: 'mc', visual: matHTML(c, places),
             prompt: 'Look at all this money in the piggy bank! How much is it?',
-            speak: 'Look at the money in the piggy bank. How much is it altogether?',
+            speak: 'Look at the money in the piggy bank. How much is it altogether?', voice: ['line/regroup-count'],
             choices: numChoices(total, cands), answer: total, tags: true,
             hint: 'Watch out! There are more than 9 in a column. Trade 10 of them for 1 of the next bigger place.',
             explain: `${places.map((p) => unit(c[p], p)).join(' + ')} = ${places.map((p) => c[p] * PLACE[p].mult).join(' + ')} = <b>${money(total)}</b>.`,
@@ -415,7 +416,7 @@
         return {
           kind: 'mc', visual: `${priceTag(n)}<div class="word-tag eq">= ${line}</div>`,
           prompt: 'Break one bill into smaller ones. What goes in the box?',
-          speak: q, choices: numChoices(ans, cands, String), answer: ans, big: true,
+          speak: q, voice: ['line/regroup-break'], choices: numChoices(ans, cands, String), answer: ans, big: true,
           hint: `One ${PLACE[big].one} was traded for 10 ${PLACE[small].name}. Add 10 to the ${PLACE[small].name} digit.`,
           explain: `Trade 1 ${PLACE[big].one} for 10 ${PLACE[small].name}: ${ans - 10} + 10 = <b>${ans}</b> ${PLACE[small].name}.`,
         };
@@ -601,6 +602,50 @@
     }
   }
 
+  // ---------- Recorded voice ----------
+  // Clips recorded with ElevenLabs (see tools/voice/). A line and a price are
+  // joined with the silence trimmed; anything not recorded (or offline and not
+  // saved yet) falls back to the device's built-in voice.
+  let VOICE = null;
+  fetch('audio/manifest.json').then((r) => (r.ok ? r.json() : null)).then((m) => { VOICE = m && m.clips; }).catch(() => {});
+  const clipCache = new Map();
+  let voiceSources = [], voiceToken = 0;
+  function loadClip(key, ctx) {
+    if (!clipCache.has(key)) {
+      const p = fetch(VOICE[key][0]).then((r) => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+        .then((data) => new Promise((resolve, reject) => ctx.decodeAudioData(data, resolve, reject)));
+      p.catch(() => clipCache.delete(key));
+      clipCache.set(key, p);
+    }
+    return clipCache.get(key);
+  }
+  function stopVoice() {
+    voiceToken++;
+    for (const s of voiceSources) { try { s.stop(); } catch (e) { /* already stopped */ } }
+    voiceSources = [];
+    if (canSpeak) speechSynthesis.cancel();
+  }
+  async function say(keys, fallback) {
+    stopVoice();
+    const token = voiceToken, ctx = audio();
+    if (VOICE && ctx && keys && keys.length && keys.every((k) => VOICE[k])) {
+      try {
+        const bufs = await Promise.all(keys.map((k) => loadClip(k, ctx)));
+        if (token !== voiceToken) return;
+        let t = ctx.currentTime + 0.03;
+        keys.forEach((k, i) => {
+          const [, start, end] = VOICE[k], src = ctx.createBufferSource();
+          src.buffer = bufs[i]; src.connect(ctx.destination);
+          src.start(t, start, end - start);
+          voiceSources.push(src);
+          t += end - start + 0.06;
+        });
+        return;
+      } catch (e) { /* fall back to the device voice */ }
+    }
+    if (token === voiceToken && fallback) speakSeq(fallback);
+  }
+
   function confetti() {
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const box = document.createElement('div');
@@ -639,7 +684,7 @@
     $('#soundBtn').textContent = S.sound ? '🔔' : '🔕';
   }
   function setScreen(html, { title = mallName(), home = true } = {}) {
-    if (canSpeak) speechSynthesis.cancel();
+    stopVoice();
     $('#title').textContent = title;
     $('#homeBtn').style.visibility = home ? 'visible' : 'hidden';
     screen.innerHTML = html;
@@ -791,10 +836,10 @@
     setScreen(`${head}${body}<div id="fb" class="feedback" hidden></div>`, { title: g.name });
     if (q.kind === 'spell') { wireSpell(); return; }
     if (q.kind === 'change') { wireChange(); return; }
-    if (canSpeak) $('#sayBtn').onclick = () => speak(q.speak);
+    if (canSpeak) $('#sayBtn').onclick = () => say(q.voice, [[q.speak]]);
     if (q.kind === 'register') wireRegister();
     else screen.querySelectorAll('.choice').forEach((b) => { b.onclick = () => answerMC(b, q.choices[+b.dataset.i].value); });
-    if (S.autoRead) speak(q.speak);
+    if (S.autoRead) say(q.voice, [[q.speak]]);
   }
 
   function wireRegister() {
@@ -864,10 +909,10 @@
     S.coins += earned;
     const change = R.test ? (save(), 0) : recordResult(R.id, first);
     sfx.good(); confetti();
-    const cheer = pick(CHEERS);
+    const ci = Math.floor(Math.random() * CHEERS.length), cheer = CHEERS[ci];
     const sold = R.q.kind === 'change' ? `<br>🛍️ Sold! ${first ? 'Right on the first try, so you got a tip!' : ''}` : '';
     showFeedback('good', `<div class="fb-title">${cheer} <span class="earned">+${earned} 🪙</span></div><div class="fb-body">${R.q.explain}${sold}</div>`);
-    if (S.sound) setTimeout(() => speak(cheer), 350);
+    if (S.sound) setTimeout(() => say([`cheer/${ci}`], [[cheer]]), 350);
     if (change > 0) setTimeout(() => { sfx.fanfare(); toast(`🎉 Level up! Now playing <b>${levelInfo(R.id, levelOf(R.id)).label}</b>`); }, 700);
   }
 
@@ -960,6 +1005,11 @@
   }
   const markHTML = (marked) => escapeHTML(marked).replace(/\[([^\]]*)\]/g, '<mark>$1</mark>');
   const sayWord = (w) => (w.sentence ? [[w.word, 0.75], [w.sentence, 0.9], [w.word, 0.75]] : [[w.word, 0.75], [w.word, 0.75]]);
+  // The recorded dictation only matches if the sentence is the one that was recorded.
+  const spellVoice = (w) => {
+    const info = SPELL_INFO[w.word.toLowerCase()];
+    return info && info.sentence === w.sentence ? [`spell/${w.word.toLowerCase()}`] : null;
+  };
 
   function pickSpellWord() {
     const list = spellWords(), used = (R && R.used) || [];
@@ -975,6 +1025,7 @@
   function spellQuestion(w, peek) {
     return {
       kind: 'spell', w, peek, speakParts: sayWord(w), speak: `${w.word}. ${w.sentence} ${w.word}.`,
+      voice: spellVoice(w), slowVoice: [`slow/${w.word.toLowerCase()}`],
       explain: `<span class="spelled">${markHTML(w.marked)}</span>${w.tip ? `<br>${w.tip}` : ''}`,
     };
   }
@@ -1055,7 +1106,7 @@
         if (R.test) R.results.push({ word: q.w.word, typed, ok: false });
         R.typed = q.w.word; drawBracelet([...q.w.word].map(() => true));
         lockSpell();
-      } else speakSeq([[q.w.word, 0.75]]);
+      } else say(q.slowVoice, [[q.w.word, 0.75]]);
     };
     screen.querySelectorAll('.bead-key').forEach((b) => { b.onclick = () => add(b.dataset.ch); });
     $('#backBtn').onclick = back;
@@ -1066,9 +1117,9 @@
       else if (e.key === 'Enter') done();
     };
     if (canSpeak) {
-      $('#hearBtn').onclick = () => speakSeq(q.speakParts);
-      $('#slowBtn').onclick = () => speakSeq([[q.w.word, 0.45]]);
-      speakSeq(q.speakParts);
+      $('#hearBtn').onclick = () => say(q.voice, q.speakParts);
+      $('#slowBtn').onclick = () => say(q.slowVoice, [[q.w.word, 0.45]]);
+      say(q.voice, q.speakParts);
     }
   }
 
@@ -1098,7 +1149,7 @@
       </section>`, { title: g.name });
     $('#practiceBtn').onclick = () => { sfx.tap(); startRound('spelling'); };
     $('#testBtn').onclick = () => { sfx.tap(); startSpellTest(); };
-    screen.querySelectorAll('.word-chip').forEach((b) => { b.onclick = () => speakSeq(sayWord(words[+b.dataset.i])); });
+    screen.querySelectorAll('.word-chip').forEach((b) => { b.onclick = () => { const w = words[+b.dataset.i]; say(spellVoice(w), sayWord(w)); }; });
   }
 
   function renderTestEnd() {
@@ -1303,6 +1354,7 @@
       kind: 'change', items, prices, total, paid, answer, customer: [ce, cname],
       wantsHTML: `Hi! I'd like the ${wants}, please. Here's <b>${money(paid)}</b>.`,
       speak: `Hi! I'd like the ${items.map((it) => it.m.name).join(' and the ')}, please. Here's ${paid} dollars. How much change do I get?`,
+      voice: [two ? 'line/sell-2' : 'line/sell-1', `p/${paid}`],
       hintSteps: two
         ? `Two things! First add ${money(prices[0])} + ${money(prices[1])}. Then count up from your total to ${money(paid)}: to the next ten, then the next hundred, then to ${money(paid)}.`
         : `Count up from the price: ${[total, ...steps.map(([, b]) => b)].map(money).join(' → ')}. How much did you add in all?`,
@@ -1387,8 +1439,8 @@
       else if (e.key === 'Backspace') add('⌫');
       else if (e.key === 'Enter') give();
     };
-    if (canSpeak) $('#sayBtn').onclick = () => speak(q.speak);
-    if (S.autoRead) speak(q.speak);
+    if (canSpeak) $('#sayBtn').onclick = () => say(q.voice, [[q.speak]]);
+    if (S.autoRead) say(q.voice, [[q.speak]]);
   }
 
   function lockChange() {
@@ -1493,6 +1545,7 @@
   splash.onclick = closeSplash;
   splash.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') closeSplash(); };
   document.addEventListener('gesturestart', (e) => e.preventDefault());
+  if (navigator.audioSession) { try { navigator.audioSession.type = 'playback'; } catch (e) { /* older Safari */ } }
   document.addEventListener('keydown', (e) => {
     if (!R || !R.q || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
     if ((R.q.kind === 'spell' && $('#bracelet')) || (R.q.kind === 'change' && $('#cbDigits'))) R.keyHandler(e);

@@ -29,3 +29,14 @@ Each round has 5 questions. A wrong answer gets a hint, and a second wrong answe
 cd docs && python3 -m http.server 8000   # then open http://localhost:8000
 ```
 It's plain HTML/CSS/JS with no build step.
+
+### Recorded voice
+Questions, spelling dictation and cheers are spoken in a recorded ElevenLabs voice ("Brittney"). Clips live in `docs/audio/`. A question is a recorded line plus a recorded price (e.g. "Round this price to the nearest ten:" + "two hundred forty-eight dollars."), joined with the silence trimmed. Anything not recorded, like a custom spelling word, falls back to the device's built-in voice.
+
+To record new lines (for example after changing `SPELL_DEFAULT` in `docs/app.js` for a new weekly list):
+```sh
+ELEVENLABS_API_KEY=sk_... python3 tools/voice/generate.py --dry-run   # shows how many credits it will use
+ELEVENLABS_API_KEY=sk_... python3 tools/voice/generate.py             # records only new or changed lines
+NODE_PATH=$(npm root -g) node tools/voice/manifest.js                 # rebuilds docs/audio/manifest.json (needs Playwright)
+```
+The API key is only read from the environment and is never stored in the repo.
