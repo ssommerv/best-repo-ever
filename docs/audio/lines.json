@@ -1,0 +1,4213 @@
+{
+"cheer/0": {
+"text": "Amazing!"
+},
+"cheer/1": {
+"text": "You got it!"
+},
+"cheer/2": {
+"text": "Super shopper!"
+},
+"cheer/3": {
+"text": "Fantastic!"
+},
+"cheer/4": {
+"text": "Cha-ching!"
+},
+"cheer/5": {
+"text": "Brilliant!"
+},
+"cheer/6": {
+"text": "Nailed it!"
+},
+"cheer/7": {
+"text": "Wow, great thinking!"
+},
+"line/deal-less": {
+"text": "Which one costs less?"
+},
+"line/deal-more": {
+"text": "Which one costs more?"
+},
+"line/deal-sign": {
+"text": "Pick the sign that makes it true. Less than, greater than, or equal to?"
+},
+"line/det-place-h": {
+"text": "Which digit is in the hundreds place?"
+},
+"line/det-place-o": {
+"text": "Which digit is in the ones place?"
+},
+"line/det-place-t": {
+"text": "Which digit is in the tens place?"
+},
+"line/det-worth-1": {
+"text": "What is the highlighted one worth?"
+},
+"line/det-worth-2": {
+"text": "What is the highlighted two worth?"
+},
+"line/det-worth-3": {
+"text": "What is the highlighted three worth?"
+},
+"line/det-worth-4": {
+"text": "What is the highlighted four worth?"
+},
+"line/det-worth-5": {
+"text": "What is the highlighted five worth?"
+},
+"line/det-worth-6": {
+"text": "What is the highlighted six worth?"
+},
+"line/det-worth-7": {
+"text": "What is the highlighted seven worth?"
+},
+"line/det-worth-8": {
+"text": "What is the highlighted eight worth?"
+},
+"line/det-worth-9": {
+"text": "What is the highlighted nine worth?"
+},
+"line/fact-10-1": {
+"text": "Trade one ten-dollar bill for one-dollar coins. How many coins do you get?"
+},
+"line/fact-100-10": {
+"text": "Trade one hundred-dollar bill for ten-dollar bills. How many ten-dollar bills do you get?"
+},
+"line/fact-1000": {
+"text": "How many ten-dollar bills make one thousand dollars?"
+},
+"line/fact-ones-100": {
+"text": "How many one-dollar coins make one hundred dollars?"
+},
+"line/fact-tens-2": {
+"text": "How many ten-dollar bills make two hundred dollars?"
+},
+"line/fact-tens-3": {
+"text": "How many ten-dollar bills make three hundred dollars?"
+},
+"line/fact-tens-4": {
+"text": "How many ten-dollar bills make four hundred dollars?"
+},
+"line/fact-tens-5": {
+"text": "How many ten-dollar bills make five hundred dollars?"
+},
+"line/fact-tens-6": {
+"text": "How many ten-dollar bills make six hundred dollars?"
+},
+"line/fact-tens-7": {
+"text": "How many ten-dollar bills make seven hundred dollars?"
+},
+"line/fact-tens-8": {
+"text": "How many ten-dollar bills make eight hundred dollars?"
+},
+"line/fact-tens-9": {
+"text": "How many ten-dollar bills make nine hundred dollars?"
+},
+"line/register": {
+"next": "two hundred forty-eight dollars.",
+"text": "Tap the money to pay exactly"
+},
+"line/regroup-break": {
+"text": "Break one bill into smaller ones. What number goes in the box?"
+},
+"line/regroup-count": {
+"text": "Look at all this money in the piggy bank! How much is it altogether?"
+},
+"line/round-10": {
+"next": "two hundred forty-eight dollars.",
+"text": "Round this price to the nearest ten:"
+},
+"line/round-100": {
+"next": "two hundred forty-eight dollars.",
+"text": "Round this price to the nearest hundred:"
+},
+"line/sell-1": {
+"next": "fifty dollars.",
+"text": "Hi! I'd like to buy this, please. Here's"
+},
+"line/sell-2": {
+"next": "one thousand dollars.",
+"text": "Hi! I'd like to buy these two things, please. Here's"
+},
+"line/tag-e2s": {
+"text": "The cashier added up the money like this. What is the price?"
+},
+"line/tag-s2e": {
+"next": "two hundred forty-eight dollars.",
+"text": "Find the expanded form for"
+},
+"line/tag-w2s": {
+"next": "two hundred forty-eight dollars.",
+"text": "The shopper said the price out loud. Find the tag for"
+},
+"p/10": {
+"prev": "It costs exactly",
+"text": "ten dollars."
+},
+"p/100": {
+"prev": "It costs exactly",
+"text": "one hundred dollars."
+},
+"p/1000": {
+"prev": "It costs exactly",
+"text": "one thousand dollars."
+},
+"p/101": {
+"prev": "It costs exactly",
+"text": "one hundred one dollars."
+},
+"p/102": {
+"prev": "It costs exactly",
+"text": "one hundred two dollars."
+},
+"p/103": {
+"prev": "It costs exactly",
+"text": "one hundred three dollars."
+},
+"p/104": {
+"prev": "It costs exactly",
+"text": "one hundred four dollars."
+},
+"p/105": {
+"prev": "It costs exactly",
+"text": "one hundred five dollars."
+},
+"p/106": {
+"prev": "It costs exactly",
+"text": "one hundred six dollars."
+},
+"p/107": {
+"prev": "It costs exactly",
+"text": "one hundred seven dollars."
+},
+"p/108": {
+"prev": "It costs exactly",
+"text": "one hundred eight dollars."
+},
+"p/109": {
+"prev": "It costs exactly",
+"text": "one hundred nine dollars."
+},
+"p/11": {
+"prev": "It costs exactly",
+"text": "eleven dollars."
+},
+"p/110": {
+"prev": "It costs exactly",
+"text": "one hundred ten dollars."
+},
+"p/111": {
+"prev": "It costs exactly",
+"text": "one hundred eleven dollars."
+},
+"p/112": {
+"prev": "It costs exactly",
+"text": "one hundred twelve dollars."
+},
+"p/113": {
+"prev": "It costs exactly",
+"text": "one hundred thirteen dollars."
+},
+"p/114": {
+"prev": "It costs exactly",
+"text": "one hundred fourteen dollars."
+},
+"p/115": {
+"prev": "It costs exactly",
+"text": "one hundred fifteen dollars."
+},
+"p/116": {
+"prev": "It costs exactly",
+"text": "one hundred sixteen dollars."
+},
+"p/117": {
+"prev": "It costs exactly",
+"text": "one hundred seventeen dollars."
+},
+"p/118": {
+"prev": "It costs exactly",
+"text": "one hundred eighteen dollars."
+},
+"p/119": {
+"prev": "It costs exactly",
+"text": "one hundred nineteen dollars."
+},
+"p/12": {
+"prev": "It costs exactly",
+"text": "twelve dollars."
+},
+"p/120": {
+"prev": "It costs exactly",
+"text": "one hundred twenty dollars."
+},
+"p/121": {
+"prev": "It costs exactly",
+"text": "one hundred twenty-one dollars."
+},
+"p/122": {
+"prev": "It costs exactly",
+"text": "one hundred twenty-two dollars."
+},
+"p/123": {
+"prev": "It costs exactly",
+"text": "one hundred twenty-three dollars."
+},
+"p/124": {
+"prev": "It costs exactly",
+"text": "one hundred twenty-four dollars."
+},
+"p/125": {
+"prev": "It costs exactly",
+"text": "one hundred twenty-five dollars."
+},
+"p/126": {
+"prev": "It costs exactly",
+"text": "one hundred twenty-six dollars."
+},
+"p/127": {
+"prev": "It costs exactly",
+"text": "one hundred twenty-seven dollars."
+},
+"p/128": {
+"prev": "It costs exactly",
+"text": "one hundred twenty-eight dollars."
+},
+"p/129": {
+"prev": "It costs exactly",
+"text": "one hundred twenty-nine dollars."
+},
+"p/13": {
+"prev": "It costs exactly",
+"text": "thirteen dollars."
+},
+"p/130": {
+"prev": "It costs exactly",
+"text": "one hundred thirty dollars."
+},
+"p/131": {
+"prev": "It costs exactly",
+"text": "one hundred thirty-one dollars."
+},
+"p/132": {
+"prev": "It costs exactly",
+"text": "one hundred thirty-two dollars."
+},
+"p/133": {
+"prev": "It costs exactly",
+"text": "one hundred thirty-three dollars."
+},
+"p/134": {
+"prev": "It costs exactly",
+"text": "one hundred thirty-four dollars."
+},
+"p/135": {
+"prev": "It costs exactly",
+"text": "one hundred thirty-five dollars."
+},
+"p/136": {
+"prev": "It costs exactly",
+"text": "one hundred thirty-six dollars."
+},
+"p/137": {
+"prev": "It costs exactly",
+"text": "one hundred thirty-seven dollars."
+},
+"p/138": {
+"prev": "It costs exactly",
+"text": "one hundred thirty-eight dollars."
+},
+"p/139": {
+"prev": "It costs exactly",
+"text": "one hundred thirty-nine dollars."
+},
+"p/14": {
+"prev": "It costs exactly",
+"text": "fourteen dollars."
+},
+"p/140": {
+"prev": "It costs exactly",
+"text": "one hundred forty dollars."
+},
+"p/141": {
+"prev": "It costs exactly",
+"text": "one hundred forty-one dollars."
+},
+"p/142": {
+"prev": "It costs exactly",
+"text": "one hundred forty-two dollars."
+},
+"p/143": {
+"prev": "It costs exactly",
+"text": "one hundred forty-three dollars."
+},
+"p/144": {
+"prev": "It costs exactly",
+"text": "one hundred forty-four dollars."
+},
+"p/145": {
+"prev": "It costs exactly",
+"text": "one hundred forty-five dollars."
+},
+"p/146": {
+"prev": "It costs exactly",
+"text": "one hundred forty-six dollars."
+},
+"p/147": {
+"prev": "It costs exactly",
+"text": "one hundred forty-seven dollars."
+},
+"p/148": {
+"prev": "It costs exactly",
+"text": "one hundred forty-eight dollars."
+},
+"p/149": {
+"prev": "It costs exactly",
+"text": "one hundred forty-nine dollars."
+},
+"p/15": {
+"prev": "It costs exactly",
+"text": "fifteen dollars."
+},
+"p/150": {
+"prev": "It costs exactly",
+"text": "one hundred fifty dollars."
+},
+"p/151": {
+"prev": "It costs exactly",
+"text": "one hundred fifty-one dollars."
+},
+"p/152": {
+"prev": "It costs exactly",
+"text": "one hundred fifty-two dollars."
+},
+"p/153": {
+"prev": "It costs exactly",
+"text": "one hundred fifty-three dollars."
+},
+"p/154": {
+"prev": "It costs exactly",
+"text": "one hundred fifty-four dollars."
+},
+"p/155": {
+"prev": "It costs exactly",
+"text": "one hundred fifty-five dollars."
+},
+"p/156": {
+"prev": "It costs exactly",
+"text": "one hundred fifty-six dollars."
+},
+"p/157": {
+"prev": "It costs exactly",
+"text": "one hundred fifty-seven dollars."
+},
+"p/158": {
+"prev": "It costs exactly",
+"text": "one hundred fifty-eight dollars."
+},
+"p/159": {
+"prev": "It costs exactly",
+"text": "one hundred fifty-nine dollars."
+},
+"p/16": {
+"prev": "It costs exactly",
+"text": "sixteen dollars."
+},
+"p/160": {
+"prev": "It costs exactly",
+"text": "one hundred sixty dollars."
+},
+"p/161": {
+"prev": "It costs exactly",
+"text": "one hundred sixty-one dollars."
+},
+"p/162": {
+"prev": "It costs exactly",
+"text": "one hundred sixty-two dollars."
+},
+"p/163": {
+"prev": "It costs exactly",
+"text": "one hundred sixty-three dollars."
+},
+"p/164": {
+"prev": "It costs exactly",
+"text": "one hundred sixty-four dollars."
+},
+"p/165": {
+"prev": "It costs exactly",
+"text": "one hundred sixty-five dollars."
+},
+"p/166": {
+"prev": "It costs exactly",
+"text": "one hundred sixty-six dollars."
+},
+"p/167": {
+"prev": "It costs exactly",
+"text": "one hundred sixty-seven dollars."
+},
+"p/168": {
+"prev": "It costs exactly",
+"text": "one hundred sixty-eight dollars."
+},
+"p/169": {
+"prev": "It costs exactly",
+"text": "one hundred sixty-nine dollars."
+},
+"p/17": {
+"prev": "It costs exactly",
+"text": "seventeen dollars."
+},
+"p/170": {
+"prev": "It costs exactly",
+"text": "one hundred seventy dollars."
+},
+"p/171": {
+"prev": "It costs exactly",
+"text": "one hundred seventy-one dollars."
+},
+"p/172": {
+"prev": "It costs exactly",
+"text": "one hundred seventy-two dollars."
+},
+"p/173": {
+"prev": "It costs exactly",
+"text": "one hundred seventy-three dollars."
+},
+"p/174": {
+"prev": "It costs exactly",
+"text": "one hundred seventy-four dollars."
+},
+"p/175": {
+"prev": "It costs exactly",
+"text": "one hundred seventy-five dollars."
+},
+"p/176": {
+"prev": "It costs exactly",
+"text": "one hundred seventy-six dollars."
+},
+"p/177": {
+"prev": "It costs exactly",
+"text": "one hundred seventy-seven dollars."
+},
+"p/178": {
+"prev": "It costs exactly",
+"text": "one hundred seventy-eight dollars."
+},
+"p/179": {
+"prev": "It costs exactly",
+"text": "one hundred seventy-nine dollars."
+},
+"p/18": {
+"prev": "It costs exactly",
+"text": "eighteen dollars."
+},
+"p/180": {
+"prev": "It costs exactly",
+"text": "one hundred eighty dollars."
+},
+"p/181": {
+"prev": "It costs exactly",
+"text": "one hundred eighty-one dollars."
+},
+"p/182": {
+"prev": "It costs exactly",
+"text": "one hundred eighty-two dollars."
+},
+"p/183": {
+"prev": "It costs exactly",
+"text": "one hundred eighty-three dollars."
+},
+"p/184": {
+"prev": "It costs exactly",
+"text": "one hundred eighty-four dollars."
+},
+"p/185": {
+"prev": "It costs exactly",
+"text": "one hundred eighty-five dollars."
+},
+"p/186": {
+"prev": "It costs exactly",
+"text": "one hundred eighty-six dollars."
+},
+"p/187": {
+"prev": "It costs exactly",
+"text": "one hundred eighty-seven dollars."
+},
+"p/188": {
+"prev": "It costs exactly",
+"text": "one hundred eighty-eight dollars."
+},
+"p/189": {
+"prev": "It costs exactly",
+"text": "one hundred eighty-nine dollars."
+},
+"p/19": {
+"prev": "It costs exactly",
+"text": "nineteen dollars."
+},
+"p/190": {
+"prev": "It costs exactly",
+"text": "one hundred ninety dollars."
+},
+"p/191": {
+"prev": "It costs exactly",
+"text": "one hundred ninety-one dollars."
+},
+"p/192": {
+"prev": "It costs exactly",
+"text": "one hundred ninety-two dollars."
+},
+"p/193": {
+"prev": "It costs exactly",
+"text": "one hundred ninety-three dollars."
+},
+"p/194": {
+"prev": "It costs exactly",
+"text": "one hundred ninety-four dollars."
+},
+"p/195": {
+"prev": "It costs exactly",
+"text": "one hundred ninety-five dollars."
+},
+"p/196": {
+"prev": "It costs exactly",
+"text": "one hundred ninety-six dollars."
+},
+"p/197": {
+"prev": "It costs exactly",
+"text": "one hundred ninety-seven dollars."
+},
+"p/198": {
+"prev": "It costs exactly",
+"text": "one hundred ninety-eight dollars."
+},
+"p/199": {
+"prev": "It costs exactly",
+"text": "one hundred ninety-nine dollars."
+},
+"p/20": {
+"prev": "It costs exactly",
+"text": "twenty dollars."
+},
+"p/200": {
+"prev": "It costs exactly",
+"text": "two hundred dollars."
+},
+"p/201": {
+"prev": "It costs exactly",
+"text": "two hundred one dollars."
+},
+"p/202": {
+"prev": "It costs exactly",
+"text": "two hundred two dollars."
+},
+"p/203": {
+"prev": "It costs exactly",
+"text": "two hundred three dollars."
+},
+"p/204": {
+"prev": "It costs exactly",
+"text": "two hundred four dollars."
+},
+"p/205": {
+"prev": "It costs exactly",
+"text": "two hundred five dollars."
+},
+"p/206": {
+"prev": "It costs exactly",
+"text": "two hundred six dollars."
+},
+"p/207": {
+"prev": "It costs exactly",
+"text": "two hundred seven dollars."
+},
+"p/208": {
+"prev": "It costs exactly",
+"text": "two hundred eight dollars."
+},
+"p/209": {
+"prev": "It costs exactly",
+"text": "two hundred nine dollars."
+},
+"p/21": {
+"prev": "It costs exactly",
+"text": "twenty-one dollars."
+},
+"p/210": {
+"prev": "It costs exactly",
+"text": "two hundred ten dollars."
+},
+"p/211": {
+"prev": "It costs exactly",
+"text": "two hundred eleven dollars."
+},
+"p/212": {
+"prev": "It costs exactly",
+"text": "two hundred twelve dollars."
+},
+"p/213": {
+"prev": "It costs exactly",
+"text": "two hundred thirteen dollars."
+},
+"p/214": {
+"prev": "It costs exactly",
+"text": "two hundred fourteen dollars."
+},
+"p/215": {
+"prev": "It costs exactly",
+"text": "two hundred fifteen dollars."
+},
+"p/216": {
+"prev": "It costs exactly",
+"text": "two hundred sixteen dollars."
+},
+"p/217": {
+"prev": "It costs exactly",
+"text": "two hundred seventeen dollars."
+},
+"p/218": {
+"prev": "It costs exactly",
+"text": "two hundred eighteen dollars."
+},
+"p/219": {
+"prev": "It costs exactly",
+"text": "two hundred nineteen dollars."
+},
+"p/22": {
+"prev": "It costs exactly",
+"text": "twenty-two dollars."
+},
+"p/220": {
+"prev": "It costs exactly",
+"text": "two hundred twenty dollars."
+},
+"p/221": {
+"prev": "It costs exactly",
+"text": "two hundred twenty-one dollars."
+},
+"p/222": {
+"prev": "It costs exactly",
+"text": "two hundred twenty-two dollars."
+},
+"p/223": {
+"prev": "It costs exactly",
+"text": "two hundred twenty-three dollars."
+},
+"p/224": {
+"prev": "It costs exactly",
+"text": "two hundred twenty-four dollars."
+},
+"p/225": {
+"prev": "It costs exactly",
+"text": "two hundred twenty-five dollars."
+},
+"p/226": {
+"prev": "It costs exactly",
+"text": "two hundred twenty-six dollars."
+},
+"p/227": {
+"prev": "It costs exactly",
+"text": "two hundred twenty-seven dollars."
+},
+"p/228": {
+"prev": "It costs exactly",
+"text": "two hundred twenty-eight dollars."
+},
+"p/229": {
+"prev": "It costs exactly",
+"text": "two hundred twenty-nine dollars."
+},
+"p/23": {
+"prev": "It costs exactly",
+"text": "twenty-three dollars."
+},
+"p/230": {
+"prev": "It costs exactly",
+"text": "two hundred thirty dollars."
+},
+"p/231": {
+"prev": "It costs exactly",
+"text": "two hundred thirty-one dollars."
+},
+"p/232": {
+"prev": "It costs exactly",
+"text": "two hundred thirty-two dollars."
+},
+"p/233": {
+"prev": "It costs exactly",
+"text": "two hundred thirty-three dollars."
+},
+"p/234": {
+"prev": "It costs exactly",
+"text": "two hundred thirty-four dollars."
+},
+"p/235": {
+"prev": "It costs exactly",
+"text": "two hundred thirty-five dollars."
+},
+"p/236": {
+"prev": "It costs exactly",
+"text": "two hundred thirty-six dollars."
+},
+"p/237": {
+"prev": "It costs exactly",
+"text": "two hundred thirty-seven dollars."
+},
+"p/238": {
+"prev": "It costs exactly",
+"text": "two hundred thirty-eight dollars."
+},
+"p/239": {
+"prev": "It costs exactly",
+"text": "two hundred thirty-nine dollars."
+},
+"p/24": {
+"prev": "It costs exactly",
+"text": "twenty-four dollars."
+},
+"p/240": {
+"prev": "It costs exactly",
+"text": "two hundred forty dollars."
+},
+"p/241": {
+"prev": "It costs exactly",
+"text": "two hundred forty-one dollars."
+},
+"p/242": {
+"prev": "It costs exactly",
+"text": "two hundred forty-two dollars."
+},
+"p/243": {
+"prev": "It costs exactly",
+"text": "two hundred forty-three dollars."
+},
+"p/244": {
+"prev": "It costs exactly",
+"text": "two hundred forty-four dollars."
+},
+"p/245": {
+"prev": "It costs exactly",
+"text": "two hundred forty-five dollars."
+},
+"p/246": {
+"prev": "It costs exactly",
+"text": "two hundred forty-six dollars."
+},
+"p/247": {
+"prev": "It costs exactly",
+"text": "two hundred forty-seven dollars."
+},
+"p/248": {
+"prev": "It costs exactly",
+"text": "two hundred forty-eight dollars."
+},
+"p/249": {
+"prev": "It costs exactly",
+"text": "two hundred forty-nine dollars."
+},
+"p/25": {
+"prev": "It costs exactly",
+"text": "twenty-five dollars."
+},
+"p/250": {
+"prev": "It costs exactly",
+"text": "two hundred fifty dollars."
+},
+"p/251": {
+"prev": "It costs exactly",
+"text": "two hundred fifty-one dollars."
+},
+"p/252": {
+"prev": "It costs exactly",
+"text": "two hundred fifty-two dollars."
+},
+"p/253": {
+"prev": "It costs exactly",
+"text": "two hundred fifty-three dollars."
+},
+"p/254": {
+"prev": "It costs exactly",
+"text": "two hundred fifty-four dollars."
+},
+"p/255": {
+"prev": "It costs exactly",
+"text": "two hundred fifty-five dollars."
+},
+"p/256": {
+"prev": "It costs exactly",
+"text": "two hundred fifty-six dollars."
+},
+"p/257": {
+"prev": "It costs exactly",
+"text": "two hundred fifty-seven dollars."
+},
+"p/258": {
+"prev": "It costs exactly",
+"text": "two hundred fifty-eight dollars."
+},
+"p/259": {
+"prev": "It costs exactly",
+"text": "two hundred fifty-nine dollars."
+},
+"p/26": {
+"prev": "It costs exactly",
+"text": "twenty-six dollars."
+},
+"p/260": {
+"prev": "It costs exactly",
+"text": "two hundred sixty dollars."
+},
+"p/261": {
+"prev": "It costs exactly",
+"text": "two hundred sixty-one dollars."
+},
+"p/262": {
+"prev": "It costs exactly",
+"text": "two hundred sixty-two dollars."
+},
+"p/263": {
+"prev": "It costs exactly",
+"text": "two hundred sixty-three dollars."
+},
+"p/264": {
+"prev": "It costs exactly",
+"text": "two hundred sixty-four dollars."
+},
+"p/265": {
+"prev": "It costs exactly",
+"text": "two hundred sixty-five dollars."
+},
+"p/266": {
+"prev": "It costs exactly",
+"text": "two hundred sixty-six dollars."
+},
+"p/267": {
+"prev": "It costs exactly",
+"text": "two hundred sixty-seven dollars."
+},
+"p/268": {
+"prev": "It costs exactly",
+"text": "two hundred sixty-eight dollars."
+},
+"p/269": {
+"prev": "It costs exactly",
+"text": "two hundred sixty-nine dollars."
+},
+"p/27": {
+"prev": "It costs exactly",
+"text": "twenty-seven dollars."
+},
+"p/270": {
+"prev": "It costs exactly",
+"text": "two hundred seventy dollars."
+},
+"p/271": {
+"prev": "It costs exactly",
+"text": "two hundred seventy-one dollars."
+},
+"p/272": {
+"prev": "It costs exactly",
+"text": "two hundred seventy-two dollars."
+},
+"p/273": {
+"prev": "It costs exactly",
+"text": "two hundred seventy-three dollars."
+},
+"p/274": {
+"prev": "It costs exactly",
+"text": "two hundred seventy-four dollars."
+},
+"p/275": {
+"prev": "It costs exactly",
+"text": "two hundred seventy-five dollars."
+},
+"p/276": {
+"prev": "It costs exactly",
+"text": "two hundred seventy-six dollars."
+},
+"p/277": {
+"prev": "It costs exactly",
+"text": "two hundred seventy-seven dollars."
+},
+"p/278": {
+"prev": "It costs exactly",
+"text": "two hundred seventy-eight dollars."
+},
+"p/279": {
+"prev": "It costs exactly",
+"text": "two hundred seventy-nine dollars."
+},
+"p/28": {
+"prev": "It costs exactly",
+"text": "twenty-eight dollars."
+},
+"p/280": {
+"prev": "It costs exactly",
+"text": "two hundred eighty dollars."
+},
+"p/281": {
+"prev": "It costs exactly",
+"text": "two hundred eighty-one dollars."
+},
+"p/282": {
+"prev": "It costs exactly",
+"text": "two hundred eighty-two dollars."
+},
+"p/283": {
+"prev": "It costs exactly",
+"text": "two hundred eighty-three dollars."
+},
+"p/284": {
+"prev": "It costs exactly",
+"text": "two hundred eighty-four dollars."
+},
+"p/285": {
+"prev": "It costs exactly",
+"text": "two hundred eighty-five dollars."
+},
+"p/286": {
+"prev": "It costs exactly",
+"text": "two hundred eighty-six dollars."
+},
+"p/287": {
+"prev": "It costs exactly",
+"text": "two hundred eighty-seven dollars."
+},
+"p/288": {
+"prev": "It costs exactly",
+"text": "two hundred eighty-eight dollars."
+},
+"p/289": {
+"prev": "It costs exactly",
+"text": "two hundred eighty-nine dollars."
+},
+"p/29": {
+"prev": "It costs exactly",
+"text": "twenty-nine dollars."
+},
+"p/290": {
+"prev": "It costs exactly",
+"text": "two hundred ninety dollars."
+},
+"p/291": {
+"prev": "It costs exactly",
+"text": "two hundred ninety-one dollars."
+},
+"p/292": {
+"prev": "It costs exactly",
+"text": "two hundred ninety-two dollars."
+},
+"p/293": {
+"prev": "It costs exactly",
+"text": "two hundred ninety-three dollars."
+},
+"p/294": {
+"prev": "It costs exactly",
+"text": "two hundred ninety-four dollars."
+},
+"p/295": {
+"prev": "It costs exactly",
+"text": "two hundred ninety-five dollars."
+},
+"p/296": {
+"prev": "It costs exactly",
+"text": "two hundred ninety-six dollars."
+},
+"p/297": {
+"prev": "It costs exactly",
+"text": "two hundred ninety-seven dollars."
+},
+"p/298": {
+"prev": "It costs exactly",
+"text": "two hundred ninety-eight dollars."
+},
+"p/299": {
+"prev": "It costs exactly",
+"text": "two hundred ninety-nine dollars."
+},
+"p/30": {
+"prev": "It costs exactly",
+"text": "thirty dollars."
+},
+"p/300": {
+"prev": "It costs exactly",
+"text": "three hundred dollars."
+},
+"p/301": {
+"prev": "It costs exactly",
+"text": "three hundred one dollars."
+},
+"p/302": {
+"prev": "It costs exactly",
+"text": "three hundred two dollars."
+},
+"p/303": {
+"prev": "It costs exactly",
+"text": "three hundred three dollars."
+},
+"p/304": {
+"prev": "It costs exactly",
+"text": "three hundred four dollars."
+},
+"p/305": {
+"prev": "It costs exactly",
+"text": "three hundred five dollars."
+},
+"p/306": {
+"prev": "It costs exactly",
+"text": "three hundred six dollars."
+},
+"p/307": {
+"prev": "It costs exactly",
+"text": "three hundred seven dollars."
+},
+"p/308": {
+"prev": "It costs exactly",
+"text": "three hundred eight dollars."
+},
+"p/309": {
+"prev": "It costs exactly",
+"text": "three hundred nine dollars."
+},
+"p/31": {
+"prev": "It costs exactly",
+"text": "thirty-one dollars."
+},
+"p/310": {
+"prev": "It costs exactly",
+"text": "three hundred ten dollars."
+},
+"p/311": {
+"prev": "It costs exactly",
+"text": "three hundred eleven dollars."
+},
+"p/312": {
+"prev": "It costs exactly",
+"text": "three hundred twelve dollars."
+},
+"p/313": {
+"prev": "It costs exactly",
+"text": "three hundred thirteen dollars."
+},
+"p/314": {
+"prev": "It costs exactly",
+"text": "three hundred fourteen dollars."
+},
+"p/315": {
+"prev": "It costs exactly",
+"text": "three hundred fifteen dollars."
+},
+"p/316": {
+"prev": "It costs exactly",
+"text": "three hundred sixteen dollars."
+},
+"p/317": {
+"prev": "It costs exactly",
+"text": "three hundred seventeen dollars."
+},
+"p/318": {
+"prev": "It costs exactly",
+"text": "three hundred eighteen dollars."
+},
+"p/319": {
+"prev": "It costs exactly",
+"text": "three hundred nineteen dollars."
+},
+"p/32": {
+"prev": "It costs exactly",
+"text": "thirty-two dollars."
+},
+"p/320": {
+"prev": "It costs exactly",
+"text": "three hundred twenty dollars."
+},
+"p/321": {
+"prev": "It costs exactly",
+"text": "three hundred twenty-one dollars."
+},
+"p/322": {
+"prev": "It costs exactly",
+"text": "three hundred twenty-two dollars."
+},
+"p/323": {
+"prev": "It costs exactly",
+"text": "three hundred twenty-three dollars."
+},
+"p/324": {
+"prev": "It costs exactly",
+"text": "three hundred twenty-four dollars."
+},
+"p/325": {
+"prev": "It costs exactly",
+"text": "three hundred twenty-five dollars."
+},
+"p/326": {
+"prev": "It costs exactly",
+"text": "three hundred twenty-six dollars."
+},
+"p/327": {
+"prev": "It costs exactly",
+"text": "three hundred twenty-seven dollars."
+},
+"p/328": {
+"prev": "It costs exactly",
+"text": "three hundred twenty-eight dollars."
+},
+"p/329": {
+"prev": "It costs exactly",
+"text": "three hundred twenty-nine dollars."
+},
+"p/33": {
+"prev": "It costs exactly",
+"text": "thirty-three dollars."
+},
+"p/330": {
+"prev": "It costs exactly",
+"text": "three hundred thirty dollars."
+},
+"p/331": {
+"prev": "It costs exactly",
+"text": "three hundred thirty-one dollars."
+},
+"p/332": {
+"prev": "It costs exactly",
+"text": "three hundred thirty-two dollars."
+},
+"p/333": {
+"prev": "It costs exactly",
+"text": "three hundred thirty-three dollars."
+},
+"p/334": {
+"prev": "It costs exactly",
+"text": "three hundred thirty-four dollars."
+},
+"p/335": {
+"prev": "It costs exactly",
+"text": "three hundred thirty-five dollars."
+},
+"p/336": {
+"prev": "It costs exactly",
+"text": "three hundred thirty-six dollars."
+},
+"p/337": {
+"prev": "It costs exactly",
+"text": "three hundred thirty-seven dollars."
+},
+"p/338": {
+"prev": "It costs exactly",
+"text": "three hundred thirty-eight dollars."
+},
+"p/339": {
+"prev": "It costs exactly",
+"text": "three hundred thirty-nine dollars."
+},
+"p/34": {
+"prev": "It costs exactly",
+"text": "thirty-four dollars."
+},
+"p/340": {
+"prev": "It costs exactly",
+"text": "three hundred forty dollars."
+},
+"p/341": {
+"prev": "It costs exactly",
+"text": "three hundred forty-one dollars."
+},
+"p/342": {
+"prev": "It costs exactly",
+"text": "three hundred forty-two dollars."
+},
+"p/343": {
+"prev": "It costs exactly",
+"text": "three hundred forty-three dollars."
+},
+"p/344": {
+"prev": "It costs exactly",
+"text": "three hundred forty-four dollars."
+},
+"p/345": {
+"prev": "It costs exactly",
+"text": "three hundred forty-five dollars."
+},
+"p/346": {
+"prev": "It costs exactly",
+"text": "three hundred forty-six dollars."
+},
+"p/347": {
+"prev": "It costs exactly",
+"text": "three hundred forty-seven dollars."
+},
+"p/348": {
+"prev": "It costs exactly",
+"text": "three hundred forty-eight dollars."
+},
+"p/349": {
+"prev": "It costs exactly",
+"text": "three hundred forty-nine dollars."
+},
+"p/35": {
+"prev": "It costs exactly",
+"text": "thirty-five dollars."
+},
+"p/350": {
+"prev": "It costs exactly",
+"text": "three hundred fifty dollars."
+},
+"p/351": {
+"prev": "It costs exactly",
+"text": "three hundred fifty-one dollars."
+},
+"p/352": {
+"prev": "It costs exactly",
+"text": "three hundred fifty-two dollars."
+},
+"p/353": {
+"prev": "It costs exactly",
+"text": "three hundred fifty-three dollars."
+},
+"p/354": {
+"prev": "It costs exactly",
+"text": "three hundred fifty-four dollars."
+},
+"p/355": {
+"prev": "It costs exactly",
+"text": "three hundred fifty-five dollars."
+},
+"p/356": {
+"prev": "It costs exactly",
+"text": "three hundred fifty-six dollars."
+},
+"p/357": {
+"prev": "It costs exactly",
+"text": "three hundred fifty-seven dollars."
+},
+"p/358": {
+"prev": "It costs exactly",
+"text": "three hundred fifty-eight dollars."
+},
+"p/359": {
+"prev": "It costs exactly",
+"text": "three hundred fifty-nine dollars."
+},
+"p/36": {
+"prev": "It costs exactly",
+"text": "thirty-six dollars."
+},
+"p/360": {
+"prev": "It costs exactly",
+"text": "three hundred sixty dollars."
+},
+"p/361": {
+"prev": "It costs exactly",
+"text": "three hundred sixty-one dollars."
+},
+"p/362": {
+"prev": "It costs exactly",
+"text": "three hundred sixty-two dollars."
+},
+"p/363": {
+"prev": "It costs exactly",
+"text": "three hundred sixty-three dollars."
+},
+"p/364": {
+"prev": "It costs exactly",
+"text": "three hundred sixty-four dollars."
+},
+"p/365": {
+"prev": "It costs exactly",
+"text": "three hundred sixty-five dollars."
+},
+"p/366": {
+"prev": "It costs exactly",
+"text": "three hundred sixty-six dollars."
+},
+"p/367": {
+"prev": "It costs exactly",
+"text": "three hundred sixty-seven dollars."
+},
+"p/368": {
+"prev": "It costs exactly",
+"text": "three hundred sixty-eight dollars."
+},
+"p/369": {
+"prev": "It costs exactly",
+"text": "three hundred sixty-nine dollars."
+},
+"p/37": {
+"prev": "It costs exactly",
+"text": "thirty-seven dollars."
+},
+"p/370": {
+"prev": "It costs exactly",
+"text": "three hundred seventy dollars."
+},
+"p/371": {
+"prev": "It costs exactly",
+"text": "three hundred seventy-one dollars."
+},
+"p/372": {
+"prev": "It costs exactly",
+"text": "three hundred seventy-two dollars."
+},
+"p/373": {
+"prev": "It costs exactly",
+"text": "three hundred seventy-three dollars."
+},
+"p/374": {
+"prev": "It costs exactly",
+"text": "three hundred seventy-four dollars."
+},
+"p/375": {
+"prev": "It costs exactly",
+"text": "three hundred seventy-five dollars."
+},
+"p/376": {
+"prev": "It costs exactly",
+"text": "three hundred seventy-six dollars."
+},
+"p/377": {
+"prev": "It costs exactly",
+"text": "three hundred seventy-seven dollars."
+},
+"p/378": {
+"prev": "It costs exactly",
+"text": "three hundred seventy-eight dollars."
+},
+"p/379": {
+"prev": "It costs exactly",
+"text": "three hundred seventy-nine dollars."
+},
+"p/38": {
+"prev": "It costs exactly",
+"text": "thirty-eight dollars."
+},
+"p/380": {
+"prev": "It costs exactly",
+"text": "three hundred eighty dollars."
+},
+"p/381": {
+"prev": "It costs exactly",
+"text": "three hundred eighty-one dollars."
+},
+"p/382": {
+"prev": "It costs exactly",
+"text": "three hundred eighty-two dollars."
+},
+"p/383": {
+"prev": "It costs exactly",
+"text": "three hundred eighty-three dollars."
+},
+"p/384": {
+"prev": "It costs exactly",
+"text": "three hundred eighty-four dollars."
+},
+"p/385": {
+"prev": "It costs exactly",
+"text": "three hundred eighty-five dollars."
+},
+"p/386": {
+"prev": "It costs exactly",
+"text": "three hundred eighty-six dollars."
+},
+"p/387": {
+"prev": "It costs exactly",
+"text": "three hundred eighty-seven dollars."
+},
+"p/388": {
+"prev": "It costs exactly",
+"text": "three hundred eighty-eight dollars."
+},
+"p/389": {
+"prev": "It costs exactly",
+"text": "three hundred eighty-nine dollars."
+},
+"p/39": {
+"prev": "It costs exactly",
+"text": "thirty-nine dollars."
+},
+"p/390": {
+"prev": "It costs exactly",
+"text": "three hundred ninety dollars."
+},
+"p/391": {
+"prev": "It costs exactly",
+"text": "three hundred ninety-one dollars."
+},
+"p/392": {
+"prev": "It costs exactly",
+"text": "three hundred ninety-two dollars."
+},
+"p/393": {
+"prev": "It costs exactly",
+"text": "three hundred ninety-three dollars."
+},
+"p/394": {
+"prev": "It costs exactly",
+"text": "three hundred ninety-four dollars."
+},
+"p/395": {
+"prev": "It costs exactly",
+"text": "three hundred ninety-five dollars."
+},
+"p/396": {
+"prev": "It costs exactly",
+"text": "three hundred ninety-six dollars."
+},
+"p/397": {
+"prev": "It costs exactly",
+"text": "three hundred ninety-seven dollars."
+},
+"p/398": {
+"prev": "It costs exactly",
+"text": "three hundred ninety-eight dollars."
+},
+"p/399": {
+"prev": "It costs exactly",
+"text": "three hundred ninety-nine dollars."
+},
+"p/40": {
+"prev": "It costs exactly",
+"text": "forty dollars."
+},
+"p/400": {
+"prev": "It costs exactly",
+"text": "four hundred dollars."
+},
+"p/401": {
+"prev": "It costs exactly",
+"text": "four hundred one dollars."
+},
+"p/402": {
+"prev": "It costs exactly",
+"text": "four hundred two dollars."
+},
+"p/403": {
+"prev": "It costs exactly",
+"text": "four hundred three dollars."
+},
+"p/404": {
+"prev": "It costs exactly",
+"text": "four hundred four dollars."
+},
+"p/405": {
+"prev": "It costs exactly",
+"text": "four hundred five dollars."
+},
+"p/406": {
+"prev": "It costs exactly",
+"text": "four hundred six dollars."
+},
+"p/407": {
+"prev": "It costs exactly",
+"text": "four hundred seven dollars."
+},
+"p/408": {
+"prev": "It costs exactly",
+"text": "four hundred eight dollars."
+},
+"p/409": {
+"prev": "It costs exactly",
+"text": "four hundred nine dollars."
+},
+"p/41": {
+"prev": "It costs exactly",
+"text": "forty-one dollars."
+},
+"p/410": {
+"prev": "It costs exactly",
+"text": "four hundred ten dollars."
+},
+"p/411": {
+"prev": "It costs exactly",
+"text": "four hundred eleven dollars."
+},
+"p/412": {
+"prev": "It costs exactly",
+"text": "four hundred twelve dollars."
+},
+"p/413": {
+"prev": "It costs exactly",
+"text": "four hundred thirteen dollars."
+},
+"p/414": {
+"prev": "It costs exactly",
+"text": "four hundred fourteen dollars."
+},
+"p/415": {
+"prev": "It costs exactly",
+"text": "four hundred fifteen dollars."
+},
+"p/416": {
+"prev": "It costs exactly",
+"text": "four hundred sixteen dollars."
+},
+"p/417": {
+"prev": "It costs exactly",
+"text": "four hundred seventeen dollars."
+},
+"p/418": {
+"prev": "It costs exactly",
+"text": "four hundred eighteen dollars."
+},
+"p/419": {
+"prev": "It costs exactly",
+"text": "four hundred nineteen dollars."
+},
+"p/42": {
+"prev": "It costs exactly",
+"text": "forty-two dollars."
+},
+"p/420": {
+"prev": "It costs exactly",
+"text": "four hundred twenty dollars."
+},
+"p/421": {
+"prev": "It costs exactly",
+"text": "four hundred twenty-one dollars."
+},
+"p/422": {
+"prev": "It costs exactly",
+"text": "four hundred twenty-two dollars."
+},
+"p/423": {
+"prev": "It costs exactly",
+"text": "four hundred twenty-three dollars."
+},
+"p/424": {
+"prev": "It costs exactly",
+"text": "four hundred twenty-four dollars."
+},
+"p/425": {
+"prev": "It costs exactly",
+"text": "four hundred twenty-five dollars."
+},
+"p/426": {
+"prev": "It costs exactly",
+"text": "four hundred twenty-six dollars."
+},
+"p/427": {
+"prev": "It costs exactly",
+"text": "four hundred twenty-seven dollars."
+},
+"p/428": {
+"prev": "It costs exactly",
+"text": "four hundred twenty-eight dollars."
+},
+"p/429": {
+"prev": "It costs exactly",
+"text": "four hundred twenty-nine dollars."
+},
+"p/43": {
+"prev": "It costs exactly",
+"text": "forty-three dollars."
+},
+"p/430": {
+"prev": "It costs exactly",
+"text": "four hundred thirty dollars."
+},
+"p/431": {
+"prev": "It costs exactly",
+"text": "four hundred thirty-one dollars."
+},
+"p/432": {
+"prev": "It costs exactly",
+"text": "four hundred thirty-two dollars."
+},
+"p/433": {
+"prev": "It costs exactly",
+"text": "four hundred thirty-three dollars."
+},
+"p/434": {
+"prev": "It costs exactly",
+"text": "four hundred thirty-four dollars."
+},
+"p/435": {
+"prev": "It costs exactly",
+"text": "four hundred thirty-five dollars."
+},
+"p/436": {
+"prev": "It costs exactly",
+"text": "four hundred thirty-six dollars."
+},
+"p/437": {
+"prev": "It costs exactly",
+"text": "four hundred thirty-seven dollars."
+},
+"p/438": {
+"prev": "It costs exactly",
+"text": "four hundred thirty-eight dollars."
+},
+"p/439": {
+"prev": "It costs exactly",
+"text": "four hundred thirty-nine dollars."
+},
+"p/44": {
+"prev": "It costs exactly",
+"text": "forty-four dollars."
+},
+"p/440": {
+"prev": "It costs exactly",
+"text": "four hundred forty dollars."
+},
+"p/441": {
+"prev": "It costs exactly",
+"text": "four hundred forty-one dollars."
+},
+"p/442": {
+"prev": "It costs exactly",
+"text": "four hundred forty-two dollars."
+},
+"p/443": {
+"prev": "It costs exactly",
+"text": "four hundred forty-three dollars."
+},
+"p/444": {
+"prev": "It costs exactly",
+"text": "four hundred forty-four dollars."
+},
+"p/445": {
+"prev": "It costs exactly",
+"text": "four hundred forty-five dollars."
+},
+"p/446": {
+"prev": "It costs exactly",
+"text": "four hundred forty-six dollars."
+},
+"p/447": {
+"prev": "It costs exactly",
+"text": "four hundred forty-seven dollars."
+},
+"p/448": {
+"prev": "It costs exactly",
+"text": "four hundred forty-eight dollars."
+},
+"p/449": {
+"prev": "It costs exactly",
+"text": "four hundred forty-nine dollars."
+},
+"p/45": {
+"prev": "It costs exactly",
+"text": "forty-five dollars."
+},
+"p/450": {
+"prev": "It costs exactly",
+"text": "four hundred fifty dollars."
+},
+"p/451": {
+"prev": "It costs exactly",
+"text": "four hundred fifty-one dollars."
+},
+"p/452": {
+"prev": "It costs exactly",
+"text": "four hundred fifty-two dollars."
+},
+"p/453": {
+"prev": "It costs exactly",
+"text": "four hundred fifty-three dollars."
+},
+"p/454": {
+"prev": "It costs exactly",
+"text": "four hundred fifty-four dollars."
+},
+"p/455": {
+"prev": "It costs exactly",
+"text": "four hundred fifty-five dollars."
+},
+"p/456": {
+"prev": "It costs exactly",
+"text": "four hundred fifty-six dollars."
+},
+"p/457": {
+"prev": "It costs exactly",
+"text": "four hundred fifty-seven dollars."
+},
+"p/458": {
+"prev": "It costs exactly",
+"text": "four hundred fifty-eight dollars."
+},
+"p/459": {
+"prev": "It costs exactly",
+"text": "four hundred fifty-nine dollars."
+},
+"p/46": {
+"prev": "It costs exactly",
+"text": "forty-six dollars."
+},
+"p/460": {
+"prev": "It costs exactly",
+"text": "four hundred sixty dollars."
+},
+"p/461": {
+"prev": "It costs exactly",
+"text": "four hundred sixty-one dollars."
+},
+"p/462": {
+"prev": "It costs exactly",
+"text": "four hundred sixty-two dollars."
+},
+"p/463": {
+"prev": "It costs exactly",
+"text": "four hundred sixty-three dollars."
+},
+"p/464": {
+"prev": "It costs exactly",
+"text": "four hundred sixty-four dollars."
+},
+"p/465": {
+"prev": "It costs exactly",
+"text": "four hundred sixty-five dollars."
+},
+"p/466": {
+"prev": "It costs exactly",
+"text": "four hundred sixty-six dollars."
+},
+"p/467": {
+"prev": "It costs exactly",
+"text": "four hundred sixty-seven dollars."
+},
+"p/468": {
+"prev": "It costs exactly",
+"text": "four hundred sixty-eight dollars."
+},
+"p/469": {
+"prev": "It costs exactly",
+"text": "four hundred sixty-nine dollars."
+},
+"p/47": {
+"prev": "It costs exactly",
+"text": "forty-seven dollars."
+},
+"p/470": {
+"prev": "It costs exactly",
+"text": "four hundred seventy dollars."
+},
+"p/471": {
+"prev": "It costs exactly",
+"text": "four hundred seventy-one dollars."
+},
+"p/472": {
+"prev": "It costs exactly",
+"text": "four hundred seventy-two dollars."
+},
+"p/473": {
+"prev": "It costs exactly",
+"text": "four hundred seventy-three dollars."
+},
+"p/474": {
+"prev": "It costs exactly",
+"text": "four hundred seventy-four dollars."
+},
+"p/475": {
+"prev": "It costs exactly",
+"text": "four hundred seventy-five dollars."
+},
+"p/476": {
+"prev": "It costs exactly",
+"text": "four hundred seventy-six dollars."
+},
+"p/477": {
+"prev": "It costs exactly",
+"text": "four hundred seventy-seven dollars."
+},
+"p/478": {
+"prev": "It costs exactly",
+"text": "four hundred seventy-eight dollars."
+},
+"p/479": {
+"prev": "It costs exactly",
+"text": "four hundred seventy-nine dollars."
+},
+"p/48": {
+"prev": "It costs exactly",
+"text": "forty-eight dollars."
+},
+"p/480": {
+"prev": "It costs exactly",
+"text": "four hundred eighty dollars."
+},
+"p/481": {
+"prev": "It costs exactly",
+"text": "four hundred eighty-one dollars."
+},
+"p/482": {
+"prev": "It costs exactly",
+"text": "four hundred eighty-two dollars."
+},
+"p/483": {
+"prev": "It costs exactly",
+"text": "four hundred eighty-three dollars."
+},
+"p/484": {
+"prev": "It costs exactly",
+"text": "four hundred eighty-four dollars."
+},
+"p/485": {
+"prev": "It costs exactly",
+"text": "four hundred eighty-five dollars."
+},
+"p/486": {
+"prev": "It costs exactly",
+"text": "four hundred eighty-six dollars."
+},
+"p/487": {
+"prev": "It costs exactly",
+"text": "four hundred eighty-seven dollars."
+},
+"p/488": {
+"prev": "It costs exactly",
+"text": "four hundred eighty-eight dollars."
+},
+"p/489": {
+"prev": "It costs exactly",
+"text": "four hundred eighty-nine dollars."
+},
+"p/49": {
+"prev": "It costs exactly",
+"text": "forty-nine dollars."
+},
+"p/490": {
+"prev": "It costs exactly",
+"text": "four hundred ninety dollars."
+},
+"p/491": {
+"prev": "It costs exactly",
+"text": "four hundred ninety-one dollars."
+},
+"p/492": {
+"prev": "It costs exactly",
+"text": "four hundred ninety-two dollars."
+},
+"p/493": {
+"prev": "It costs exactly",
+"text": "four hundred ninety-three dollars."
+},
+"p/494": {
+"prev": "It costs exactly",
+"text": "four hundred ninety-four dollars."
+},
+"p/495": {
+"prev": "It costs exactly",
+"text": "four hundred ninety-five dollars."
+},
+"p/496": {
+"prev": "It costs exactly",
+"text": "four hundred ninety-six dollars."
+},
+"p/497": {
+"prev": "It costs exactly",
+"text": "four hundred ninety-seven dollars."
+},
+"p/498": {
+"prev": "It costs exactly",
+"text": "four hundred ninety-eight dollars."
+},
+"p/499": {
+"prev": "It costs exactly",
+"text": "four hundred ninety-nine dollars."
+},
+"p/50": {
+"prev": "It costs exactly",
+"text": "fifty dollars."
+},
+"p/500": {
+"prev": "It costs exactly",
+"text": "five hundred dollars."
+},
+"p/501": {
+"prev": "It costs exactly",
+"text": "five hundred one dollars."
+},
+"p/502": {
+"prev": "It costs exactly",
+"text": "five hundred two dollars."
+},
+"p/503": {
+"prev": "It costs exactly",
+"text": "five hundred three dollars."
+},
+"p/504": {
+"prev": "It costs exactly",
+"text": "five hundred four dollars."
+},
+"p/505": {
+"prev": "It costs exactly",
+"text": "five hundred five dollars."
+},
+"p/506": {
+"prev": "It costs exactly",
+"text": "five hundred six dollars."
+},
+"p/507": {
+"prev": "It costs exactly",
+"text": "five hundred seven dollars."
+},
+"p/508": {
+"prev": "It costs exactly",
+"text": "five hundred eight dollars."
+},
+"p/509": {
+"prev": "It costs exactly",
+"text": "five hundred nine dollars."
+},
+"p/51": {
+"prev": "It costs exactly",
+"text": "fifty-one dollars."
+},
+"p/510": {
+"prev": "It costs exactly",
+"text": "five hundred ten dollars."
+},
+"p/511": {
+"prev": "It costs exactly",
+"text": "five hundred eleven dollars."
+},
+"p/512": {
+"prev": "It costs exactly",
+"text": "five hundred twelve dollars."
+},
+"p/513": {
+"prev": "It costs exactly",
+"text": "five hundred thirteen dollars."
+},
+"p/514": {
+"prev": "It costs exactly",
+"text": "five hundred fourteen dollars."
+},
+"p/515": {
+"prev": "It costs exactly",
+"text": "five hundred fifteen dollars."
+},
+"p/516": {
+"prev": "It costs exactly",
+"text": "five hundred sixteen dollars."
+},
+"p/517": {
+"prev": "It costs exactly",
+"text": "five hundred seventeen dollars."
+},
+"p/518": {
+"prev": "It costs exactly",
+"text": "five hundred eighteen dollars."
+},
+"p/519": {
+"prev": "It costs exactly",
+"text": "five hundred nineteen dollars."
+},
+"p/52": {
+"prev": "It costs exactly",
+"text": "fifty-two dollars."
+},
+"p/520": {
+"prev": "It costs exactly",
+"text": "five hundred twenty dollars."
+},
+"p/521": {
+"prev": "It costs exactly",
+"text": "five hundred twenty-one dollars."
+},
+"p/522": {
+"prev": "It costs exactly",
+"text": "five hundred twenty-two dollars."
+},
+"p/523": {
+"prev": "It costs exactly",
+"text": "five hundred twenty-three dollars."
+},
+"p/524": {
+"prev": "It costs exactly",
+"text": "five hundred twenty-four dollars."
+},
+"p/525": {
+"prev": "It costs exactly",
+"text": "five hundred twenty-five dollars."
+},
+"p/526": {
+"prev": "It costs exactly",
+"text": "five hundred twenty-six dollars."
+},
+"p/527": {
+"prev": "It costs exactly",
+"text": "five hundred twenty-seven dollars."
+},
+"p/528": {
+"prev": "It costs exactly",
+"text": "five hundred twenty-eight dollars."
+},
+"p/529": {
+"prev": "It costs exactly",
+"text": "five hundred twenty-nine dollars."
+},
+"p/53": {
+"prev": "It costs exactly",
+"text": "fifty-three dollars."
+},
+"p/530": {
+"prev": "It costs exactly",
+"text": "five hundred thirty dollars."
+},
+"p/531": {
+"prev": "It costs exactly",
+"text": "five hundred thirty-one dollars."
+},
+"p/532": {
+"prev": "It costs exactly",
+"text": "five hundred thirty-two dollars."
+},
+"p/533": {
+"prev": "It costs exactly",
+"text": "five hundred thirty-three dollars."
+},
+"p/534": {
+"prev": "It costs exactly",
+"text": "five hundred thirty-four dollars."
+},
+"p/535": {
+"prev": "It costs exactly",
+"text": "five hundred thirty-five dollars."
+},
+"p/536": {
+"prev": "It costs exactly",
+"text": "five hundred thirty-six dollars."
+},
+"p/537": {
+"prev": "It costs exactly",
+"text": "five hundred thirty-seven dollars."
+},
+"p/538": {
+"prev": "It costs exactly",
+"text": "five hundred thirty-eight dollars."
+},
+"p/539": {
+"prev": "It costs exactly",
+"text": "five hundred thirty-nine dollars."
+},
+"p/54": {
+"prev": "It costs exactly",
+"text": "fifty-four dollars."
+},
+"p/540": {
+"prev": "It costs exactly",
+"text": "five hundred forty dollars."
+},
+"p/541": {
+"prev": "It costs exactly",
+"text": "five hundred forty-one dollars."
+},
+"p/542": {
+"prev": "It costs exactly",
+"text": "five hundred forty-two dollars."
+},
+"p/543": {
+"prev": "It costs exactly",
+"text": "five hundred forty-three dollars."
+},
+"p/544": {
+"prev": "It costs exactly",
+"text": "five hundred forty-four dollars."
+},
+"p/545": {
+"prev": "It costs exactly",
+"text": "five hundred forty-five dollars."
+},
+"p/546": {
+"prev": "It costs exactly",
+"text": "five hundred forty-six dollars."
+},
+"p/547": {
+"prev": "It costs exactly",
+"text": "five hundred forty-seven dollars."
+},
+"p/548": {
+"prev": "It costs exactly",
+"text": "five hundred forty-eight dollars."
+},
+"p/549": {
+"prev": "It costs exactly",
+"text": "five hundred forty-nine dollars."
+},
+"p/55": {
+"prev": "It costs exactly",
+"text": "fifty-five dollars."
+},
+"p/550": {
+"prev": "It costs exactly",
+"text": "five hundred fifty dollars."
+},
+"p/551": {
+"prev": "It costs exactly",
+"text": "five hundred fifty-one dollars."
+},
+"p/552": {
+"prev": "It costs exactly",
+"text": "five hundred fifty-two dollars."
+},
+"p/553": {
+"prev": "It costs exactly",
+"text": "five hundred fifty-three dollars."
+},
+"p/554": {
+"prev": "It costs exactly",
+"text": "five hundred fifty-four dollars."
+},
+"p/555": {
+"prev": "It costs exactly",
+"text": "five hundred fifty-five dollars."
+},
+"p/556": {
+"prev": "It costs exactly",
+"text": "five hundred fifty-six dollars."
+},
+"p/557": {
+"prev": "It costs exactly",
+"text": "five hundred fifty-seven dollars."
+},
+"p/558": {
+"prev": "It costs exactly",
+"text": "five hundred fifty-eight dollars."
+},
+"p/559": {
+"prev": "It costs exactly",
+"text": "five hundred fifty-nine dollars."
+},
+"p/56": {
+"prev": "It costs exactly",
+"text": "fifty-six dollars."
+},
+"p/560": {
+"prev": "It costs exactly",
+"text": "five hundred sixty dollars."
+},
+"p/561": {
+"prev": "It costs exactly",
+"text": "five hundred sixty-one dollars."
+},
+"p/562": {
+"prev": "It costs exactly",
+"text": "five hundred sixty-two dollars."
+},
+"p/563": {
+"prev": "It costs exactly",
+"text": "five hundred sixty-three dollars."
+},
+"p/564": {
+"prev": "It costs exactly",
+"text": "five hundred sixty-four dollars."
+},
+"p/565": {
+"prev": "It costs exactly",
+"text": "five hundred sixty-five dollars."
+},
+"p/566": {
+"prev": "It costs exactly",
+"text": "five hundred sixty-six dollars."
+},
+"p/567": {
+"prev": "It costs exactly",
+"text": "five hundred sixty-seven dollars."
+},
+"p/568": {
+"prev": "It costs exactly",
+"text": "five hundred sixty-eight dollars."
+},
+"p/569": {
+"prev": "It costs exactly",
+"text": "five hundred sixty-nine dollars."
+},
+"p/57": {
+"prev": "It costs exactly",
+"text": "fifty-seven dollars."
+},
+"p/570": {
+"prev": "It costs exactly",
+"text": "five hundred seventy dollars."
+},
+"p/571": {
+"prev": "It costs exactly",
+"text": "five hundred seventy-one dollars."
+},
+"p/572": {
+"prev": "It costs exactly",
+"text": "five hundred seventy-two dollars."
+},
+"p/573": {
+"prev": "It costs exactly",
+"text": "five hundred seventy-three dollars."
+},
+"p/574": {
+"prev": "It costs exactly",
+"text": "five hundred seventy-four dollars."
+},
+"p/575": {
+"prev": "It costs exactly",
+"text": "five hundred seventy-five dollars."
+},
+"p/576": {
+"prev": "It costs exactly",
+"text": "five hundred seventy-six dollars."
+},
+"p/577": {
+"prev": "It costs exactly",
+"text": "five hundred seventy-seven dollars."
+},
+"p/578": {
+"prev": "It costs exactly",
+"text": "five hundred seventy-eight dollars."
+},
+"p/579": {
+"prev": "It costs exactly",
+"text": "five hundred seventy-nine dollars."
+},
+"p/58": {
+"prev": "It costs exactly",
+"text": "fifty-eight dollars."
+},
+"p/580": {
+"prev": "It costs exactly",
+"text": "five hundred eighty dollars."
+},
+"p/581": {
+"prev": "It costs exactly",
+"text": "five hundred eighty-one dollars."
+},
+"p/582": {
+"prev": "It costs exactly",
+"text": "five hundred eighty-two dollars."
+},
+"p/583": {
+"prev": "It costs exactly",
+"text": "five hundred eighty-three dollars."
+},
+"p/584": {
+"prev": "It costs exactly",
+"text": "five hundred eighty-four dollars."
+},
+"p/585": {
+"prev": "It costs exactly",
+"text": "five hundred eighty-five dollars."
+},
+"p/586": {
+"prev": "It costs exactly",
+"text": "five hundred eighty-six dollars."
+},
+"p/587": {
+"prev": "It costs exactly",
+"text": "five hundred eighty-seven dollars."
+},
+"p/588": {
+"prev": "It costs exactly",
+"text": "five hundred eighty-eight dollars."
+},
+"p/589": {
+"prev": "It costs exactly",
+"text": "five hundred eighty-nine dollars."
+},
+"p/59": {
+"prev": "It costs exactly",
+"text": "fifty-nine dollars."
+},
+"p/590": {
+"prev": "It costs exactly",
+"text": "five hundred ninety dollars."
+},
+"p/591": {
+"prev": "It costs exactly",
+"text": "five hundred ninety-one dollars."
+},
+"p/592": {
+"prev": "It costs exactly",
+"text": "five hundred ninety-two dollars."
+},
+"p/593": {
+"prev": "It costs exactly",
+"text": "five hundred ninety-three dollars."
+},
+"p/594": {
+"prev": "It costs exactly",
+"text": "five hundred ninety-four dollars."
+},
+"p/595": {
+"prev": "It costs exactly",
+"text": "five hundred ninety-five dollars."
+},
+"p/596": {
+"prev": "It costs exactly",
+"text": "five hundred ninety-six dollars."
+},
+"p/597": {
+"prev": "It costs exactly",
+"text": "five hundred ninety-seven dollars."
+},
+"p/598": {
+"prev": "It costs exactly",
+"text": "five hundred ninety-eight dollars."
+},
+"p/599": {
+"prev": "It costs exactly",
+"text": "five hundred ninety-nine dollars."
+},
+"p/60": {
+"prev": "It costs exactly",
+"text": "sixty dollars."
+},
+"p/600": {
+"prev": "It costs exactly",
+"text": "six hundred dollars."
+},
+"p/601": {
+"prev": "It costs exactly",
+"text": "six hundred one dollars."
+},
+"p/602": {
+"prev": "It costs exactly",
+"text": "six hundred two dollars."
+},
+"p/603": {
+"prev": "It costs exactly",
+"text": "six hundred three dollars."
+},
+"p/604": {
+"prev": "It costs exactly",
+"text": "six hundred four dollars."
+},
+"p/605": {
+"prev": "It costs exactly",
+"text": "six hundred five dollars."
+},
+"p/606": {
+"prev": "It costs exactly",
+"text": "six hundred six dollars."
+},
+"p/607": {
+"prev": "It costs exactly",
+"text": "six hundred seven dollars."
+},
+"p/608": {
+"prev": "It costs exactly",
+"text": "six hundred eight dollars."
+},
+"p/609": {
+"prev": "It costs exactly",
+"text": "six hundred nine dollars."
+},
+"p/61": {
+"prev": "It costs exactly",
+"text": "sixty-one dollars."
+},
+"p/610": {
+"prev": "It costs exactly",
+"text": "six hundred ten dollars."
+},
+"p/611": {
+"prev": "It costs exactly",
+"text": "six hundred eleven dollars."
+},
+"p/612": {
+"prev": "It costs exactly",
+"text": "six hundred twelve dollars."
+},
+"p/613": {
+"prev": "It costs exactly",
+"text": "six hundred thirteen dollars."
+},
+"p/614": {
+"prev": "It costs exactly",
+"text": "six hundred fourteen dollars."
+},
+"p/615": {
+"prev": "It costs exactly",
+"text": "six hundred fifteen dollars."
+},
+"p/616": {
+"prev": "It costs exactly",
+"text": "six hundred sixteen dollars."
+},
+"p/617": {
+"prev": "It costs exactly",
+"text": "six hundred seventeen dollars."
+},
+"p/618": {
+"prev": "It costs exactly",
+"text": "six hundred eighteen dollars."
+},
+"p/619": {
+"prev": "It costs exactly",
+"text": "six hundred nineteen dollars."
+},
+"p/62": {
+"prev": "It costs exactly",
+"text": "sixty-two dollars."
+},
+"p/620": {
+"prev": "It costs exactly",
+"text": "six hundred twenty dollars."
+},
+"p/621": {
+"prev": "It costs exactly",
+"text": "six hundred twenty-one dollars."
+},
+"p/622": {
+"prev": "It costs exactly",
+"text": "six hundred twenty-two dollars."
+},
+"p/623": {
+"prev": "It costs exactly",
+"text": "six hundred twenty-three dollars."
+},
+"p/624": {
+"prev": "It costs exactly",
+"text": "six hundred twenty-four dollars."
+},
+"p/625": {
+"prev": "It costs exactly",
+"text": "six hundred twenty-five dollars."
+},
+"p/626": {
+"prev": "It costs exactly",
+"text": "six hundred twenty-six dollars."
+},
+"p/627": {
+"prev": "It costs exactly",
+"text": "six hundred twenty-seven dollars."
+},
+"p/628": {
+"prev": "It costs exactly",
+"text": "six hundred twenty-eight dollars."
+},
+"p/629": {
+"prev": "It costs exactly",
+"text": "six hundred twenty-nine dollars."
+},
+"p/63": {
+"prev": "It costs exactly",
+"text": "sixty-three dollars."
+},
+"p/630": {
+"prev": "It costs exactly",
+"text": "six hundred thirty dollars."
+},
+"p/631": {
+"prev": "It costs exactly",
+"text": "six hundred thirty-one dollars."
+},
+"p/632": {
+"prev": "It costs exactly",
+"text": "six hundred thirty-two dollars."
+},
+"p/633": {
+"prev": "It costs exactly",
+"text": "six hundred thirty-three dollars."
+},
+"p/634": {
+"prev": "It costs exactly",
+"text": "six hundred thirty-four dollars."
+},
+"p/635": {
+"prev": "It costs exactly",
+"text": "six hundred thirty-five dollars."
+},
+"p/636": {
+"prev": "It costs exactly",
+"text": "six hundred thirty-six dollars."
+},
+"p/637": {
+"prev": "It costs exactly",
+"text": "six hundred thirty-seven dollars."
+},
+"p/638": {
+"prev": "It costs exactly",
+"text": "six hundred thirty-eight dollars."
+},
+"p/639": {
+"prev": "It costs exactly",
+"text": "six hundred thirty-nine dollars."
+},
+"p/64": {
+"prev": "It costs exactly",
+"text": "sixty-four dollars."
+},
+"p/640": {
+"prev": "It costs exactly",
+"text": "six hundred forty dollars."
+},
+"p/641": {
+"prev": "It costs exactly",
+"text": "six hundred forty-one dollars."
+},
+"p/642": {
+"prev": "It costs exactly",
+"text": "six hundred forty-two dollars."
+},
+"p/643": {
+"prev": "It costs exactly",
+"text": "six hundred forty-three dollars."
+},
+"p/644": {
+"prev": "It costs exactly",
+"text": "six hundred forty-four dollars."
+},
+"p/645": {
+"prev": "It costs exactly",
+"text": "six hundred forty-five dollars."
+},
+"p/646": {
+"prev": "It costs exactly",
+"text": "six hundred forty-six dollars."
+},
+"p/647": {
+"prev": "It costs exactly",
+"text": "six hundred forty-seven dollars."
+},
+"p/648": {
+"prev": "It costs exactly",
+"text": "six hundred forty-eight dollars."
+},
+"p/649": {
+"prev": "It costs exactly",
+"text": "six hundred forty-nine dollars."
+},
+"p/65": {
+"prev": "It costs exactly",
+"text": "sixty-five dollars."
+},
+"p/650": {
+"prev": "It costs exactly",
+"text": "six hundred fifty dollars."
+},
+"p/651": {
+"prev": "It costs exactly",
+"text": "six hundred fifty-one dollars."
+},
+"p/652": {
+"prev": "It costs exactly",
+"text": "six hundred fifty-two dollars."
+},
+"p/653": {
+"prev": "It costs exactly",
+"text": "six hundred fifty-three dollars."
+},
+"p/654": {
+"prev": "It costs exactly",
+"text": "six hundred fifty-four dollars."
+},
+"p/655": {
+"prev": "It costs exactly",
+"text": "six hundred fifty-five dollars."
+},
+"p/656": {
+"prev": "It costs exactly",
+"text": "six hundred fifty-six dollars."
+},
+"p/657": {
+"prev": "It costs exactly",
+"text": "six hundred fifty-seven dollars."
+},
+"p/658": {
+"prev": "It costs exactly",
+"text": "six hundred fifty-eight dollars."
+},
+"p/659": {
+"prev": "It costs exactly",
+"text": "six hundred fifty-nine dollars."
+},
+"p/66": {
+"prev": "It costs exactly",
+"text": "sixty-six dollars."
+},
+"p/660": {
+"prev": "It costs exactly",
+"text": "six hundred sixty dollars."
+},
+"p/661": {
+"prev": "It costs exactly",
+"text": "six hundred sixty-one dollars."
+},
+"p/662": {
+"prev": "It costs exactly",
+"text": "six hundred sixty-two dollars."
+},
+"p/663": {
+"prev": "It costs exactly",
+"text": "six hundred sixty-three dollars."
+},
+"p/664": {
+"prev": "It costs exactly",
+"text": "six hundred sixty-four dollars."
+},
+"p/665": {
+"prev": "It costs exactly",
+"text": "six hundred sixty-five dollars."
+},
+"p/666": {
+"prev": "It costs exactly",
+"text": "six hundred sixty-six dollars."
+},
+"p/667": {
+"prev": "It costs exactly",
+"text": "six hundred sixty-seven dollars."
+},
+"p/668": {
+"prev": "It costs exactly",
+"text": "six hundred sixty-eight dollars."
+},
+"p/669": {
+"prev": "It costs exactly",
+"text": "six hundred sixty-nine dollars."
+},
+"p/67": {
+"prev": "It costs exactly",
+"text": "sixty-seven dollars."
+},
+"p/670": {
+"prev": "It costs exactly",
+"text": "six hundred seventy dollars."
+},
+"p/671": {
+"prev": "It costs exactly",
+"text": "six hundred seventy-one dollars."
+},
+"p/672": {
+"prev": "It costs exactly",
+"text": "six hundred seventy-two dollars."
+},
+"p/673": {
+"prev": "It costs exactly",
+"text": "six hundred seventy-three dollars."
+},
+"p/674": {
+"prev": "It costs exactly",
+"text": "six hundred seventy-four dollars."
+},
+"p/675": {
+"prev": "It costs exactly",
+"text": "six hundred seventy-five dollars."
+},
+"p/676": {
+"prev": "It costs exactly",
+"text": "six hundred seventy-six dollars."
+},
+"p/677": {
+"prev": "It costs exactly",
+"text": "six hundred seventy-seven dollars."
+},
+"p/678": {
+"prev": "It costs exactly",
+"text": "six hundred seventy-eight dollars."
+},
+"p/679": {
+"prev": "It costs exactly",
+"text": "six hundred seventy-nine dollars."
+},
+"p/68": {
+"prev": "It costs exactly",
+"text": "sixty-eight dollars."
+},
+"p/680": {
+"prev": "It costs exactly",
+"text": "six hundred eighty dollars."
+},
+"p/681": {
+"prev": "It costs exactly",
+"text": "six hundred eighty-one dollars."
+},
+"p/682": {
+"prev": "It costs exactly",
+"text": "six hundred eighty-two dollars."
+},
+"p/683": {
+"prev": "It costs exactly",
+"text": "six hundred eighty-three dollars."
+},
+"p/684": {
+"prev": "It costs exactly",
+"text": "six hundred eighty-four dollars."
+},
+"p/685": {
+"prev": "It costs exactly",
+"text": "six hundred eighty-five dollars."
+},
+"p/686": {
+"prev": "It costs exactly",
+"text": "six hundred eighty-six dollars."
+},
+"p/687": {
+"prev": "It costs exactly",
+"text": "six hundred eighty-seven dollars."
+},
+"p/688": {
+"prev": "It costs exactly",
+"text": "six hundred eighty-eight dollars."
+},
+"p/689": {
+"prev": "It costs exactly",
+"text": "six hundred eighty-nine dollars."
+},
+"p/69": {
+"prev": "It costs exactly",
+"text": "sixty-nine dollars."
+},
+"p/690": {
+"prev": "It costs exactly",
+"text": "six hundred ninety dollars."
+},
+"p/691": {
+"prev": "It costs exactly",
+"text": "six hundred ninety-one dollars."
+},
+"p/692": {
+"prev": "It costs exactly",
+"text": "six hundred ninety-two dollars."
+},
+"p/693": {
+"prev": "It costs exactly",
+"text": "six hundred ninety-three dollars."
+},
+"p/694": {
+"prev": "It costs exactly",
+"text": "six hundred ninety-four dollars."
+},
+"p/695": {
+"prev": "It costs exactly",
+"text": "six hundred ninety-five dollars."
+},
+"p/696": {
+"prev": "It costs exactly",
+"text": "six hundred ninety-six dollars."
+},
+"p/697": {
+"prev": "It costs exactly",
+"text": "six hundred ninety-seven dollars."
+},
+"p/698": {
+"prev": "It costs exactly",
+"text": "six hundred ninety-eight dollars."
+},
+"p/699": {
+"prev": "It costs exactly",
+"text": "six hundred ninety-nine dollars."
+},
+"p/70": {
+"prev": "It costs exactly",
+"text": "seventy dollars."
+},
+"p/700": {
+"prev": "It costs exactly",
+"text": "seven hundred dollars."
+},
+"p/701": {
+"prev": "It costs exactly",
+"text": "seven hundred one dollars."
+},
+"p/702": {
+"prev": "It costs exactly",
+"text": "seven hundred two dollars."
+},
+"p/703": {
+"prev": "It costs exactly",
+"text": "seven hundred three dollars."
+},
+"p/704": {
+"prev": "It costs exactly",
+"text": "seven hundred four dollars."
+},
+"p/705": {
+"prev": "It costs exactly",
+"text": "seven hundred five dollars."
+},
+"p/706": {
+"prev": "It costs exactly",
+"text": "seven hundred six dollars."
+},
+"p/707": {
+"prev": "It costs exactly",
+"text": "seven hundred seven dollars."
+},
+"p/708": {
+"prev": "It costs exactly",
+"text": "seven hundred eight dollars."
+},
+"p/709": {
+"prev": "It costs exactly",
+"text": "seven hundred nine dollars."
+},
+"p/71": {
+"prev": "It costs exactly",
+"text": "seventy-one dollars."
+},
+"p/710": {
+"prev": "It costs exactly",
+"text": "seven hundred ten dollars."
+},
+"p/711": {
+"prev": "It costs exactly",
+"text": "seven hundred eleven dollars."
+},
+"p/712": {
+"prev": "It costs exactly",
+"text": "seven hundred twelve dollars."
+},
+"p/713": {
+"prev": "It costs exactly",
+"text": "seven hundred thirteen dollars."
+},
+"p/714": {
+"prev": "It costs exactly",
+"text": "seven hundred fourteen dollars."
+},
+"p/715": {
+"prev": "It costs exactly",
+"text": "seven hundred fifteen dollars."
+},
+"p/716": {
+"prev": "It costs exactly",
+"text": "seven hundred sixteen dollars."
+},
+"p/717": {
+"prev": "It costs exactly",
+"text": "seven hundred seventeen dollars."
+},
+"p/718": {
+"prev": "It costs exactly",
+"text": "seven hundred eighteen dollars."
+},
+"p/719": {
+"prev": "It costs exactly",
+"text": "seven hundred nineteen dollars."
+},
+"p/72": {
+"prev": "It costs exactly",
+"text": "seventy-two dollars."
+},
+"p/720": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty dollars."
+},
+"p/721": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty-one dollars."
+},
+"p/722": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty-two dollars."
+},
+"p/723": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty-three dollars."
+},
+"p/724": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty-four dollars."
+},
+"p/725": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty-five dollars."
+},
+"p/726": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty-six dollars."
+},
+"p/727": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty-seven dollars."
+},
+"p/728": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty-eight dollars."
+},
+"p/729": {
+"prev": "It costs exactly",
+"text": "seven hundred twenty-nine dollars."
+},
+"p/73": {
+"prev": "It costs exactly",
+"text": "seventy-three dollars."
+},
+"p/730": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty dollars."
+},
+"p/731": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty-one dollars."
+},
+"p/732": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty-two dollars."
+},
+"p/733": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty-three dollars."
+},
+"p/734": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty-four dollars."
+},
+"p/735": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty-five dollars."
+},
+"p/736": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty-six dollars."
+},
+"p/737": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty-seven dollars."
+},
+"p/738": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty-eight dollars."
+},
+"p/739": {
+"prev": "It costs exactly",
+"text": "seven hundred thirty-nine dollars."
+},
+"p/74": {
+"prev": "It costs exactly",
+"text": "seventy-four dollars."
+},
+"p/740": {
+"prev": "It costs exactly",
+"text": "seven hundred forty dollars."
+},
+"p/741": {
+"prev": "It costs exactly",
+"text": "seven hundred forty-one dollars."
+},
+"p/742": {
+"prev": "It costs exactly",
+"text": "seven hundred forty-two dollars."
+},
+"p/743": {
+"prev": "It costs exactly",
+"text": "seven hundred forty-three dollars."
+},
+"p/744": {
+"prev": "It costs exactly",
+"text": "seven hundred forty-four dollars."
+},
+"p/745": {
+"prev": "It costs exactly",
+"text": "seven hundred forty-five dollars."
+},
+"p/746": {
+"prev": "It costs exactly",
+"text": "seven hundred forty-six dollars."
+},
+"p/747": {
+"prev": "It costs exactly",
+"text": "seven hundred forty-seven dollars."
+},
+"p/748": {
+"prev": "It costs exactly",
+"text": "seven hundred forty-eight dollars."
+},
+"p/749": {
+"prev": "It costs exactly",
+"text": "seven hundred forty-nine dollars."
+},
+"p/75": {
+"prev": "It costs exactly",
+"text": "seventy-five dollars."
+},
+"p/750": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty dollars."
+},
+"p/751": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty-one dollars."
+},
+"p/752": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty-two dollars."
+},
+"p/753": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty-three dollars."
+},
+"p/754": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty-four dollars."
+},
+"p/755": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty-five dollars."
+},
+"p/756": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty-six dollars."
+},
+"p/757": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty-seven dollars."
+},
+"p/758": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty-eight dollars."
+},
+"p/759": {
+"prev": "It costs exactly",
+"text": "seven hundred fifty-nine dollars."
+},
+"p/76": {
+"prev": "It costs exactly",
+"text": "seventy-six dollars."
+},
+"p/760": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty dollars."
+},
+"p/761": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty-one dollars."
+},
+"p/762": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty-two dollars."
+},
+"p/763": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty-three dollars."
+},
+"p/764": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty-four dollars."
+},
+"p/765": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty-five dollars."
+},
+"p/766": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty-six dollars."
+},
+"p/767": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty-seven dollars."
+},
+"p/768": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty-eight dollars."
+},
+"p/769": {
+"prev": "It costs exactly",
+"text": "seven hundred sixty-nine dollars."
+},
+"p/77": {
+"prev": "It costs exactly",
+"text": "seventy-seven dollars."
+},
+"p/770": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy dollars."
+},
+"p/771": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy-one dollars."
+},
+"p/772": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy-two dollars."
+},
+"p/773": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy-three dollars."
+},
+"p/774": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy-four dollars."
+},
+"p/775": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy-five dollars."
+},
+"p/776": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy-six dollars."
+},
+"p/777": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy-seven dollars."
+},
+"p/778": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy-eight dollars."
+},
+"p/779": {
+"prev": "It costs exactly",
+"text": "seven hundred seventy-nine dollars."
+},
+"p/78": {
+"prev": "It costs exactly",
+"text": "seventy-eight dollars."
+},
+"p/780": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty dollars."
+},
+"p/781": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty-one dollars."
+},
+"p/782": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty-two dollars."
+},
+"p/783": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty-three dollars."
+},
+"p/784": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty-four dollars."
+},
+"p/785": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty-five dollars."
+},
+"p/786": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty-six dollars."
+},
+"p/787": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty-seven dollars."
+},
+"p/788": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty-eight dollars."
+},
+"p/789": {
+"prev": "It costs exactly",
+"text": "seven hundred eighty-nine dollars."
+},
+"p/79": {
+"prev": "It costs exactly",
+"text": "seventy-nine dollars."
+},
+"p/790": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety dollars."
+},
+"p/791": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety-one dollars."
+},
+"p/792": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety-two dollars."
+},
+"p/793": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety-three dollars."
+},
+"p/794": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety-four dollars."
+},
+"p/795": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety-five dollars."
+},
+"p/796": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety-six dollars."
+},
+"p/797": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety-seven dollars."
+},
+"p/798": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety-eight dollars."
+},
+"p/799": {
+"prev": "It costs exactly",
+"text": "seven hundred ninety-nine dollars."
+},
+"p/80": {
+"prev": "It costs exactly",
+"text": "eighty dollars."
+},
+"p/800": {
+"prev": "It costs exactly",
+"text": "eight hundred dollars."
+},
+"p/801": {
+"prev": "It costs exactly",
+"text": "eight hundred one dollars."
+},
+"p/802": {
+"prev": "It costs exactly",
+"text": "eight hundred two dollars."
+},
+"p/803": {
+"prev": "It costs exactly",
+"text": "eight hundred three dollars."
+},
+"p/804": {
+"prev": "It costs exactly",
+"text": "eight hundred four dollars."
+},
+"p/805": {
+"prev": "It costs exactly",
+"text": "eight hundred five dollars."
+},
+"p/806": {
+"prev": "It costs exactly",
+"text": "eight hundred six dollars."
+},
+"p/807": {
+"prev": "It costs exactly",
+"text": "eight hundred seven dollars."
+},
+"p/808": {
+"prev": "It costs exactly",
+"text": "eight hundred eight dollars."
+},
+"p/809": {
+"prev": "It costs exactly",
+"text": "eight hundred nine dollars."
+},
+"p/81": {
+"prev": "It costs exactly",
+"text": "eighty-one dollars."
+},
+"p/810": {
+"prev": "It costs exactly",
+"text": "eight hundred ten dollars."
+},
+"p/811": {
+"prev": "It costs exactly",
+"text": "eight hundred eleven dollars."
+},
+"p/812": {
+"prev": "It costs exactly",
+"text": "eight hundred twelve dollars."
+},
+"p/813": {
+"prev": "It costs exactly",
+"text": "eight hundred thirteen dollars."
+},
+"p/814": {
+"prev": "It costs exactly",
+"text": "eight hundred fourteen dollars."
+},
+"p/815": {
+"prev": "It costs exactly",
+"text": "eight hundred fifteen dollars."
+},
+"p/816": {
+"prev": "It costs exactly",
+"text": "eight hundred sixteen dollars."
+},
+"p/817": {
+"prev": "It costs exactly",
+"text": "eight hundred seventeen dollars."
+},
+"p/818": {
+"prev": "It costs exactly",
+"text": "eight hundred eighteen dollars."
+},
+"p/819": {
+"prev": "It costs exactly",
+"text": "eight hundred nineteen dollars."
+},
+"p/82": {
+"prev": "It costs exactly",
+"text": "eighty-two dollars."
+},
+"p/820": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty dollars."
+},
+"p/821": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty-one dollars."
+},
+"p/822": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty-two dollars."
+},
+"p/823": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty-three dollars."
+},
+"p/824": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty-four dollars."
+},
+"p/825": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty-five dollars."
+},
+"p/826": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty-six dollars."
+},
+"p/827": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty-seven dollars."
+},
+"p/828": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty-eight dollars."
+},
+"p/829": {
+"prev": "It costs exactly",
+"text": "eight hundred twenty-nine dollars."
+},
+"p/83": {
+"prev": "It costs exactly",
+"text": "eighty-three dollars."
+},
+"p/830": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty dollars."
+},
+"p/831": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty-one dollars."
+},
+"p/832": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty-two dollars."
+},
+"p/833": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty-three dollars."
+},
+"p/834": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty-four dollars."
+},
+"p/835": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty-five dollars."
+},
+"p/836": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty-six dollars."
+},
+"p/837": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty-seven dollars."
+},
+"p/838": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty-eight dollars."
+},
+"p/839": {
+"prev": "It costs exactly",
+"text": "eight hundred thirty-nine dollars."
+},
+"p/84": {
+"prev": "It costs exactly",
+"text": "eighty-four dollars."
+},
+"p/840": {
+"prev": "It costs exactly",
+"text": "eight hundred forty dollars."
+},
+"p/841": {
+"prev": "It costs exactly",
+"text": "eight hundred forty-one dollars."
+},
+"p/842": {
+"prev": "It costs exactly",
+"text": "eight hundred forty-two dollars."
+},
+"p/843": {
+"prev": "It costs exactly",
+"text": "eight hundred forty-three dollars."
+},
+"p/844": {
+"prev": "It costs exactly",
+"text": "eight hundred forty-four dollars."
+},
+"p/845": {
+"prev": "It costs exactly",
+"text": "eight hundred forty-five dollars."
+},
+"p/846": {
+"prev": "It costs exactly",
+"text": "eight hundred forty-six dollars."
+},
+"p/847": {
+"prev": "It costs exactly",
+"text": "eight hundred forty-seven dollars."
+},
+"p/848": {
+"prev": "It costs exactly",
+"text": "eight hundred forty-eight dollars."
+},
+"p/849": {
+"prev": "It costs exactly",
+"text": "eight hundred forty-nine dollars."
+},
+"p/85": {
+"prev": "It costs exactly",
+"text": "eighty-five dollars."
+},
+"p/850": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty dollars."
+},
+"p/851": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty-one dollars."
+},
+"p/852": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty-two dollars."
+},
+"p/853": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty-three dollars."
+},
+"p/854": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty-four dollars."
+},
+"p/855": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty-five dollars."
+},
+"p/856": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty-six dollars."
+},
+"p/857": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty-seven dollars."
+},
+"p/858": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty-eight dollars."
+},
+"p/859": {
+"prev": "It costs exactly",
+"text": "eight hundred fifty-nine dollars."
+},
+"p/86": {
+"prev": "It costs exactly",
+"text": "eighty-six dollars."
+},
+"p/860": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty dollars."
+},
+"p/861": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty-one dollars."
+},
+"p/862": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty-two dollars."
+},
+"p/863": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty-three dollars."
+},
+"p/864": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty-four dollars."
+},
+"p/865": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty-five dollars."
+},
+"p/866": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty-six dollars."
+},
+"p/867": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty-seven dollars."
+},
+"p/868": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty-eight dollars."
+},
+"p/869": {
+"prev": "It costs exactly",
+"text": "eight hundred sixty-nine dollars."
+},
+"p/87": {
+"prev": "It costs exactly",
+"text": "eighty-seven dollars."
+},
+"p/870": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy dollars."
+},
+"p/871": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy-one dollars."
+},
+"p/872": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy-two dollars."
+},
+"p/873": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy-three dollars."
+},
+"p/874": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy-four dollars."
+},
+"p/875": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy-five dollars."
+},
+"p/876": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy-six dollars."
+},
+"p/877": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy-seven dollars."
+},
+"p/878": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy-eight dollars."
+},
+"p/879": {
+"prev": "It costs exactly",
+"text": "eight hundred seventy-nine dollars."
+},
+"p/88": {
+"prev": "It costs exactly",
+"text": "eighty-eight dollars."
+},
+"p/880": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty dollars."
+},
+"p/881": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty-one dollars."
+},
+"p/882": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty-two dollars."
+},
+"p/883": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty-three dollars."
+},
+"p/884": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty-four dollars."
+},
+"p/885": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty-five dollars."
+},
+"p/886": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty-six dollars."
+},
+"p/887": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty-seven dollars."
+},
+"p/888": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty-eight dollars."
+},
+"p/889": {
+"prev": "It costs exactly",
+"text": "eight hundred eighty-nine dollars."
+},
+"p/89": {
+"prev": "It costs exactly",
+"text": "eighty-nine dollars."
+},
+"p/890": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety dollars."
+},
+"p/891": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety-one dollars."
+},
+"p/892": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety-two dollars."
+},
+"p/893": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety-three dollars."
+},
+"p/894": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety-four dollars."
+},
+"p/895": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety-five dollars."
+},
+"p/896": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety-six dollars."
+},
+"p/897": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety-seven dollars."
+},
+"p/898": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety-eight dollars."
+},
+"p/899": {
+"prev": "It costs exactly",
+"text": "eight hundred ninety-nine dollars."
+},
+"p/90": {
+"prev": "It costs exactly",
+"text": "ninety dollars."
+},
+"p/900": {
+"prev": "It costs exactly",
+"text": "nine hundred dollars."
+},
+"p/901": {
+"prev": "It costs exactly",
+"text": "nine hundred one dollars."
+},
+"p/902": {
+"prev": "It costs exactly",
+"text": "nine hundred two dollars."
+},
+"p/903": {
+"prev": "It costs exactly",
+"text": "nine hundred three dollars."
+},
+"p/904": {
+"prev": "It costs exactly",
+"text": "nine hundred four dollars."
+},
+"p/905": {
+"prev": "It costs exactly",
+"text": "nine hundred five dollars."
+},
+"p/906": {
+"prev": "It costs exactly",
+"text": "nine hundred six dollars."
+},
+"p/907": {
+"prev": "It costs exactly",
+"text": "nine hundred seven dollars."
+},
+"p/908": {
+"prev": "It costs exactly",
+"text": "nine hundred eight dollars."
+},
+"p/909": {
+"prev": "It costs exactly",
+"text": "nine hundred nine dollars."
+},
+"p/91": {
+"prev": "It costs exactly",
+"text": "ninety-one dollars."
+},
+"p/910": {
+"prev": "It costs exactly",
+"text": "nine hundred ten dollars."
+},
+"p/911": {
+"prev": "It costs exactly",
+"text": "nine hundred eleven dollars."
+},
+"p/912": {
+"prev": "It costs exactly",
+"text": "nine hundred twelve dollars."
+},
+"p/913": {
+"prev": "It costs exactly",
+"text": "nine hundred thirteen dollars."
+},
+"p/914": {
+"prev": "It costs exactly",
+"text": "nine hundred fourteen dollars."
+},
+"p/915": {
+"prev": "It costs exactly",
+"text": "nine hundred fifteen dollars."
+},
+"p/916": {
+"prev": "It costs exactly",
+"text": "nine hundred sixteen dollars."
+},
+"p/917": {
+"prev": "It costs exactly",
+"text": "nine hundred seventeen dollars."
+},
+"p/918": {
+"prev": "It costs exactly",
+"text": "nine hundred eighteen dollars."
+},
+"p/919": {
+"prev": "It costs exactly",
+"text": "nine hundred nineteen dollars."
+},
+"p/92": {
+"prev": "It costs exactly",
+"text": "ninety-two dollars."
+},
+"p/920": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty dollars."
+},
+"p/921": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty-one dollars."
+},
+"p/922": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty-two dollars."
+},
+"p/923": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty-three dollars."
+},
+"p/924": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty-four dollars."
+},
+"p/925": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty-five dollars."
+},
+"p/926": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty-six dollars."
+},
+"p/927": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty-seven dollars."
+},
+"p/928": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty-eight dollars."
+},
+"p/929": {
+"prev": "It costs exactly",
+"text": "nine hundred twenty-nine dollars."
+},
+"p/93": {
+"prev": "It costs exactly",
+"text": "ninety-three dollars."
+},
+"p/930": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty dollars."
+},
+"p/931": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty-one dollars."
+},
+"p/932": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty-two dollars."
+},
+"p/933": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty-three dollars."
+},
+"p/934": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty-four dollars."
+},
+"p/935": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty-five dollars."
+},
+"p/936": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty-six dollars."
+},
+"p/937": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty-seven dollars."
+},
+"p/938": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty-eight dollars."
+},
+"p/939": {
+"prev": "It costs exactly",
+"text": "nine hundred thirty-nine dollars."
+},
+"p/94": {
+"prev": "It costs exactly",
+"text": "ninety-four dollars."
+},
+"p/940": {
+"prev": "It costs exactly",
+"text": "nine hundred forty dollars."
+},
+"p/941": {
+"prev": "It costs exactly",
+"text": "nine hundred forty-one dollars."
+},
+"p/942": {
+"prev": "It costs exactly",
+"text": "nine hundred forty-two dollars."
+},
+"p/943": {
+"prev": "It costs exactly",
+"text": "nine hundred forty-three dollars."
+},
+"p/944": {
+"prev": "It costs exactly",
+"text": "nine hundred forty-four dollars."
+},
+"p/945": {
+"prev": "It costs exactly",
+"text": "nine hundred forty-five dollars."
+},
+"p/946": {
+"prev": "It costs exactly",
+"text": "nine hundred forty-six dollars."
+},
+"p/947": {
+"prev": "It costs exactly",
+"text": "nine hundred forty-seven dollars."
+},
+"p/948": {
+"prev": "It costs exactly",
+"text": "nine hundred forty-eight dollars."
+},
+"p/949": {
+"prev": "It costs exactly",
+"text": "nine hundred forty-nine dollars."
+},
+"p/95": {
+"prev": "It costs exactly",
+"text": "ninety-five dollars."
+},
+"p/950": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty dollars."
+},
+"p/951": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty-one dollars."
+},
+"p/952": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty-two dollars."
+},
+"p/953": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty-three dollars."
+},
+"p/954": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty-four dollars."
+},
+"p/955": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty-five dollars."
+},
+"p/956": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty-six dollars."
+},
+"p/957": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty-seven dollars."
+},
+"p/958": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty-eight dollars."
+},
+"p/959": {
+"prev": "It costs exactly",
+"text": "nine hundred fifty-nine dollars."
+},
+"p/96": {
+"prev": "It costs exactly",
+"text": "ninety-six dollars."
+},
+"p/960": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty dollars."
+},
+"p/961": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty-one dollars."
+},
+"p/962": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty-two dollars."
+},
+"p/963": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty-three dollars."
+},
+"p/964": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty-four dollars."
+},
+"p/965": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty-five dollars."
+},
+"p/966": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty-six dollars."
+},
+"p/967": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty-seven dollars."
+},
+"p/968": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty-eight dollars."
+},
+"p/969": {
+"prev": "It costs exactly",
+"text": "nine hundred sixty-nine dollars."
+},
+"p/97": {
+"prev": "It costs exactly",
+"text": "ninety-seven dollars."
+},
+"p/970": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy dollars."
+},
+"p/971": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy-one dollars."
+},
+"p/972": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy-two dollars."
+},
+"p/973": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy-three dollars."
+},
+"p/974": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy-four dollars."
+},
+"p/975": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy-five dollars."
+},
+"p/976": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy-six dollars."
+},
+"p/977": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy-seven dollars."
+},
+"p/978": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy-eight dollars."
+},
+"p/979": {
+"prev": "It costs exactly",
+"text": "nine hundred seventy-nine dollars."
+},
+"p/98": {
+"prev": "It costs exactly",
+"text": "ninety-eight dollars."
+},
+"p/980": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty dollars."
+},
+"p/981": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty-one dollars."
+},
+"p/982": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty-two dollars."
+},
+"p/983": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty-three dollars."
+},
+"p/984": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty-four dollars."
+},
+"p/985": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty-five dollars."
+},
+"p/986": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty-six dollars."
+},
+"p/987": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty-seven dollars."
+},
+"p/988": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty-eight dollars."
+},
+"p/989": {
+"prev": "It costs exactly",
+"text": "nine hundred eighty-nine dollars."
+},
+"p/99": {
+"prev": "It costs exactly",
+"text": "ninety-nine dollars."
+},
+"p/990": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety dollars."
+},
+"p/991": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety-one dollars."
+},
+"p/992": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety-two dollars."
+},
+"p/993": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety-three dollars."
+},
+"p/994": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety-four dollars."
+},
+"p/995": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety-five dollars."
+},
+"p/996": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety-six dollars."
+},
+"p/997": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety-seven dollars."
+},
+"p/998": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety-eight dollars."
+},
+"p/999": {
+"prev": "It costs exactly",
+"text": "nine hundred ninety-nine dollars."
+},
+"slow/buy": {
+"speed": 0.75,
+"text": "buy."
+},
+"slow/drink": {
+"speed": 0.75,
+"text": "drink."
+},
+"slow/eye": {
+"speed": 0.75,
+"text": "eye."
+},
+"slow/find": {
+"speed": 0.75,
+"text": "find."
+},
+"slow/i": {
+"speed": 0.75,
+"text": "I."
+},
+"slow/kind": {
+"speed": 0.75,
+"text": "kind."
+},
+"slow/life": {
+"speed": 0.75,
+"text": "life."
+},
+"slow/my": {
+"speed": 0.75,
+"text": "my."
+},
+"slow/pitch": {
+"speed": 0.75,
+"text": "pitch."
+},
+"slow/swim": {
+"speed": 0.75,
+"text": "swim."
+},
+"slow/tight": {
+"speed": 0.75,
+"text": "tight."
+},
+"slow/try": {
+"speed": 0.75,
+"text": "try."
+},
+"slow/which": {
+"speed": 0.75,
+"text": "which."
+},
+"slow/while": {
+"speed": 0.75,
+"text": "while."
+},
+"slow/why": {
+"speed": 0.75,
+"text": "why."
+},
+"spell/buy": {
+"text": "buy. Can we buy a new backpack for school? buy."
+},
+"spell/drink": {
+"text": "drink. I bought a cold drink at the food court. drink."
+},
+"spell/eye": {
+"text": "eye. That shiny necklace caught my eye. eye."
+},
+"spell/find": {
+"text": "find. I cannot find my size in this store. find."
+},
+"spell/i": {
+"text": "I. I love the sparkly store at the mall. I."
+},
+"spell/kind": {
+"text": "kind. The cashier was very kind to us. kind."
+},
+"spell/life": {
+"text": "life. This is the best shopping trip of my life! life."
+},
+"spell/my": {
+"text": "my. My bag is full of new clothes. my."
+},
+"spell/pitch": {
+"text": "pitch. At the mall concert, the singer hit a high pitch. pitch."
+},
+"spell/swim": {
+"text": "swim. I need a new suit to swim in this summer. swim."
+},
+"spell/tight": {
+"text": "tight. These jeans are too tight, so I need a bigger size. tight."
+},
+"spell/try": {
+"text": "try. Let's try on the sunglasses! try."
+},
+"spell/which": {
+"text": "which. Which color shirt should I get? which."
+},
+"spell/while": {
+"text": "while. Wait here while I try on these shoes. while."
+},
+"spell/why": {
+"text": "why. Why is the toy store so busy today? why."
+}
+}
