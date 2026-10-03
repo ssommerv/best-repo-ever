@@ -1,22 +1,34 @@
 // Offline support. When online, always load the newest code from the server
 // (bypassing the browser's HTTP cache); fall back to the saved copy only when
-// offline or the network is too slow. Images rarely change, so they are served
-// from the saved copy first.
-const CACHE = 'pvb-v6';
+// offline or the network is too slow. Images and voice clips rarely change, so
+// they are served from the saved copy first.
+const CACHE = 'pvb-v7';
 const ASSETS = [
-  './', './index.html', './styles.css', './app.js', './manifest.webmanifest',
+  './', './index.html', './styles.css', './app.js', './manifest.webmanifest', './audio/manifest.json',
   './img/hannah-splash.jpg', './img/hannah-head.jpg',
   './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png',
 ];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE)
-    .then((c) => Promise.all(ASSETS.map((url) => fetch(url, { cache: 'reload' }).then((res) => {
+  e.waitUntil((async () => {
+    const c = await caches.open(CACHE);
+    await Promise.all(ASSETS.map(async (url) => {
+      const res = await fetch(url, { cache: 'reload' });
       if (!res.ok) throw new Error(`${url}: ${res.status}`);
-      return c.put(url, res);
-    }))))
-    .then(() => self.skipWaiting()));
+      await c.put(url, res);
+    }));
+    await precacheVoice(c);
+    await self.skipWaiting();
+  })());
 });
+
+// Save the question lines, spelling words and cheers for offline use. The
+// 1,000 price clips are saved as they get played instead.
+function precacheVoice(c) {
+  return c.match('./audio/manifest.json').then((r) => (r ? r.json() : { clips: {} }))
+    .then(({ clips }) => Promise.all(Object.entries(clips).filter(([key]) => !key.startsWith('p/'))
+      .map(([, [file]]) => fetch(file, { cache: 'reload' }).then((res) => res.ok && c.put(file, res)).catch(() => {}))));
+}
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(caches.keys()
@@ -24,7 +36,7 @@ self.addEventListener('activate', (e) => {
     .then(() => self.clients.claim()));
 });
 
-const isImage = (url) => /\.(png|jpe?g|svg|webp)$/i.test(url.pathname);
+const isImage = (url) => /\.(png|jpe?g|svg|webp|mp3)$/i.test(url.pathname);
 
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
