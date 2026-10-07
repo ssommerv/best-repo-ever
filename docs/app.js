@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '7 (Oct 3, 2026)';
+  const APP_VERSION = '8 (Oct 7, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -975,21 +975,22 @@
   // ---------- Spelling (Letter Bead Bar) ----------
   // [bracketed] letters are the tricky part, highlighted when the answer is shown.
   const SPELL_DEFAULT = [
-    ['pi[tch]', 'At the mall concert, the singer hit a high pitch.', 'After a short vowel, the “ch” sound is spelled <b>t-c-h</b>.'],
-    ['dri[nk]', 'I bought a cold drink at the food court.', 'Stretch it out: d-r-i-n-k. It ends with <b>n-k</b>.'],
-    ['sw[i]m', 'I need a new suit to swim in this summer.', 'Stretch it out: s-w-i-m. The <b>i</b> is short, like in “him”.'],
-    ['l[i]f[e]', 'This is the best shopping trip of my life!', 'The silent <b>e</b> at the end makes the <b>i</b> say its name.'],
-    ['[wh][i]l[e]', 'Wait here while I try on these shoes.', 'It starts with <b>w-h</b>, and the silent <b>e</b> makes the <b>i</b> say its name.'],
-    ['[I]', 'I love the sparkly store at the mall.', 'When <b>I</b> means me, it is always one capital letter.'],
-    ['m[y]', 'My bag is full of new clothes.', 'The <b>y</b> at the end says “i”, like in why and try.'],
-    ['t[igh]t', 'These jeans are too tight, so I need a bigger size.', '<b>i-g-h</b> together says “i”, like in night and light.'],
-    ['b[u]y', 'Can we buy a new backpack for school?', 'Tricky word! The <b>u</b> is silent: b-u-y.'],
-    ['[eye]', 'That shiny necklace caught my eye.', 'Tricky word! <b>e-y-e</b> is spelled the same forwards and backwards.'],
-    ['[wh]i[ch]', 'Which color shirt should I get?', 'It starts with <b>w-h</b> and ends with <b>c-h</b>.'],
-    ['f[i]nd', 'I cannot find my size in this store.', 'The <b>i</b> says its name before <b>n-d</b>, like in kind and mind.'],
-    ['[wh][y]', 'Why is the toy store so busy today?', 'It starts with <b>w-h</b>, and the <b>y</b> says “i”.'],
-    ['k[i]nd', 'The cashier was very kind to us.', 'The <b>i</b> says its name before <b>n-d</b>, like in find and mind.'],
-    ['tr[y]', "Let's try on the sunglasses!", 'The <b>y</b> at the end says “i”, like in my and why.'],
+    ['ro[ck]et', 'I want the rocket toy from the toy store.', 'After a short <b>o</b>, the “k” sound is spelled <b>c-k</b>, like in pocket.'],
+    ['po[ck]et', 'I put my change in my pocket.', 'After a short <b>o</b>, the “k” sound is spelled <b>c-k</b>, like in rocket.'],
+    ['h[old]', 'Can you hold my shopping bags, please?', '<b>o-l-d</b> says “old”, like in told and gold.'],
+    ['t[old]', 'Mom told me we could buy one treat.', '<b>o-l-d</b> says “old”, like in hold and gold.'],
+    ['of[t]en', 'We often get pretzels at the food court.', 'Tricky word! The <b>t</b> is quiet, but it is still there: o-f-t-e-n.'],
+    ['gr[ow]', 'My new plant will grow if I water it.', '<b>o-w</b> at the end can say “o”, like in snow and show.'],
+    ['[thr][o]n[e]', 'The princess doll sits on a sparkly throne.', 'It starts with <b>t-h-r</b>, and the silent <b>e</b> makes the <b>o</b> say its name.'],
+    ['s[o]', 'This dress is so pretty!', 'Just two letters! The <b>o</b> says its name at the end: s-o.'],
+    ['s[ew]', 'I can sew a patch on my backpack.', 'Tricky word! It sounds like “so”, but the “o” sound is spelled <b>e-w</b>.'],
+    ['m[o]st', 'This is the most fun store in the mall!', 'The <b>o</b> says its name before <b>s-t</b>, like in almost and post.'],
+    ['[al]most', 'We are almost at the food court.', '<b>al</b> + <b>most</b>. Only one <b>l</b> at the start!'],
+    ['b[o]th', 'I want both the red shoes and the blue shoes.', 'The <b>o</b> says its name, and it ends with <b>t-h</b>.'],
+    ['c[oa]ch', 'My soccer coach bought new balls at the sports store.', '<b>o-a</b> together says “o”, and it ends with <b>c-h</b>.'],
+    ['[o]pen', 'The new toy store is open today!', 'The <b>o</b> at the start says its name: o-p-e-n.'],
+    ['[al]so', 'I also want a cupcake!', '<b>al</b> + <b>so</b>. Only one <b>l</b>!'],
+    ['[ph]oto[syn]the[sis]', 'Plants make their own food from sunlight. That is called photosynthesis.', 'Bonus word! Say it in chunks: pho-to-syn-the-sis. <b>p-h</b> says “f”.'],
   ];
   const plainWord = (marked) => marked.replace(/[[\]]/g, '');
   const SPELL_INFO = Object.fromEntries(SPELL_DEFAULT.map(([m, s, tip]) => [plainWord(m).toLowerCase(), { marked: m, sentence: s, tip }]));

@@ -62,6 +62,15 @@ def main():
     done = json.load(open(done_path)) if os.path.exists(done_path) else {}
     todo = [k for k, v in lines.items() if k.startswith(args.only)
             and (done.get(k) != v or not os.path.exists(os.path.join(AUDIO, k + '.mp3')))]
+    # Forget clips for lines that no longer exist (e.g. last week's spelling words).
+    stale = [k for k in done if k not in lines]
+    for k in stale:
+        path = os.path.join(AUDIO, k + '.mp3')
+        if os.path.exists(path): os.remove(path)
+        del done[k]
+    if stale:
+        with open(done_path, 'w') as f: json.dump(done, f, indent=0, sort_keys=True)
+        print(f'Removed {len(stale)} old clips')
     if args.limit: todo = todo[:args.limit]
     chars = sum(len(lines[k]['text']) for k in todo)
     print(f'{len(lines)} lines total, {len(todo)} to record, ~{chars} characters')

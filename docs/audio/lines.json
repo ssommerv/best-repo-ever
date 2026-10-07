@@ -4105,109 +4105,116 @@
 "prev": "It costs exactly",
 "text": "nine hundred ninety-nine dollars."
 },
-"slow/buy": {
+"slow/almost": {
 "speed": 0.75,
-"text": "buy."
+"text": "almost."
 },
-"slow/drink": {
+"slow/also": {
 "speed": 0.75,
-"text": "drink."
+"text": "also."
 },
-"slow/eye": {
+"slow/both": {
 "speed": 0.75,
-"text": "eye."
+"text": "both."
 },
-"slow/find": {
+"slow/coach": {
 "speed": 0.75,
-"text": "find."
+"text": "coach."
 },
-"slow/i": {
+"slow/grow": {
 "speed": 0.75,
-"text": "I."
+"text": "grow."
 },
-"slow/kind": {
+"slow/hold": {
 "speed": 0.75,
-"text": "kind."
+"text": "hold."
 },
-"slow/life": {
+"slow/most": {
 "speed": 0.75,
-"text": "life."
+"text": "most."
 },
-"slow/my": {
+"slow/often": {
 "speed": 0.75,
-"text": "my."
+"text": "often."
 },
-"slow/pitch": {
+"slow/open": {
 "speed": 0.75,
-"text": "pitch."
+"text": "open."
 },
-"slow/swim": {
+"slow/photosynthesis": {
 "speed": 0.75,
-"text": "swim."
+"text": "photosynthesis."
 },
-"slow/tight": {
+"slow/pocket": {
 "speed": 0.75,
-"text": "tight."
+"text": "pocket."
 },
-"slow/try": {
+"slow/rocket": {
 "speed": 0.75,
-"text": "try."
+"text": "rocket."
 },
-"slow/which": {
+"slow/sew": {
 "speed": 0.75,
-"text": "which."
+"text": "sew."
 },
-"slow/while": {
+"slow/so": {
 "speed": 0.75,
-"text": "while."
+"text": "so."
 },
-"slow/why": {
+"slow/throne": {
 "speed": 0.75,
-"text": "why."
+"text": "throne."
 },
-"spell/buy": {
-"text": "buy. Can we buy a new backpack for school? buy."
+"slow/told": {
+"speed": 0.75,
+"text": "told."
 },
-"spell/drink": {
-"text": "drink. I bought a cold drink at the food court. drink."
+"spell/almost": {
+"text": "almost. We are almost at the food court. almost."
 },
-"spell/eye": {
-"text": "eye. That shiny necklace caught my eye. eye."
+"spell/also": {
+"text": "also. I also want a cupcake! also."
 },
-"spell/find": {
-"text": "find. I cannot find my size in this store. find."
+"spell/both": {
+"text": "both. I want both the red shoes and the blue shoes. both."
 },
-"spell/i": {
-"text": "I. I love the sparkly store at the mall. I."
+"spell/coach": {
+"text": "coach. My soccer coach bought new balls at the sports store. coach."
 },
-"spell/kind": {
-"text": "kind. The cashier was very kind to us. kind."
+"spell/grow": {
+"text": "grow. My new plant will grow if I water it. grow."
 },
-"spell/life": {
-"text": "life. This is the best shopping trip of my life! life."
+"spell/hold": {
+"text": "hold. Can you hold my shopping bags, please? hold."
 },
-"spell/my": {
-"text": "my. My bag is full of new clothes. my."
+"spell/most": {
+"text": "most. This is the most fun store in the mall! most."
 },
-"spell/pitch": {
-"text": "pitch. At the mall concert, the singer hit a high pitch. pitch."
+"spell/often": {
+"text": "often. We often get pretzels at the food court. often."
 },
-"spell/swim": {
-"text": "swim. I need a new suit to swim in this summer. swim."
+"spell/open": {
+"text": "open. The new toy store is open today! open."
 },
-"spell/tight": {
-"text": "tight. These jeans are too tight, so I need a bigger size. tight."
+"spell/photosynthesis": {
+"text": "photosynthesis. Plants make their own food from sunlight. That is called photosynthesis. photosynthesis."
 },
-"spell/try": {
-"text": "try. Let's try on the sunglasses! try."
+"spell/pocket": {
+"text": "pocket. I put my change in my pocket. pocket."
 },
-"spell/which": {
-"text": "which. Which color shirt should I get? which."
+"spell/rocket": {
+"text": "rocket. I want the rocket toy from the toy store. rocket."
 },
-"spell/while": {
-"text": "while. Wait here while I try on these shoes. while."
+"spell/sew": {
+"text": "sew. I can sew a patch on my backpack. sew."
 },
-"spell/why": {
-"text": "why. Why is the toy store so busy today? why."
+"spell/so": {
+"text": "so. This dress is so pretty! so."
+},
+"spell/throne": {
+"text": "throne. The princess doll sits on a sparkly throne. throne."
+},
+"spell/told": {
+"text": "told. Mom told me we could buy one treat. told."
 }
 }
