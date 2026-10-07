@@ -39,6 +39,29 @@
     'line/fact-1000': { text: 'How many ten-dollar bills make one thousand dollars?' },
     'line/regroup-count': { text: 'Look at all this money in the piggy bank! How much is it altogether?' },
     'line/regroup-break': { text: 'Break one bill into smaller ones. What number goes in the box?' },
+    // Receipt Counter (addition up to 1000).
+    'line/add-ones': { text: 'Add the ones.' },
+    'line/add-regroup-ones': { text: 'Regroup the ones. Ten ones make one ten.' },
+    'line/add-tens': { text: 'Add the tens.' },
+    'line/add-regroup-tens': { text: 'Regroup the tens. Ten tens make one hundred.' },
+    'line/add-hundreds': { text: 'Add the hundreds.' },
+    'line/add-total': { text: 'Now write the total.' },
+    'line/add-own': { text: 'Add the two prices. Remember to regroup when a column makes ten or more.' },
+    'line/add-missing': { text: 'Thinking cap time! What are the missing numbers?' },
+    // Display Window (addition patterns and code).
+    'line/pat-jump': { text: 'How much is added each time?' },
+    'line/pat-rule': { text: 'Write the pattern rule.' },
+    'line/pat-next': { text: 'What numbers come next?' },
+    'line/pat-missing': { text: 'What are the missing numbers in the pattern?' },
+    'line/pat-count1': { text: 'How many are in Figure 1?' },
+    'line/pat-count2': { text: 'How many are in Figure 2?' },
+    'line/pat-added': { text: 'How many are added each time?' },
+    'line/pat-table': { text: 'Use the pattern rule to complete the table.' },
+    'line/code-set': { text: 'What is the starting number?' },
+    'line/code-add': { text: 'What number is added each time?' },
+    'line/code-first': { text: 'What is the first output?' },
+    'line/code-outputs': { text: 'Follow the code. What are the outputs?' },
+    'line/code-make': { text: 'Fill in the code to make this pattern.' },
   };
   for (let d = 1; d <= 9; d++) lines[`line/det-worth-${d}`] = { text: `What is the highlighted ${ONES[d]} worth?` };
   for (let k = 2; k <= 9; k++) lines[`line/fact-tens-${k}`] = { text: `How many ten-dollar bills make ${ONES[k]} hundred dollars?` };

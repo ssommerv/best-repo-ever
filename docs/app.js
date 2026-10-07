@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '8 (Oct 7, 2026)';
+  const APP_VERSION = '9 (Oct 8, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -431,6 +431,29 @@
     make(level) { return spellQuestion(pickSpellWord(), level <= 1 || !canSpeak); },
     home: () => renderSpellHome(),
   };
+  GAMES.receipt = {
+    name: 'Receipt Counter', emoji: '🧾', color: 'pink',
+    skill: 'Add up to 1000 with regrouping',
+    maxLevel: 4,
+    levels: {
+      1: { label: 'Learn: add step by step', short: 'Learn it' },
+      2: { label: 'On your own: regroup ones or tens', short: 'On your own' },
+      3: { label: 'Regroup ones and tens + stories', short: 'Harder' },
+      4: { label: 'Thinking Cap: missing digits', short: 'Challenge' },
+    },
+    make: (level) => receiptQuestion(level),
+  };
+  GAMES.patterns = {
+    name: 'Display Window', emoji: '🎀', color: 'purple',
+    skill: 'Addition patterns and code',
+    maxLevel: 3,
+    levels: {
+      1: { label: 'Learn: patterns step by step', short: 'Learn it' },
+      2: { label: 'On your own: number patterns', short: 'On your own' },
+      3: { label: 'On your own: shapes and code', short: 'Shapes & code' },
+    },
+    make: (level) => patternQuestion(level),
+  };
   GAMES.sell = {
     name: 'Open for Business', emoji: '🛎️', color: 'yellow', hidden: true,
     skill: 'Sell to customers and make change (subtraction)',
@@ -442,7 +465,9 @@
     make: (level) => changeQuestion(level),
     home: () => renderRoom(), homeLabel: 'Back to My Boutique',
   };
-  const GAME_IDS = Object.keys(GAMES).filter((id) => !GAMES[id].featured && !GAMES[id].hidden);
+  // This chapter's stores come first in the mall.
+  const CURRENT = ['receipt', 'patterns'];
+  const GAME_IDS = [...CURRENT, ...Object.keys(GAMES).filter((id) => !CURRENT.includes(id) && !GAMES[id].featured && !GAMES[id].hidden)];
   const ALL_IDS = ['spelling', ...GAME_IDS, 'sell'];
   const maxLevel = (id) => GAMES[id].maxLevel || 3;
   const levelInfo = (id, lv) => (GAMES[id].levels || LEVELS)[lv];
@@ -719,7 +744,8 @@
         <span class="store-emoji">${g.emoji}</span>
         <span class="store-name">${g.name}</span>
         <span class="store-skill">${g.skill}</span>
-        <span class="store-level" aria-label="Level ${lv}">${stars(lv)} <small>${LEVELS[lv].short}</small></span>
+        <span class="store-level" aria-label="Level ${lv}">${stars(lv, maxLevel(id))} <small>${levelInfo(id, lv).short}</small></span>
+        ${CURRENT.includes(id) ? '<span class="new-chip">New: Chapter 2</span>' : ''}
       </button>`;
     }).join('');
     const sp = GAMES.spelling, spLv = levelOf('spelling');
@@ -820,6 +846,8 @@
       body = spellBody(q);
     } else if (q.kind === 'change') {
       body = changeBody(q);
+    } else if (q.kind === 'steps') {
+      body = stepsBody(q);
     } else {
       const cls = q.layout === 'deal' ? 'choices deal' : `choices ${q.big ? 'big' : ''} ${q.tags ? 'tags' : ''} n${q.choices.length}`;
       body = `
@@ -836,6 +864,7 @@
     setScreen(`${head}${body}<div id="fb" class="feedback" hidden></div>`, { title: g.name });
     if (q.kind === 'spell') { wireSpell(); return; }
     if (q.kind === 'change') { wireChange(); return; }
+    if (q.kind === 'steps') { wireSteps(); return; }
     if (canSpeak) $('#sayBtn').onclick = () => say(q.voice, [[q.speak]]);
     if (q.kind === 'register') wireRegister();
     else screen.querySelectorAll('.choice').forEach((b) => { b.onclick = () => answerMC(b, q.choices[+b.dataset.i].value); });
@@ -1177,6 +1206,482 @@
     if (pct === 1) confetti();
     $('#againBtn').onclick = startSpellTest;
     $('#mallBtn').onclick = renderSpellHome;
+  }
+
+  // ---------- Step-by-step questions (Receipt Counter, Display Window) ----------
+  // A "steps" question is a list of steps with blanks she fills using the keypad.
+  // Level 1 ("Learn") walks through the book's method one step at a time, with hints
+  // that teach the method rather than the answer. Higher levels are a single step with
+  // no hints: a miss gets "check your work", a second miss shows the worked solution.
+
+  const bx = (id, cls = '') => `<button class="bx ${cls}" data-b="${id}" aria-label="Answer box"></button>`;
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+  function addCols(a, b) {
+    const A = digitsOf(a), B = digitsOf(b), out = {};
+    let carry = 0;
+    for (const p of ['o', 't', 'h']) {
+      const tot = A[p] + B[p] + carry;
+      out[p] = { a: A[p], b: B[p], cin: carry, tot, digit: tot % 10, cout: Math.floor(tot / 10) };
+      carry = out[p].cout;
+    }
+    return out;
+  }
+
+  // kind: none | ones | tens | both (which columns regroup). bLen: digits in the second number.
+  function genAdd(kind, bLen) {
+    if (kind === 'tens' && bLen === 1) bLen = 2;
+    for (let i = 0; i < 5000; i++) {
+      const a = rand(100, 899);
+      const b = bLen === 1 ? rand(1, 9) : bLen === 2 ? rand(10, 99) : rand(100, 899);
+      if (a + b > 999) continue;
+      const c = addCols(a, b), ro = c.o.cout > 0, rt = c.t.cout > 0;
+      if ((kind === 'none' && !ro && !rt) || (kind === 'ones' && ro && !rt) || (kind === 'tens' && !ro && rt) || (kind === 'both' && ro && rt)) {
+        return { a, b, s: a + b, c };
+      }
+    }
+    return { a: 347, b: 129, s: 476, c: addCols(347, 129) };
+  }
+
+  // The book's worked solution, line by line.
+  function workedAdd(a, b) {
+    const c = addCols(a, b), lines = [];
+    const plus = (p) => `${c[p].cin ? `${unit(1, p)} + ` : ''}${unit(c[p].a, p)} + ${unit(c[p].b, p)}`;
+    lines.push(`<b>Add the ones.</b> ${unit(c.o.a, 'o')} + ${unit(c.o.b, 'o')} = ${unit(c.o.tot, 'o')}${c.o.cout ? `. <b>Regroup:</b> ${c.o.tot} ones = 1 ten ${unit(c.o.digit, 'o')}` : ''}.`);
+    lines.push(`<b>Add the tens.</b> ${plus('t')} = ${unit(c.t.tot, 't')}${c.t.cout ? `. <b>Regroup:</b> ${c.t.tot} tens = 1 hundred ${unit(c.t.digit, 't')}` : ''}.`);
+    lines.push(`<b>Add the hundreds.</b> ${plus('h')} = ${unit(c.h.tot, 'h')}.`);
+    lines.push(`So, ${a} + ${b} = <b>${a + b}</b>.`);
+    return `<ol class="worked">${lines.map((l) => `<li>${l}</li>`).join('')}</ol>`;
+  }
+
+  // Column addition grid. opts.fill: answer places shown (guided); opts.carry: carries shown;
+  // opts.input: answer row (and carry row) are boxes; opts.hide: { a: [places], b: [places] } become boxes.
+  function addGrid(a, b, opts = {}) {
+    const c = addCols(a, b), A = digitsOf(a), B = digitsOf(b), places = ['h', 't', 'o'];
+    const hide = opts.hide || { a: [], b: [] };
+    const digitCell = (n, len, p, row) => {
+      if (hide[row] && hide[row].includes(p)) return `<span class="g-cell">${bx(`${row}${p}`, 'g')}</span>`;
+      const show = p === 'o' || (p === 't' && len >= 2) || (p === 'h' && len >= 3);
+      return `<span class="g-cell">${show ? n : ''}</span>`;
+    };
+    const len = (n) => String(n).length;
+    const carryCell = (p) => {
+      if (p === 'o') return '<span class="g-cell g-carry"></span>';
+      const from = p === 't' ? 'o' : 't';
+      if (opts.input) return `<span class="g-cell g-carry">${bx(`c${p}`, 'carry')}</span>`;
+      return `<span class="g-cell g-carry">${opts.carry && opts.carry.includes(p) && c[from].cout ? '1' : ''}</span>`;
+    };
+    const ansCell = (p) => {
+      if (opts.input) return `<span class="g-cell">${bx(`s${p}`, 'g')}</span>`;
+      const shown = opts.fill && opts.fill.includes(p);
+      return `<span class="g-cell g-ans">${shown ? c[p].digit : ''}</span>`;
+    };
+    return `<div class="add-grid" aria-label="${a} plus ${b}">
+      <span class="g-cell"></span>${places.map((p) => `<span class="g-cell g-head pv-${p}">${PLACE[p].name}</span>`).join('')}
+      <span class="g-cell"></span>${places.map(carryCell).join('')}
+      <span class="g-cell"></span>${places.map((p) => digitCell(A[p], len(a), p, 'a')).join('')}
+      <span class="g-cell g-sign">+</span>${places.map((p) => digitCell(B[p], len(b), p, 'b')).join('')}
+      <span class="g-line"></span>
+      <span class="g-cell"></span>${places.map(ansCell).join('')}
+    </div>`;
+  }
+
+  // Both numbers as money in a place-value chart (the book's base 10 blocks).
+  function addMat(a, b) {
+    const A = digitsOf(a), B = digitsOf(b);
+    const row = (D, n) => `<div class="am-label">${n}</div>` + ['h', 't', 'o'].map((p) => `<div class="am-cell pv-${p}">${Array.from({ length: D[p] }, () => billHTML(p, 'sm')).join('')}</div>`).join('');
+    return `<div class="add-mat">
+      <div></div>${['h', 't', 'o'].map((p) => `<div class="pv-head am-head pv-${p}">${PLACE[p].name}</div>`).join('')}
+      ${row(A, a)}<div class="am-split"></div>${row(B, b)}
+    </div>`;
+  }
+
+  const RECEIPT_STORIES = [
+    (a, b) => ({ text: `The bakery sold ${a} cupcakes in the morning and ${b} cupcakes in the afternoon. How many cupcakes did it sell in all?`, why: 'In all means put them together, so add.' }),
+    (a, b) => ({ text: `On Saturday, ${a} shoppers visited the toy store. On Sunday, ${b} more shoppers visited than on Saturday. How many shoppers visited on Sunday?`, why: `Sunday had ${b} <b>more</b> than Saturday, so add.` }),
+    (a, b) => ({ text: `The shoe store sold ${a} pairs of shoes on Monday. It sold ${b} fewer pairs on Monday than on Tuesday. How many pairs did it sell on Tuesday?`, why: `Monday had <b>fewer</b>, so Tuesday had <b>more</b>. Add to find Tuesday.` }),
+    (a, b) => ({ text: `The craft store has ${a} red beads and ${b} blue beads. How many beads does it have altogether?`, why: 'Altogether means put them together, so add.' }),
+    (a, b) => ({ text: `${pick(['Mia', 'Ava', 'Zoe', 'Lily'])} has ${a} stickers. She buys ${b} more stickers at the mall. How many stickers does she have now?`, why: 'She gets more, so add.' }),
+    (a, b) => ({ text: `The book store sold ${a} books last week. This week it sold ${b} more books than last week. How many books did it sell this week?`, why: `This week was ${b} <b>more</b>, so add.` }),
+  ];
+
+  function receiptQuestion(level) {
+    const [i1, i2] = shuffle(ITEMS).slice(0, 2).map(([e, name]) => ({ e, name }));
+    const receipt = (a, b) => `<div class="receipt">
+      <div class="r-line"><span>${i1.e} ${i1.name}</span><b>${money(a)}</b></div>
+      <div class="r-line"><span>${i2.e} ${i2.name}</span><b>${money(b)}</b></div>
+      <div class="r-line r-total"><span>Total</span><b>?</b></div></div>`;
+
+    if (level <= 1) {
+      const kind = pick(['none', 'ones', 'ones', 'tens', 'both', 'both']);
+      const { a, b, s, c } = genAdd(kind, pick([1, 2, 3, 3, 3]));
+      const steps = [];
+      steps.push({
+        text: `<b>Add the ones.</b><br>${unit(c.o.a, 'o')} + ${unit(c.o.b, 'o')} = ${bx('o1')} ones`,
+        blanks: [{ id: 'o1', ans: c.o.tot }], voice: ['line/add-ones'], speak: 'Add the ones.',
+        hint: Math.min(c.o.a, c.o.b) === 0
+          ? 'Look at the ones column. Adding 0 ones does not change the number of ones!'
+          : `Look at the ones column. Start at ${Math.max(c.o.a, c.o.b)} and count on ${Math.min(c.o.a, c.o.b)} more. You can count the $1 coins!`,
+        reveal: `${unit(c.o.a, 'o')} + ${unit(c.o.b, 'o')} = ${unit(c.o.tot, 'o')}.`, show: { fill: c.o.cout ? [] : ['o'] },
+      });
+      if (c.o.cout) {
+        steps.push({
+          text: `<b>Regroup the ones.</b><br>${c.o.tot} ones = ${bx('o2')} ten ${bx('o3')} ones`,
+          blanks: [{ id: 'o2', ans: 1 }, { id: 'o3', ans: c.o.digit }], voice: ['line/add-regroup-ones'], speak: 'Regroup the ones. Ten ones make one ten.',
+          hint: `Every 10 ones make 1 ten. Take a group of 10 out of ${c.o.tot} ones. How many groups of 10, and how many ones are left?`,
+          reveal: `${c.o.tot} ones = 1 ten ${unit(c.o.digit, 'o')}. The ${c.o.digit} goes in the ones place, and a small 1 goes above the tens.`,
+          show: { fill: ['o'], carry: ['t'] },
+        });
+      }
+      steps.push({
+        text: `<b>Add the tens.</b><br>${c.t.cin ? '1 ten + ' : ''}${unit(c.t.a, 't')} + ${unit(c.t.b, 't')} = ${bx('t1')} tens`,
+        blanks: [{ id: 't1', ans: c.t.tot }], voice: ['line/add-tens'], speak: 'Add the tens.',
+        hint: `Count the $10 bills in the tens column${c.t.cin ? ', and don\'t forget the 1 ten you regrouped' : ''}.`,
+        reveal: `${c.t.cin ? '1 ten + ' : ''}${unit(c.t.a, 't')} + ${unit(c.t.b, 't')} = ${unit(c.t.tot, 't')}.`,
+        show: { fill: c.t.cout ? ['o'] : ['o', 't'], carry: ['t'] },
+      });
+      if (c.t.cout) {
+        steps.push({
+          text: `<b>Regroup the tens.</b><br>${c.t.tot} tens = ${bx('t2')} hundred ${bx('t3')} tens`,
+          blanks: [{ id: 't2', ans: 1 }, { id: 't3', ans: c.t.digit }], voice: ['line/add-regroup-tens'], speak: 'Regroup the tens. Ten tens make one hundred.',
+          hint: `Every 10 tens make 1 hundred. Take a group of 10 tens out of ${c.t.tot} tens. How many tens are left?`,
+          reveal: `${c.t.tot} tens = 1 hundred ${unit(c.t.digit, 't')}. The ${c.t.digit} goes in the tens place, and a small 1 goes above the hundreds.`,
+          show: { fill: ['o', 't'], carry: ['t', 'h'] },
+        });
+      }
+      steps.push({
+        text: `<b>Add the hundreds.</b><br>${c.h.cin ? '1 hundred + ' : ''}${unit(c.h.a, 'h')} + ${unit(c.h.b, 'h')} = ${bx('h1')} hundreds`,
+        blanks: [{ id: 'h1', ans: c.h.tot }], voice: ['line/add-hundreds'], speak: 'Add the hundreds.',
+        hint: `Count the $100 bills${c.h.cin ? ', and add the 1 hundred you regrouped' : ''}.`,
+        reveal: `${c.h.cin ? '1 hundred + ' : ''}${unit(c.h.a, 'h')} + ${unit(c.h.b, 'h')} = ${unit(c.h.tot, 'h')}.`,
+        show: { fill: ['o', 't', 'h'], carry: ['t', 'h'] },
+      });
+      steps.push({
+        text: `So, ${a} + ${b} = ${bx('tot')}`,
+        blanks: [{ id: 'tot', ans: s }], voice: ['line/add-total'], speak: 'Now write the total.',
+        hint: 'Read the answer row from left to right: hundreds, tens, then ones.',
+        reveal: `${a} + ${b} = ${s}.`, show: { fill: ['o', 't', 'h'], carry: ['t', 'h'] },
+      });
+      return {
+        kind: 'steps', guided: true, steps, nums: { a, b, s },
+        prompt: `Add up the receipt, one step at a time.`,
+        board: (st) => `${receipt(a, b)}${addGrid(a, b, (steps[Math.max(0, st - 1)] || {}).show && st > 0 ? steps[st - 1].show : {})}${addMat(a, b)}`,
+        explain: workedAdd(a, b),
+      };
+    }
+
+    // Thinking Cap: missing digits (level 4).
+    if (level >= 4 && Math.random() < 0.6) {
+      const { a, b, s } = genAdd(pick(['ones', 'tens', 'both', 'both']), 3);
+      const row = pick(['a', 'b', 'b']);
+      const hidden = shuffle(['h', 't', 'o']).slice(0, rand(1, 3));
+      const D = digitsOf(row === 'a' ? a : b);
+      const order = ['o', 't', 'h'].filter((p) => hidden.includes(p));
+      return {
+        kind: 'steps', guided: false, nums: { a, b, s, row, hidden },
+        prompt: 'Thinking Cap! What are the missing numbers?',
+        steps: [{
+          text: 'Fill in the missing digits so the addition is correct.',
+          blanks: order.map((p) => ({ id: `${row}${p}`, ans: D[p] })), voice: ['line/add-missing'], speak: 'What are the missing numbers?',
+        }],
+        board: () => `<div class="thinking">🧢</div>${addGrid(a, b, { hide: { [row]: hidden }, fill: ['o', 't', 'h'], carry: [] })}`,
+        explain: `${a} + ${b} = ${s}.${workedAdd(a, b)}`,
+      };
+    }
+
+    // Word problems (levels 3 and 4).
+    if (level >= 3 && Math.random() < 0.4) {
+      const { a, b, s } = genAdd(pick(['ones', 'tens', 'both', 'both']), pick([2, 3, 3]));
+      const story = pick(RECEIPT_STORIES)(a, b);
+      return {
+        kind: 'steps', guided: false, nums: { a, b, s },
+        prompt: '📖 Shopping story. Read it, then solve it.',
+        steps: [{ text: `<p class="story">${story.text}</p><div class="story-ans">Answer: ${bx('ans')}</div>`, blanks: [{ id: 'ans', ans: s }], speak: story.text }],
+        board: () => '',
+        explain: `${story.why}<br>${a} + ${b} = <b>${s}</b>.${workedAdd(a, b)}`,
+      };
+    }
+
+    // On your own: the whole column (levels 2+).
+    const kind = level <= 2 ? pick(['none', 'ones', 'ones', 'tens', 'tens']) : pick(['ones', 'tens', 'both', 'both', 'both']);
+    const { a, b, s } = genAdd(kind, level <= 2 ? pick([2, 3]) : 3);
+    return {
+      kind: 'steps', guided: false, nums: { a, b, s },
+      prompt: 'Add up the receipt. Write the total in the boxes.',
+      steps: [{
+        text: 'Write each digit of the total. You can write any regrouped 1s in the small boxes.',
+        blanks: [{ id: 'so', ans: digitsOf(s).o }, { id: 'st', ans: digitsOf(s).t }, { id: 'sh', ans: digitsOf(s).h }, { id: 'ct', ans: null }, { id: 'ch', ans: null }],
+        voice: ['line/add-own'], speak: 'Add the two prices. Remember to regroup when a column makes ten or more.',
+      }],
+      board: () => `${receipt(a, b)}${addGrid(a, b, { input: true })}`,
+      explain: workedAdd(a, b),
+    };
+  }
+
+  // ----- Display Window: addition patterns -----
+  const PAT_EMOJI = ['🎁', '🧁', '👜', '⭐', '🌸', '🧸'];
+
+  function seqBoard(terms, d, shown, opts = {}) {
+    return `<div class="seq">${terms.map((t, i) => `${i ? `<span class="jump">+${opts.hideJump ? '?' : d}</span>` : ''}<span class="seq-term">${shown.includes(i) ? t : bx(`n${i}`)}</span>`).join('')}</div>`;
+  }
+
+  function figuresBoard(start, d, emoji, count, guided) {
+    const fig = (n) => {
+      const total = start + (n - 1) * d;
+      const items = Array.from({ length: total }, (_, i) => `<span class="fig-item ${guided && i >= start ? `grow g${Math.floor((i - start) / d) % 3}` : ''}">${emoji}</span>`).join('');
+      return `<div class="fig"><div class="fig-items">${items}</div><small>Figure ${n}</small></div>`;
+    };
+    return `<div class="figs">${Array.from({ length: count }, (_, i) => fig(i + 1)).join('')}<div class="fig fig-q">?</div></div>`;
+  }
+
+  function figTable(start, d, emoji, asked) {
+    return `<table class="fig-table"><tr><th>Figure number</th><th>Number of ${emoji}</th></tr>${[1, 2, 3, 4, 5].map((n) => `<tr><td>${n}</td><td>${asked.includes(n) ? bx(`f${n}`) : start + (n - 1) * d}</td></tr>`).join('')}</table>`;
+  }
+
+  function codeBoard(s, d, r, opts = {}) {
+    const outs = Array.from({ length: r }, (_, i) => s + (i + 1) * d);
+    const val = (id, v, show) => (show ? `<b>${v}</b>` : bx(id));
+    return `<div class="code">
+      <div class="code-block set">SET <i>Value</i> to ${val('cs', s, !opts.askSet)}</div>
+      <div class="code-loop"><div class="code-repeat">REPEAT <b>${r}</b></div>
+        <div class="code-body"><div class="code-block add">ADD ${val('cd', d, !opts.askAdd)} to <i>Value</i></div><div class="code-block out">OUTPUT <i>Value</i></div></div></div>
+      ${opts.outputs === false ? '' : `<div class="code-outs"><small>Outputs:</small>${outs.map((o, i) => `<span class="seq-term">${(opts.shownOuts || []).includes(i) ? o : bx(`o${i}`)}</span>`).join('')}</div>`}
+    </div>`;
+  }
+
+  function patternQuestion(level) {
+    const type = level <= 1 ? pick(['num', 'num', 'shape', 'code']) : level === 2 ? 'num' : pick(['shape', 'code', 'code']);
+
+    if (type === 'num') {
+      const d = pick(level <= 1 ? [2, 5, 10, 25, 50, 100, 3, 4] : [3, 4, 6, 7, 9, 11, 12, 15, 20, 25, 50, 100]);
+      let s;
+      do { s = level <= 1 ? pick([0, rand(1, 60), rand(100, 400)]) : rand(0, 700); } while (s + d * 6 > 999);
+      const terms = Array.from({ length: 7 }, (_, i) => s + i * d);
+      const rule = `Pattern rule: Start at ${s}, and add ${d} each time.`;
+      const explain = `${rule}<br>${terms.join(', ')}`;
+      if (level <= 1) {
+        const steps = [
+          {
+            text: `How much is added each time?<br>${terms[0]} + ${bx('d')} = ${terms[1]}`, blanks: [{ id: 'd', ans: d }],
+            voice: ['line/pat-jump'], speak: 'How much is added each time?',
+            hint: `Count on from ${terms[0]} to ${terms[1]}. Try counting by tens first, then by ones.`, reveal: `${terms[0]} + ${d} = ${terms[1]}. The jump is ${d}.`,
+          },
+          {
+            text: `Pattern rule: Start at ${bx('rs')}, and add ${bx('rd')} each time.`, blanks: [{ id: 'rs', ans: s }, { id: 'rd', ans: d }],
+            voice: ['line/pat-rule'], speak: 'Write the pattern rule.',
+            hint: 'The pattern starts with the first number on the line. You found the jump in the last step.', reveal: rule,
+          },
+          {
+            text: `Continue the pattern. Add ${d} each time.`, blanks: [4, 5, 6].map((i) => ({ id: `n${i}`, ans: terms[i] })),
+            voice: ['line/pat-next'], speak: 'What numbers come next?',
+            hint: `Add ${d} to the last number. Then add ${d} again.`, reveal: terms.slice(4).join(', '),
+          },
+        ];
+        return {
+          kind: 'steps', guided: true, steps, pat: { s, d }, prompt: 'The sale sign numbers grow in a pattern!',
+          board: (st) => seqBoard(terms, d, [0, 1, 2, 3], { hideJump: st < 1 }), explain,
+        };
+      }
+      const hidden = shuffle([2, 3, 4, 5, 6]).slice(0, 3).sort((x, y) => x - y);
+      const askRule = Math.random() < 0.5;
+      return {
+        kind: 'steps', guided: false, pat: { s, d }, prompt: 'What are the missing numbers in the pattern?',
+        steps: [{
+          text: askRule ? `Pattern rule: Start at ${s}, and add ${bx('rd')} each time.` : 'Fill in the missing numbers.',
+          blanks: [...hidden.map((i) => ({ id: `n${i}`, ans: terms[i] })), ...(askRule ? [{ id: 'rd', ans: d }] : [])],
+          voice: ['line/pat-missing'], speak: 'What are the missing numbers in the pattern?',
+        }],
+        board: () => seqBoard(terms, d, [0, 1, 2, 3, 4, 5, 6].filter((i) => !hidden.includes(i)), { hideJump: true }), explain,
+      };
+    }
+
+    if (type === 'shape') {
+      const start = rand(1, 5), d = rand(1, level <= 1 ? 3 : 4), emoji = pick(PAT_EMOJI);
+      const rule = `Pattern rule: Start at ${start}, and add ${d} each time.`;
+      const counts = [1, 2, 3, 4, 5].map((n) => start + (n - 1) * d);
+      const explain = `${rule}<br>Figures 1 to 5: ${counts.join(', ')}.`;
+      if (level <= 1) {
+        const steps = [
+          { text: `How many ${emoji} are in Figure 1? ${bx('c1')}`, blanks: [{ id: 'c1', ans: start }], voice: ['line/pat-count1'], speak: 'How many are in Figure 1?', hint: 'Touch each one as you count it.', reveal: `Figure 1 has ${start}.` },
+          { text: `How many ${emoji} are in Figure 2? ${bx('c2')}`, blanks: [{ id: 'c2', ans: start + d }], voice: ['line/pat-count2'], speak: 'How many are in Figure 2?', hint: 'Count the ones from Figure 1, then count on the new ones.', reveal: `Figure 2 has ${start + d}.` },
+          { text: `How many ${emoji} are added each time? ${start} + ${bx('dd')} = ${start + d}`, blanks: [{ id: 'dd', ans: d }], voice: ['line/pat-added'], speak: 'How many are added each time?', hint: `Look at the colored ones that are new in each figure. Or count on from ${start} to ${start + d}.`, reveal: `${d} are added each time.` },
+          { text: `Pattern rule: Start at ${bx('rs')}, and add ${bx('rd')} each time.`, blanks: [{ id: 'rs', ans: start }, { id: 'rd', ans: d }], voice: ['line/pat-rule'], speak: 'Write the pattern rule.', hint: 'Start with the number in Figure 1. Add the number you found in the last step.', reveal: rule },
+          { text: 'Use the pattern rule to complete the table.', blanks: [{ id: 'f4', ans: counts[3] }, { id: 'f5', ans: counts[4] }], voice: ['line/pat-table'], speak: 'Use the pattern rule to complete the table.', hint: `Figure 3 has ${counts[2]}. Add ${d} to get Figure 4, then add ${d} again.`, reveal: `Figure 4 has ${counts[3]} and Figure 5 has ${counts[4]}.` },
+        ];
+        return {
+          kind: 'steps', guided: true, steps, pat: { s: start, d }, prompt: 'Build the window display! Each figure grows by the same amount.',
+          board: (st) => `${figuresBoard(start, d, emoji, 3, true)}${st >= 4 ? figTable(start, d, emoji, [4, 5]) : ''}`, explain,
+        };
+      }
+      return {
+        kind: 'steps', guided: false, pat: { s: start, d }, prompt: 'Find the pattern rule. Then complete the table.',
+        steps: [{
+          text: `Pattern rule: Start at ${bx('rs')}, and add ${bx('rd')} each time.`,
+          blanks: [{ id: 'rs', ans: start }, { id: 'rd', ans: d }, { id: 'f4', ans: counts[3] }, { id: 'f5', ans: counts[4] }],
+          voice: ['line/pat-table'], speak: 'Find the pattern rule. Then complete the table.',
+        }],
+        board: () => `${figuresBoard(start, d, emoji, 3, false)}${figTable(start, d, emoji, [4, 5])}`, explain,
+      };
+    }
+
+    // Robot cashier code.
+    const d = pick([5, 10, 25, 50, 100, 20]), r = pick([4, 5]);
+    let s;
+    do { s = pick([0, 50, 100, 150, 200, 250, 300, 450, 500, rand(1, 60) * 5]); } while (s + d * r > 999);
+    const outs = Array.from({ length: r }, (_, i) => s + (i + 1) * d);
+    const explain = `SET starts the Value at ${s}. Each time through the loop, ADD ${d}, then OUTPUT.<br>Pattern: ${[s, ...outs].join(', ')}.`;
+    if (level <= 1) {
+      const steps = [
+        { text: `The starting number is ${bx('cs1')}.`, blanks: [{ id: 'cs1', ans: s }], voice: ['line/code-set'], speak: 'What is the starting number?', hint: 'The SET block tells you the starting number.', reveal: `SET Value to ${s}, so it starts at ${s}.` },
+        { text: `The number added each time is ${bx('cd1')}.`, blanks: [{ id: 'cd1', ans: d }], voice: ['line/code-add'], speak: 'What number is added each time?', hint: 'The ADD block inside the loop tells you what to add.', reveal: `ADD ${d} to Value, so ${d} is added each time.` },
+        { text: `The first output is ${s} + ${d} = ${bx('o0x')}.`, blanks: [{ id: 'o0x', ans: outs[0] }], voice: ['line/code-first'], speak: 'What is the first output?', hint: `Start with ${s}, then add ${d}.`, reveal: `${s} + ${d} = ${outs[0]}.` },
+        { text: `The loop repeats ${r} times. What are the other outputs?`, blanks: outs.slice(1).map((o, i) => ({ id: `o${i + 1}`, ans: o })), voice: ['line/code-outputs'], speak: 'Follow the code. What are the outputs?', hint: `Each output is ${d} more than the one before.`, reveal: outs.slice(1).join(', ') },
+      ];
+      return {
+        kind: 'steps', guided: true, steps, pat: { s, d }, prompt: '🤖 The robot cashier follows this code to number the sale tags.',
+        board: (st) => codeBoard(s, d, r, { shownOuts: st >= 3 ? [0] : [], outputs: st >= 2 }), explain,
+      };
+    }
+    const variant = pick(['run', 'make', 'missing']);
+    if (variant === 'make') {
+      return {
+        kind: 'steps', guided: false, pat: { s, d }, prompt: `🤖 Make a pattern that starts at ${s} and increases by ${d} each time.`,
+        steps: [{ text: 'Fill in the code.', blanks: [{ id: 'cs', ans: s }, { id: 'cd', ans: d }], voice: ['line/code-make'], speak: 'Fill in the code to make this pattern.' }],
+        board: () => codeBoard(s, d, r, { askSet: true, askAdd: true, outputs: false }), explain,
+      };
+    }
+    if (variant === 'missing') {
+      const pattern = [s, ...outs], hidden = shuffle([1, 2, 3, 4]).slice(0, 2);
+      return {
+        kind: 'steps', guided: false, pat: { s, d }, prompt: '🤖 What are the missing numbers in the pattern this code makes?',
+        steps: [{ text: 'Fill in the missing numbers.', blanks: hidden.sort((x, y) => x - y).map((i) => ({ id: `n${i}`, ans: pattern[i] })), voice: ['line/pat-missing'], speak: 'What are the missing numbers in the pattern?' }],
+        board: () => `${codeBoard(s, d, r, { outputs: false })}${seqBoard(pattern, d, pattern.map((_, i) => i).filter((i) => !hidden.includes(i)), { hideJump: true })}`, explain,
+      };
+    }
+    return {
+      kind: 'steps', guided: false, pat: { s, d }, prompt: '🤖 Follow the code. What are the outputs?',
+      steps: [{ text: 'Write every output.', blanks: outs.map((o, i) => ({ id: `o${i}`, ans: o })), voice: ['line/code-outputs'], speak: 'Follow the code. What are the outputs?' }],
+      board: () => codeBoard(s, d, r, {}), explain,
+    };
+  }
+
+  // ----- Shared "steps" player -----
+  function stepsBody(q) {
+    const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '⌫', '0'].map((k) =>
+      `<button class="pad-key" data-k="${k}" aria-label="${k === '⌫' ? 'Delete' : k}">${k}</button>`).join('');
+    return `
+      <div class="play split steps">
+        <div class="q-card">
+          <p class="prompt">${q.prompt} ${canSpeak ? '<button class="say" id="sayBtn" aria-label="Read it to me">🔊</button>' : ''}</p>
+          ${q.guided ? '<div class="learn-chip">📘 Learn it step by step</div>' : ''}
+          <div id="board"></div>
+        </div>
+        <div class="register-side">
+          <div id="stepList" class="step-list"></div>
+          <div class="keypad">${keys}<button class="pad-key give" id="checkBtn">Check ✔</button></div>
+        </div>
+      </div>`;
+  }
+
+  function wireSteps() {
+    const q = R.q;
+    Object.assign(R, { stepIdx: 0, stepTries: 0, miss: false, vals: {}, active: null });
+    const step = () => q.steps[R.stepIdx];
+    const allBlanks = () => q.steps.slice(0, R.stepIdx + 1).flatMap((s) => s.blanks);
+    const lenOf = (id) => { const b = allBlanks().find((x) => x.id === id); return b && b.ans != null ? String(b.ans).length : 1; };
+
+    const paint = () => {
+      const cur = new Set(step() ? step().blanks.map((b) => b.id) : []);
+      screen.querySelectorAll('.bx').forEach((el) => {
+        const id = el.dataset.b;
+        el.textContent = R.vals[id] || '';
+        el.classList.toggle('on', id === R.active);
+        el.disabled = R.locked || !cur.has(id);
+        el.classList.toggle('done', !cur.has(id));
+        el.onclick = () => { if (!el.disabled) { R.active = id; sfx.tap(); paint(); } };
+      });
+    };
+    const render = () => {
+      $('#board').innerHTML = q.board(R.stepIdx);
+      const shown = q.guided ? q.steps.slice(0, R.stepIdx + 1) : [step()];
+      $('#stepList').innerHTML = shown.map((s, i) => `<div class="step ${i < R.stepIdx ? 'step-done' : 'step-now'}">${q.guided ? `<span class="step-num">${i < R.stepIdx ? '✔' : i + 1}</span>` : ''}<div>${s.text}</div></div>`).join('');
+      const first = step() && step().blanks.find((b) => !R.vals[b.id]);
+      R.active = first ? first.id : null;
+      paint();
+      const now = screen.querySelector('.step-now');
+      if (now && q.guided) now.scrollIntoView({ block: 'nearest' });
+    };
+    const type = (k) => {
+      if (R.locked || !R.active) return;
+      const v = R.vals[R.active] || '';
+      if (k === '⌫') R.vals[R.active] = v.slice(0, -1);
+      else if (v.length < lenOf(R.active)) {
+        R.vals[R.active] = v + k;
+        if (R.vals[R.active].length >= lenOf(R.active)) {
+          const next = step().blanks.find((b) => !R.vals[b.id] && b.id !== R.active);
+          if (next) R.active = next.id;
+        }
+      }
+      sfx.tap(); paint();
+    };
+    const finish = (ok) => {
+      R.locked = true; paint();
+      screen.querySelectorAll('.pad-key').forEach((b) => { b.disabled = true; });
+      if (ok) { R.attempts = R.miss ? 1 : 0; onCorrect(); return; }
+      if (!R.test) recordResult(R.id, false);
+      showFeedback('reveal', `<div class="fb-title">Here's how to solve it 💡</div><div class="fb-body">${q.explain}</div>`);
+    };
+    const nextStep = () => {
+      $('#fb').hidden = true;
+      R.stepIdx++; R.stepTries = 0;
+      if (R.stepIdx >= q.steps.length) return finish(true);
+      render();
+      if (S.autoRead || q.guided) say(step().voice, [[step().speak]]);
+    };
+    const check = () => {
+      if (R.locked) return;
+      const graded = step().blanks.filter((b) => b.ans != null);
+      if (graded.some((b) => !R.vals[b.id])) return toast('Fill in every box first!');
+      const wrong = graded.filter((b) => +R.vals[b.id] !== b.ans);
+      screen.querySelectorAll('.bx.bad').forEach((el) => el.classList.remove('bad'));
+      if (!wrong.length) {
+        sfx.coin();
+        if (q.guided && R.stepIdx < q.steps.length - 1) toast(pick(['✔ Yes!', '✔ Great!', '✔ Right!']));
+        return nextStep();
+      }
+      R.miss = true; R.stepTries++;
+      sfx.bad();
+      const card = screen.querySelector('.play');
+      card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+      if (R.stepTries === 1) {
+        if (q.guided) wrong.forEach((b) => { const el = screen.querySelector(`.bx[data-b="${b.id}"]`); if (el) el.classList.add('bad'); });
+        const tip = q.guided ? step().hint : 'Not quite. Check your work again.';
+        showFeedback('hint', `<div class="fb-title">${q.guided ? pick(['Almost! Here is a tip:', 'Not quite. Think about it like this:']) : 'Not quite!'}</div><div class="fb-body">${tip}</div>`, false);
+        return;
+      }
+      graded.forEach((b) => { R.vals[b.id] = String(b.ans); });
+      if (q.guided) {
+        R.active = null; R.locked = true; paint(); R.locked = false;
+        showFeedback('hint', `<div class="fb-title">Here's that step 💡</div><div class="fb-body">${step().reveal}</div>`, false);
+        const fb = $('#fb'), btn = document.createElement('button');
+        btn.className = 'btn primary big'; btn.textContent = 'Got it ➜';
+        btn.onclick = () => { sfx.tap(); nextStep(); };
+        fb.appendChild(btn); btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return;
+      }
+      finish(false);
+    };
+
+    screen.querySelectorAll('.pad-key[data-k]').forEach((b) => { b.onclick = () => type(b.dataset.k); });
+    $('#checkBtn').onclick = check;
+    R.keyHandler = (e) => {
+      if (/^\d$/.test(e.key)) type(e.key);
+      else if (e.key === 'Backspace') type('⌫');
+      else if (e.key === 'Enter') check();
+    };
+    if (canSpeak) $('#sayBtn').onclick = () => { const s = step() || q.steps[q.steps.length - 1]; say(s.voice, [[s.speak]]); };
+    render();
+    if (S.autoRead || q.guided) say(step().voice, [[step().speak]]);
   }
 
   // ---------- Shop & boutique ----------
@@ -1549,7 +2054,7 @@
   if (navigator.audioSession) { try { navigator.audioSession.type = 'playback'; } catch (e) { /* older Safari */ } }
   document.addEventListener('keydown', (e) => {
     if (!R || !R.q || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
-    if ((R.q.kind === 'spell' && $('#bracelet')) || (R.q.kind === 'change' && $('#cbDigits'))) R.keyHandler(e);
+    if ((R.q.kind === 'spell' && $('#bracelet')) || (R.q.kind === 'change' && $('#cbDigits')) || (R.q.kind === 'steps' && $('#checkBtn'))) R.keyHandler(e);
   });
 
   if (S.started || S.name) renderMall(); else renderWelcome();

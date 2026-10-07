@@ -2,7 +2,7 @@
 // (bypassing the browser's HTTP cache); fall back to the saved copy only when
 // offline or the network is too slow. Images and voice clips rarely change, so
 // they are served from the saved copy first.
-const CACHE = 'pvb-v8';
+const CACHE = 'pvb-v9';
 const ASSETS = [
   './', './index.html', './styles.css', './app.js', './manifest.webmanifest', './audio/manifest.json',
   './img/hannah-splash.jpg', './img/hannah-head.jpg',
