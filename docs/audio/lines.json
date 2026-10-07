@@ -23,6 +23,45 @@
 "cheer/7": {
 "text": "Wow, great thinking!"
 },
+"line/add-hundreds": {
+"text": "Add the hundreds."
+},
+"line/add-missing": {
+"text": "Thinking cap time! What are the missing numbers?"
+},
+"line/add-ones": {
+"text": "Add the ones."
+},
+"line/add-own": {
+"text": "Add the two prices. Remember to regroup when a column makes ten or more."
+},
+"line/add-regroup-ones": {
+"text": "Regroup the ones. Ten ones make one ten."
+},
+"line/add-regroup-tens": {
+"text": "Regroup the tens. Ten tens make one hundred."
+},
+"line/add-tens": {
+"text": "Add the tens."
+},
+"line/add-total": {
+"text": "Now write the total."
+},
+"line/code-add": {
+"text": "What number is added each time?"
+},
+"line/code-first": {
+"text": "What is the first output?"
+},
+"line/code-make": {
+"text": "Fill in the code to make this pattern."
+},
+"line/code-outputs": {
+"text": "Follow the code. What are the outputs?"
+},
+"line/code-set": {
+"text": "What is the starting number?"
+},
 "line/deal-less": {
 "text": "Which one costs less?"
 },
@@ -103,6 +142,30 @@
 },
 "line/fact-tens-9": {
 "text": "How many ten-dollar bills make nine hundred dollars?"
+},
+"line/pat-added": {
+"text": "How many are added each time?"
+},
+"line/pat-count1": {
+"text": "How many are in Figure 1?"
+},
+"line/pat-count2": {
+"text": "How many are in Figure 2?"
+},
+"line/pat-jump": {
+"text": "How much is added each time?"
+},
+"line/pat-missing": {
+"text": "What are the missing numbers in the pattern?"
+},
+"line/pat-next": {
+"text": "What numbers come next?"
+},
+"line/pat-rule": {
+"text": "Write the pattern rule."
+},
+"line/pat-table": {
+"text": "Use the pattern rule to complete the table."
 },
 "line/register": {
 "next": "two hundred forty-eight dollars.",
