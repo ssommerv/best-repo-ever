@@ -327,6 +327,14 @@ main {
 .deal-emoji { font-size: 80px; line-height: 1; }
 .deal-name { font-size: 22px; color: var(--ink-soft); }
 .choices.deal .tag { font-size: 44px; }
+.choices.deal.n2 { grid-template-columns: repeat(2, 1fr); }
+.choices.deal.n3 .choice { min-height: 220px; }
+.choices.deal.n3 .tag { font-size: 36px; }
+@media (max-width: 600px) {
+  .choices.deal.n3 .choice { min-height: 0; flex-direction: row; justify-content: space-around; }
+  .choices.deal.n3 .deal-emoji { font-size: 52px; }
+}
+.choice .word-choice { font-size: 24px; line-height: 1.25; }
 
 /* Number line */
 .nl { width: 100%; max-width: 720px; height: auto; }

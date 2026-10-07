@@ -29,11 +29,23 @@
 "line/add-missing": {
 "text": "Thinking cap time! What are the missing numbers?"
 },
+"line/add-missing-2": {
+"text": "Thinking cap time! Some digits fell off the receipt. Which digits are missing?"
+},
+"line/add-missing-3": {
+"text": "Thinking cap time! Find the hidden digits that make the addition true."
+},
 "line/add-ones": {
 "text": "Add the ones."
 },
 "line/add-own": {
 "text": "Add the two prices. Remember to regroup when a column makes ten or more."
+},
+"line/add-own-2": {
+"text": "What is the total? Add the two prices, starting with the ones."
+},
+"line/add-own-3": {
+"text": "The cashier needs your help. Add up the receipt, and remember to regroup."
 },
 "line/add-regroup-ones": {
 "text": "Regroup the ones. Ten ones make one ten."
@@ -62,59 +74,180 @@
 "line/code-set": {
 "text": "What is the starting number?"
 },
+"line/deal-least3": {
+"text": "Which of these three costs the least?"
+},
 "line/deal-less": {
 "text": "Which one costs less?"
+},
+"line/deal-less-2": {
+"text": "Which one is cheaper?"
+},
+"line/deal-less-3": {
+"text": "Which price is lower?"
 },
 "line/deal-more": {
 "text": "Which one costs more?"
 },
+"line/deal-more-2": {
+"text": "Which one is more expensive?"
+},
+"line/deal-more-3": {
+"text": "Which price is higher?"
+},
+"line/deal-most3": {
+"text": "Which of these three costs the most?"
+},
+"line/deal-over": {
+"next": "two hundred forty-eight dollars.",
+"text": "Which price is greater than"
+},
 "line/deal-sign": {
 "text": "Pick the sign that makes it true. Less than, greater than, or equal to?"
+},
+"line/deal-sign-2": {
+"text": "Which sign goes in the box? Less than, greater than, or equal to?"
+},
+"line/deal-sign-3": {
+"text": "Compare the prices. Pick less than, greater than, or equal to."
+},
+"line/det-match": {
+"text": "Which price matches this money?"
 },
 "line/det-place-h": {
 "text": "Which digit is in the hundreds place?"
 },
+"line/det-place-h-2": {
+"text": "Find the digit in the hundreds place."
+},
+"line/det-place-h-3": {
+"text": "Look at the hundreds place. Which digit is there?"
+},
 "line/det-place-o": {
 "text": "Which digit is in the ones place?"
+},
+"line/det-place-o-2": {
+"text": "Find the digit in the ones place."
+},
+"line/det-place-o-3": {
+"text": "Look at the ones place. Which digit is there?"
 },
 "line/det-place-t": {
 "text": "Which digit is in the tens place?"
 },
+"line/det-place-t-2": {
+"text": "Find the digit in the tens place."
+},
+"line/det-place-t-3": {
+"text": "Look at the tens place. Which digit is there?"
+},
+"line/det-value-h": {
+"text": "What is the value of the digit in the hundreds place?"
+},
+"line/det-value-o": {
+"text": "What is the value of the digit in the ones place?"
+},
+"line/det-value-t": {
+"text": "What is the value of the digit in the tens place?"
+},
 "line/det-worth-1": {
 "text": "What is the highlighted one worth?"
+},
+"line/det-worth-1-2": {
+"text": "How much is the highlighted one worth?"
+},
+"line/det-worth-1-3": {
+"text": "The one is highlighted. What is its value?"
 },
 "line/det-worth-2": {
 "text": "What is the highlighted two worth?"
 },
+"line/det-worth-2-2": {
+"text": "How much is the highlighted two worth?"
+},
+"line/det-worth-2-3": {
+"text": "The two is highlighted. What is its value?"
+},
 "line/det-worth-3": {
 "text": "What is the highlighted three worth?"
+},
+"line/det-worth-3-2": {
+"text": "How much is the highlighted three worth?"
+},
+"line/det-worth-3-3": {
+"text": "The three is highlighted. What is its value?"
 },
 "line/det-worth-4": {
 "text": "What is the highlighted four worth?"
 },
+"line/det-worth-4-2": {
+"text": "How much is the highlighted four worth?"
+},
+"line/det-worth-4-3": {
+"text": "The four is highlighted. What is its value?"
+},
 "line/det-worth-5": {
 "text": "What is the highlighted five worth?"
+},
+"line/det-worth-5-2": {
+"text": "How much is the highlighted five worth?"
+},
+"line/det-worth-5-3": {
+"text": "The five is highlighted. What is its value?"
 },
 "line/det-worth-6": {
 "text": "What is the highlighted six worth?"
 },
+"line/det-worth-6-2": {
+"text": "How much is the highlighted six worth?"
+},
+"line/det-worth-6-3": {
+"text": "The six is highlighted. What is its value?"
+},
 "line/det-worth-7": {
 "text": "What is the highlighted seven worth?"
+},
+"line/det-worth-7-2": {
+"text": "How much is the highlighted seven worth?"
+},
+"line/det-worth-7-3": {
+"text": "The seven is highlighted. What is its value?"
 },
 "line/det-worth-8": {
 "text": "What is the highlighted eight worth?"
 },
+"line/det-worth-8-2": {
+"text": "How much is the highlighted eight worth?"
+},
+"line/det-worth-8-3": {
+"text": "The eight is highlighted. What is its value?"
+},
 "line/det-worth-9": {
 "text": "What is the highlighted nine worth?"
 },
+"line/det-worth-9-2": {
+"text": "How much is the highlighted nine worth?"
+},
+"line/det-worth-9-3": {
+"text": "The nine is highlighted. What is its value?"
+},
 "line/fact-10-1": {
 "text": "Trade one ten-dollar bill for one-dollar coins. How many coins do you get?"
+},
+"line/fact-100-1": {
+"text": "Trade one hundred-dollar bill for one-dollar coins. How many coins do you get?"
 },
 "line/fact-100-10": {
 "text": "Trade one hundred-dollar bill for ten-dollar bills. How many ten-dollar bills do you get?"
 },
 "line/fact-1000": {
 "text": "How many ten-dollar bills make one thousand dollars?"
+},
+"line/fact-1000-100": {
+"text": "How many hundred-dollar bills make one thousand dollars?"
+},
+"line/fact-10s-in-100": {
+"text": "How many ten-dollar bills are the same as one hundred-dollar bill?"
 },
 "line/fact-ones-100": {
 "text": "How many one-dollar coins make one hundred dollars?"
@@ -171,38 +304,142 @@
 "next": "two hundred forty-eight dollars.",
 "text": "Tap the money to pay exactly"
 },
+"line/register-2": {
+"next": "two hundred forty-eight dollars.",
+"text": "Count out the money for exactly"
+},
+"line/register-3": {
+"next": "two hundred forty-eight dollars.",
+"text": "Help the shopper pay exactly"
+},
+"line/register-noh": {
+"next": "two hundred forty-eight dollars.",
+"text": "No hundred-dollar bills this time! Use tens and ones to pay"
+},
 "line/regroup-break": {
 "text": "Break one bill into smaller ones. What number goes in the box?"
 },
+"line/regroup-break-2": {
+"text": "Trade a bill for smaller bills. What number goes in the box?"
+},
+"line/regroup-break-3": {
+"text": "Fill in the box so it is the same amount of money."
+},
 "line/regroup-count": {
 "text": "Look at all this money in the piggy bank! How much is it altogether?"
+},
+"line/regroup-count-2": {
+"text": "Count all the money. How much is there?"
+},
+"line/regroup-count-3": {
+"text": "How much money is on the mat altogether?"
+},
+"line/regroup-same": {
+"text": "Which one shows the same amount of money?"
 },
 "line/round-10": {
 "next": "two hundred forty-eight dollars.",
 "text": "Round this price to the nearest ten:"
 },
+"line/round-10-2": {
+"next": "two hundred forty-eight dollars.",
+"text": "Round to the nearest ten. The price is"
+},
+"line/round-10-3": {
+"next": "two hundred forty-eight dollars.",
+"text": "Sale sign! Estimate this price to the nearest ten:"
+},
 "line/round-100": {
 "next": "two hundred forty-eight dollars.",
 "text": "Round this price to the nearest hundred:"
+},
+"line/round-100-2": {
+"next": "two hundred forty-eight dollars.",
+"text": "Round to the nearest hundred. The price is"
+},
+"line/round-100-3": {
+"next": "two hundred forty-eight dollars.",
+"text": "Sale sign! Estimate this price to the nearest hundred:"
+},
+"line/round-estimate-10": {
+"text": "About how much do both cost? Round each price to the nearest ten, then add."
+},
+"line/round-estimate-100": {
+"text": "About how much do both cost? Round each price to the nearest hundred, then add."
+},
+"line/round-which-10": {
+"next": "two hundred forty-eight dollars.",
+"text": "Rounding to the nearest ten, which price rounds to"
+},
+"line/round-which-100": {
+"next": "two hundred forty-eight dollars.",
+"text": "Rounding to the nearest hundred, which price rounds to"
 },
 "line/sell-1": {
 "next": "fifty dollars.",
 "text": "Hi! I'd like to buy this, please. Here's"
 },
+"line/sell-1b": {
+"next": "fifty dollars.",
+"text": "Hello! Can I buy this, please? Here is"
+},
+"line/sell-1c": {
+"next": "fifty dollars.",
+"text": "I'll take this one, thank you! Here's"
+},
 "line/sell-2": {
 "next": "one thousand dollars.",
 "text": "Hi! I'd like to buy these two things, please. Here's"
 },
+"line/sell-2b": {
+"next": "one thousand dollars.",
+"text": "Hello! Can I buy these two things, please? Here is"
+},
+"line/sell-2c": {
+"next": "one thousand dollars.",
+"text": "I'll take these two, thank you! Here's"
+},
 "line/tag-e2s": {
 "text": "The cashier added up the money like this. What is the price?"
+},
+"line/tag-e2s-2": {
+"text": "Put the parts together. What price is this?"
+},
+"line/tag-e2s-3": {
+"text": "This is the price in expanded form. Which tag shows it?"
 },
 "line/tag-s2e": {
 "next": "two hundred forty-eight dollars.",
 "text": "Find the expanded form for"
 },
+"line/tag-s2e-2": {
+"next": "two hundred forty-eight dollars.",
+"text": "What is the expanded form of"
+},
+"line/tag-s2e-3": {
+"next": "two hundred forty-eight dollars.",
+"text": "Break this price into hundreds, tens and ones:"
+},
+"line/tag-s2u": {
+"text": "How many hundreds, tens and ones make this price?"
+},
+"line/tag-s2w": {
+"text": "Which words say this price?"
+},
+"line/tag-u2s": {
+"text": "What price is this many hundreds, tens and ones?"
+},
 "line/tag-w2s": {
 "next": "two hundred forty-eight dollars.",
 "text": "The shopper said the price out loud. Find the tag for"
+},
+"line/tag-w2s-2": {
+"next": "two hundred forty-eight dollars.",
+"text": "Which price tag shows"
+},
+"line/tag-w2s-3": {
+"next": "two hundred forty-eight dollars.",
+"text": "The cashier said the price. Find the tag for"
 },
 "p/10": {
 "prev": "It costs exactly",
@@ -4235,49 +4472,145 @@
 "spell/almost": {
 "text": "almost. We are almost at the food court. almost."
 },
+"spell/almost-2": {
+"text": "almost. My piggy bank is almost full of coins. almost."
+},
+"spell/almost-3": {
+"text": "almost. We almost forgot to buy the birthday card! almost."
+},
 "spell/also": {
 "text": "also. I also want a cupcake! also."
+},
+"spell/also-2": {
+"text": "also. The shoe store also sells socks. also."
+},
+"spell/also-3": {
+"text": "also. I want a pretzel, and I also want lemonade. also."
 },
 "spell/both": {
 "text": "both. I want both the red shoes and the blue shoes. both."
 },
+"spell/both-2": {
+"text": "both. I used both hands to carry my shopping bag. both."
+},
+"spell/both-3": {
+"text": "both. Both of my friends got the same sparkly shoes. both."
+},
 "spell/coach": {
 "text": "coach. My soccer coach bought new balls at the sports store. coach."
+},
+"spell/coach-2": {
+"text": "coach. Our coach gave us all new water bottles. coach."
+},
+"spell/coach-3": {
+"text": "coach. The dance coach bought ribbons at the craft store. coach."
 },
 "spell/grow": {
 "text": "grow. My new plant will grow if I water it. grow."
 },
+"spell/grow-2": {
+"text": "grow. My feet grow so fast that I need new shoes. grow."
+},
+"spell/grow-3": {
+"text": "grow. The flower shop sells seeds that grow into sunflowers. grow."
+},
 "spell/hold": {
 "text": "hold. Can you hold my shopping bags, please? hold."
+},
+"spell/hold-2": {
+"text": "hold. Please hold my hand in the busy mall. hold."
+},
+"spell/hold-3": {
+"text": "hold. My new purse can hold all my stickers. hold."
 },
 "spell/most": {
 "text": "most. This is the most fun store in the mall! most."
 },
+"spell/most-2": {
+"text": "most. Which toy costs the most money? most."
+},
+"spell/most-3": {
+"text": "most. I like the bookstore the most. most."
+},
 "spell/often": {
 "text": "often. We often get pretzels at the food court. often."
+},
+"spell/often-2": {
+"text": "often. How often does the pet store get new puppies? often."
+},
+"spell/often-3": {
+"text": "often. Dad often buys coffee before we shop. often."
 },
 "spell/open": {
 "text": "open. The new toy store is open today! open."
 },
+"spell/open-2": {
+"text": "open. Please open the door for the shoppers. open."
+},
+"spell/open-3": {
+"text": "open. I can't wait to open my new paint set! open."
+},
 "spell/photosynthesis": {
 "text": "photosynthesis. Plants make their own food from sunlight. That is called photosynthesis. photosynthesis."
+},
+"spell/photosynthesis-2": {
+"text": "photosynthesis. The plant store sign says leaves use photosynthesis to make food. photosynthesis."
+},
+"spell/photosynthesis-3": {
+"text": "photosynthesis. A tree needs sunlight, water and air for photosynthesis. photosynthesis."
 },
 "spell/pocket": {
 "text": "pocket. I put my change in my pocket. pocket."
 },
+"spell/pocket-2": {
+"text": "pocket. My new jeans have a pocket with a zipper. pocket."
+},
+"spell/pocket-3": {
+"text": "pocket. She found a coin in her coat pocket. pocket."
+},
 "spell/rocket": {
 "text": "rocket. I want the rocket toy from the toy store. rocket."
+},
+"spell/rocket-2": {
+"text": "rocket. The rocket ship ride at the mall goes up and down. rocket."
+},
+"spell/rocket-3": {
+"text": "rocket. Look, that balloon is shaped like a rocket! rocket."
 },
 "spell/sew": {
 "text": "sew. I can sew a patch on my backpack. sew."
 },
+"spell/sew-2": {
+"text": "sew. Grandma will sew a button on my new coat. sew."
+},
+"spell/sew-3": {
+"text": "sew. The craft store sells kits to sew a pillow. sew."
+},
 "spell/so": {
 "text": "so. This dress is so pretty! so."
+},
+"spell/so-2": {
+"text": "so. The mall is so big that we got a map. so."
+},
+"spell/so-3": {
+"text": "so. I was so happy when I found the last unicorn plush. so."
 },
 "spell/throne": {
 "text": "throne. The princess doll sits on a sparkly throne. throne."
 },
+"spell/throne-2": {
+"text": "throne. The king in the toy castle has a golden throne. throne."
+},
+"spell/throne-3": {
+"text": "throne. I made a throne out of pillows in the furniture store. throne."
+},
 "spell/told": {
 "text": "told. Mom told me we could buy one treat. told."
+},
+"spell/told-2": {
+"text": "told. The cashier told us the shoes were on sale. told."
+},
+"spell/told-3": {
+"text": "told. I told my friend about the new candy store. told."
 }
 }

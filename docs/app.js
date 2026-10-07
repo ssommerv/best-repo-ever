@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '9 (Oct 8, 2026)';
+  const APP_VERSION = '10 (Oct 8, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -46,7 +46,12 @@
     ['🧣', 'scarf'], ['👜', 'purse'], ['🐠', 'fish tank'], ['🚲', 'bike'], ['🎂', 'birthday cake'], ['🪀', 'yo-yo'],
     ['🖍️', 'crayon box'], ['🏀', 'basketball'], ['🩰', 'ballet shoes'], ['📷', 'camera'], ['🛹', 'skateboard'],
   ];
-  const item = () => { const [emoji, name] = pick(ITEMS); return { emoji, name }; };
+  // Everything in the mall: the classic list plus every shop item (MERCH is defined further down).
+  let ALL_ITEMS = null;
+  const itemPool = () => ALL_ITEMS || (ALL_ITEMS = [...new Map([...ITEMS.map(([emoji, name]) => [emoji, name]),
+    ...MERCH.map((m) => [m.e, m.name.toLowerCase()])].map(([emoji, name]) => [name, { emoji, name }])).values()]);
+  const item = () => pick(itemPool());
+  const items = (k) => shuffle(itemPool()).slice(0, k);
 
   // ---------- Levels ----------
   const LEVELS = {
@@ -186,16 +191,45 @@
   const expParts = (n) => { const d = digitsOf(n); return [d.h * 100, d.t * 10, d.o].filter((v) => v); };
   const joinParts = (arr) => arr.filter((v) => v).join(' + ');
 
+  // Each question type has three wordings, each with its own recorded voice line,
+  // so practicing a lot doesn't mean hearing the same sentence over and over.
+  const variant = (list) => list[Math.floor(Math.random() * list.length)];
+  const plain = (html) => html.replace(/<[^>]+>/g, '');
+  const ONES_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const unitList = (h, t, o, order = ['h', 't', 'o']) => order.map((p) => unit({ h, t, o }[p], p)).join(', ');
+
+  // A few 3-digit prices close to n that are easy to mix up with it.
+  function lookAlikes(n) {
+    const d = digitsOf(n), out = new Set();
+    const add = (h, t, o) => { const v = h * 100 + t * 10 + o; if (v !== n && v >= 10 && v <= 999 && (n < 100 ? v < 100 : v >= 100)) out.add(v); };
+    if (n >= 100) { add(d.h, d.o, d.t); add(d.t, d.h, d.o); add(d.o, d.t, d.h); add(d.h, (d.t + 1) % 10, d.o); add((d.h % 9) + 1, d.t, d.o); }
+    else { add(0, d.o, d.t); add(0, (d.t % 9) + 1, d.o); add(0, d.t, (d.o + 1) % 10); }
+    return [...out];
+  }
+
   const GAMES = {
     register: {
       name: 'Cash Register', emoji: '💳', color: 'pink',
       skill: 'Build prices with $100s, $10s and $1s',
       make(level) {
-        const n = price(level), it = item();
+        const it = item();
+        if (level >= 2 && Math.random() < 0.25) {
+          const n = rand(110, 249);
+          return {
+            kind: 'register', n, item: it, noHundreds: true,
+            prompt: `Pay ${money(n)} for the ${it.name}, but <b>no $100 bills</b>! Use $10 bills and $1 coins.`,
+            speak: `Pay ${n} dollars for the ${it.name} without using any hundred-dollar bills.`, voice: ['line/register-noh', `p/${n}`],
+            explain: `${unit(Math.floor(n / 100), 'h')} = ${Math.floor(n / 100) * 10} tens, so ${money(n)} = ${unit(Math.floor(n / 10), 't')} and ${unit(n % 10, 'o')}.`,
+          };
+        }
+        const n = price(level);
+        const [prompt, vk] = variant([
+          [`Pay <b>exactly</b> ${money(n)} for the ${it.name}.`, 'line/register'],
+          [`The ${it.name} costs ${money(n)}. Count out <b>exactly</b> that much.`, 'line/register-2'],
+          [`Help the shopper pay <b>exactly</b> ${money(n)} for the ${it.name}.`, 'line/register-3'],
+        ]);
         return {
-          kind: 'register', n, item: it,
-          prompt: `Pay <b>exactly</b> ${money(n)} for the ${it.name}.`,
-          speak: `Pay exactly ${n} dollars for the ${it.name}.`, voice: ['line/register', `p/${n}`],
+          kind: 'register', n, item: it, prompt, speak: plain(prompt), voice: [vk, `p/${n}`],
           explain: `${money(n)} = ${placesFor(n).map((p) => unit(digitsOf(n)[p], p)).join(', ')}.`,
         };
       },
@@ -205,30 +239,56 @@
       name: 'Price Tag Detective', emoji: '🔍', color: 'purple',
       skill: 'What is each digit worth?',
       make(level) {
-        const n = price(level), d = digitsOf(n), places = placesFor(n);
-        if (Math.random() < 0.6) {
+        const n = price(level), d = digitsOf(n), places = placesFor(n), r = Math.random();
+        if (r < 0.35) {
           const p = pick(places.filter((q) => d[q] > 0)), dig = d[p], val = dig * PLACE[p].mult;
+          const hl = `<span class="hl-${p} hl-inline">${dig}</span>`;
+          const [prompt, vk] = variant([
+            [`What is the ${hl} in ${money(n)} worth?`, `line/det-worth-${dig}`],
+            [`How much is the highlighted ${hl} worth?`, `line/det-worth-${dig}-2`],
+            [`The ${hl} is highlighted. What is its value?`, `line/det-worth-${dig}-3`],
+          ]);
           return {
-            kind: 'mc', visual: priceTag(n, p),
-            prompt: `What is the <span class="hl-${p} hl-inline">${dig}</span> in ${money(n)} worth?`,
-            speak: `In the price ${n} dollars, what is the highlighted ${dig} worth?`, voice: [`line/det-worth-${dig}`],
+            kind: 'mc', visual: priceTag(n, p), prompt, speak: `In the price ${n} dollars, what is the highlighted ${dig} worth?`, voice: [vk],
             choices: shuffle([dig, dig * 10, dig * 100]).map((v) => ({ value: v, label: money(v) })),
             answer: val,
             hint: `Which place is the ${dig} in? Check the chart:${pvChart(n, p)}`,
             explain: `The ${dig} is in the <b>${PLACE[p].name}</b> place, so it's worth ${unit(dig, p)} = <b>${money(val)}</b>.`,
           };
         }
-        const p = pick(places), ans = d[p];
-        const set = new Set([ans, ...places.map((q) => d[q])]);
-        while (set.size < 4) set.add(rand(0, 9));
+        if (r < 0.55) {
+          const p = pick(places), ans = d[p];
+          const set = new Set([ans, ...places.map((q) => d[q])]);
+          while (set.size < 4) set.add(rand(0, 9));
+          const [prompt, vk] = variant([
+            [`Which digit is in the <b>${PLACE[p].name}</b> place?`, `line/det-place-${p}`],
+            [`Find the digit in the <b>${PLACE[p].name}</b> place.`, `line/det-place-${p}-2`],
+            [`Look at the <b>${PLACE[p].name}</b> place. Which digit is there?`, `line/det-place-${p}-3`],
+          ]);
+          return {
+            kind: 'mc', visual: priceTag(n), prompt, speak: `In the price ${n} dollars, ${plain(prompt).toLowerCase()}`, voice: [vk],
+            choices: shuffle([...set]).map((v) => ({ value: v, label: String(v) })),
+            answer: ans, big: true,
+            hint: `From left to right the places go ${places.map((q) => PLACE[q].name).join(', ')}.`,
+            explain: `${pvChart(n, p)}The ${PLACE[p].name} digit is <b>${ans}</b>.`,
+          };
+        }
+        if (r < 0.75) {
+          const p = pick(places.filter((q) => d[q] > 0)), dig = d[p], val = dig * PLACE[p].mult;
+          return {
+            kind: 'mc', visual: priceTag(n), prompt: `What is the <b>value</b> of the digit in the <b>${PLACE[p].name}</b> place?`,
+            speak: `What is the value of the digit in the ${PLACE[p].name} place?`, voice: [`line/det-value-${p}`],
+            choices: shuffle([dig, dig * 10, dig * 100]).map((v) => ({ value: v, label: money(v) })), answer: val,
+            hint: `First find the digit in the ${PLACE[p].name} place. Then think: how many ${PLACE[p].name} is that?`,
+            explain: `The ${PLACE[p].name} digit is ${dig}. ${unit(dig, p)} = <b>${money(val)}</b>.`,
+          };
+        }
         return {
-          kind: 'mc', visual: priceTag(n),
-          prompt: `Which digit is in the <b>${PLACE[p].name}</b> place?`,
-          speak: `In the price ${n} dollars, which digit is in the ${PLACE[p].name} place?`, voice: [`line/det-place-${p}`],
-          choices: shuffle([...set]).map((v) => ({ value: v, label: String(v) })),
-          answer: ans, big: true,
-          hint: `From left to right the places go ${places.map((q) => PLACE[q].name).join(', ')}.`,
-          explain: `${pvChart(n, p)}The ${PLACE[p].name} digit is <b>${ans}</b>.`,
+          kind: 'mc', visual: matHTML(d, places), prompt: 'Which price matches this money?',
+          speak: 'Which price matches this money?', voice: ['line/det-match'],
+          choices: numChoices(n, lookAlikes(n)), answer: n, tags: true,
+          hint: 'Count the bills in each column. The hundreds come first, then the tens, then the ones.',
+          explain: `${placesFor(n).map((p) => unit(d[p], p)).join(', ')} = <b>${money(n)}</b>.`,
         };
       },
     },
@@ -239,18 +299,23 @@
       make(level) {
         let n;
         do { n = price(level); } while (expParts(n).length < 2);
-        const d = digitsOf(n), three = n >= 100, type = pick(['w2s', 's2e', 'e2s']);
+        const d = digitsOf(n), three = n >= 100;
+        const type = pick(['w2s', 's2e', 'e2s', 's2w', 'u2s', 's2u']);
         const exp = joinParts(expParts(n));
         const expFull = `${exp} = ${money(n)}`;
+        const swaps = three
+          ? [d.h * 100 + d.o * 10 + d.t, d.h * 1000 + d.t * 10 + d.o, d.o * 100 + d.t * 10 + d.h, n + pick([100, -10, 10])]
+          : [d.o * 10 + d.t, d.t * 100 + d.o, n + pick([10, -10]), d.t + d.o];
         if (type === 'w2s') {
-          const cands = three
-            ? [d.h * 100 + d.o * 10 + d.t, d.h * 1000 + d.t * 10 + d.o, d.o * 100 + d.t * 10 + d.h, n + pick([100, -10, 10])]
-            : [d.o * 10 + d.t, d.t * 100 + d.o, n + pick([10, -10]), d.t + d.o];
+          const [prompt, vk] = variant([
+            ['The shopper read the price out loud. Which tag matches?', 'line/tag-w2s'],
+            ['Which price tag shows this price?', 'line/tag-w2s-2'],
+            ['The cashier said this price. Find the tag that matches.', 'line/tag-w2s-3'],
+          ]);
           return {
-            kind: 'mc', visual: `<div class="word-tag">“${words(n)} dollars”</div>`,
-            prompt: 'The shopper read the price out loud. Which tag matches?',
-            speak: `The shopper said: ${words(n)} dollars. Which tag matches?`, voice: ['line/tag-w2s', `p/${n}`],
-            choices: numChoices(n, cands), answer: n, tags: true,
+            kind: 'mc', visual: `<div class="word-tag">“${words(n)} dollars”</div>`, prompt,
+            speak: `${plain(prompt)} ${words(n)} dollars.`, voice: [vk, `p/${n}`],
+            choices: numChoices(n, swaps), answer: n, tags: true,
             hint: three ? `“${words(n).split(' hundred')[0]} hundred” goes in the hundreds place. Then look at the tens and ones.` : 'The first word tells you the tens. The last word tells you the ones.',
             explain: `“${words(n)}” = ${expFull}.`,
           };
@@ -259,24 +324,65 @@
           const cands = three
             ? [joinParts([d.h, d.t, d.o]), joinParts([d.h * 100, d.t, d.o]), joinParts([d.h * 10, d.t * 10, d.o]), joinParts([d.h * 100, d.t * 100, d.o]), joinParts([d.h * 100, d.o * 10, d.t])]
             : [joinParts([d.t, d.o]), joinParts([d.t * 100, d.o]), joinParts([d.t * 10, d.o * 10]), joinParts([d.o * 10, d.t])];
+          const [prompt, vk] = variant([
+            [`Stretch it out! Which shows ${money(n)} in <b>expanded form</b>?`, 'line/tag-s2e'],
+            [`Which is the <b>expanded form</b> of ${money(n)}?`, 'line/tag-s2e-2'],
+            [`Break ${money(n)} into hundreds, tens and ones. Which <b>expanded form</b> is right?`, 'line/tag-s2e-3'],
+          ]);
           return {
-            kind: 'mc', visual: priceTag(n),
-            prompt: `Stretch it out! Which shows ${money(n)} in <b>expanded form</b>?`,
-            speak: `Which shows ${n} in expanded form?`, voice: ['line/tag-s2e', `p/${n}`],
+            kind: 'mc', visual: priceTag(n), prompt, speak: plain(prompt), voice: [vk, `p/${n}`],
             choices: strChoices(exp, cands), answer: exp,
             hint: `Find what each digit is worth:${pvChart(n)}`,
             explain: `${pvChart(n)}${expFull}`,
           };
         }
-        const cands = [parseInt(expParts(n).join(''), 10), parseInt(String(n).replace(/0/g, ''), 10),
-          three ? d.h * 100 + d.o * 10 + d.t : d.o * 10 + d.t, three ? d.h * 1000 + d.t * 10 + d.o : d.t * 100 + d.o];
+        if (type === 'e2s') {
+          const cands = [parseInt(expParts(n).join(''), 10), parseInt(String(n).replace(/0/g, ''), 10),
+            three ? d.h * 100 + d.o * 10 + d.t : d.o * 10 + d.t, three ? d.h * 1000 + d.t * 10 + d.o : d.t * 100 + d.o];
+          const [prompt, vk] = variant([
+            ['The cashier added up the money like this. What is the price?', 'line/tag-e2s'],
+            ['Put the parts together. What price is this?', 'line/tag-e2s-2'],
+            ['This is the price in expanded form. Which tag shows it?', 'line/tag-e2s-3'],
+          ]);
+          return {
+            kind: 'mc', visual: `<div class="word-tag exp">${exp}</div>`, prompt, speak: `${plain(prompt)} ${expParts(n).join(' plus ')}.`, voice: [vk],
+            choices: numChoices(n, cands), answer: n, tags: true,
+            hint: 'Put each part in its place on the chart, then read the digits.',
+            explain: `${pvChart(n)}${expFull}`,
+          };
+        }
+        if (type === 's2w') {
+          const set = new Set([n, ...swaps.filter((v) => v > 0 && v < 1000)]);
+          while (set.size < 4) set.add(Math.max(10, Math.min(999, n + pick([-100, -10, 10, 100]) * rand(1, 2))));
+          return {
+            kind: 'mc', visual: priceTag(n), prompt: 'Which words say this price?', speak: 'Which words say this price?', voice: ['line/tag-s2w'],
+            choices: shuffle([...set].slice(0, 4)).map((v) => ({ value: v, label: `<span class="word-choice">${words(v)}</span>` })), answer: n,
+            hint: three ? 'Say the hundreds first, then the tens and ones.' : 'Say the tens first, then the ones.',
+            explain: `${money(n)} is “${words(n)} dollars”.`,
+          };
+        }
+        if (type === 'u2s') {
+          const order = Math.random() < 0.4 ? shuffle(placesFor(n)) : placesFor(n);
+          const cands = [parseInt(String(n).replace(/0/g, ''), 10), ...swaps];
+          return {
+            kind: 'mc', visual: `<div class="word-tag eq">${unitList(d.h, d.t, d.o, order)}</div>`,
+            prompt: order.join() === placesFor(n).join() ? 'What price is this?' : 'Careful, the places are mixed up! What price is this?',
+            speak: 'What price is this many hundreds, tens and ones?', voice: ['line/tag-u2s'],
+            choices: numChoices(n, cands), answer: n, tags: true,
+            hint: 'Put each number in its own place: hundreds, then tens, then ones. A place with 0 still needs a 0!',
+            explain: `${unitList(d.h, d.t, d.o, placesFor(n))} = <b>${money(n)}</b>.`,
+          };
+        }
+        const right = unitList(d.h, d.t, d.o, placesFor(n));
+        const wrongs = three
+          ? [unitList(d.o, d.t, d.h), unitList(d.h, d.o, d.t), unitList(d.t, d.h, d.o), unitList(d.h, d.t, (d.o + 1) % 10)]
+          : [`${unit(d.o, 't')}, ${unit(d.t, 'o')}`, `${unit(d.t, 'h')}, ${unit(d.o, 't')}`, `${unit(d.t, 't')}, ${unit((d.o + 1) % 10, 'o')}`];
         return {
-          kind: 'mc', visual: `<div class="word-tag exp">${exp}</div>`,
-          prompt: 'The cashier added up the money like this. What is the price?',
-          speak: `The cashier added ${expParts(n).join(' plus ')}. What is the price?`, voice: ['line/tag-e2s'],
-          choices: numChoices(n, cands), answer: n, tags: true,
-          hint: 'Put each part in its place on the chart, then read the digits.',
-          explain: `${pvChart(n)}${expFull}`,
+          kind: 'mc', visual: priceTag(n), prompt: 'How many hundreds, tens and ones make this price?',
+          speak: 'How many hundreds, tens and ones make this price?', voice: ['line/tag-s2u'],
+          choices: strChoices(right, wrongs), answer: right,
+          hint: `Read the digits from left to right:${pvChart(n)}`,
+          explain: `${money(n)} = ${right}.`,
         };
       },
     },
@@ -285,38 +391,68 @@
       name: 'Best Deal', emoji: '⚖️', color: 'yellow',
       skill: 'Compare prices with &lt;, &gt; and =',
       make(level) {
-        const a = price(level);
-        if (Math.random() < 0.5) {
-          const b = closeTo(a, level), itA = item();
-          let itB; do { itB = item(); } while (itB.name === itA.name);
+        const a = price(level), r = Math.random();
+        const card = (it, p) => `<span class="deal-emoji">${it.emoji}</span><span class="deal-name">${it.name}</span>${priceTag(p)}`;
+        if (r < 0.35) {
+          const b = closeTo(a, level), [itA, itB] = items(2);
           const wantLess = Math.random() < 0.5, ans = (wantLess ? a < b : a > b) ? 0 : 1;
-          const card = (it, p) => `<span class="deal-emoji">${it.emoji}</span><span class="deal-name">${it.name}</span>${priceTag(p)}`;
+          const [prompt, vk] = variant(wantLess
+            ? [['Which one costs <b>less</b>?', 'line/deal-less'], ['Which one is <b>cheaper</b>?', 'line/deal-less-2'], ['Which price is <b>lower</b>?', 'line/deal-less-3']]
+            : [['Which one costs <b>more</b>?', 'line/deal-more'], ['Which one is <b>more expensive</b>?', 'line/deal-more-2'], ['Which price is <b>higher</b>?', 'line/deal-more-3']]);
           return {
-            kind: 'mc', layout: 'deal',
-            prompt: `Which one costs <b>${wantLess ? 'less' : 'more'}</b>?`,
-            speak: `Which one costs ${wantLess ? 'less' : 'more'}? The ${itA.name} for ${a} dollars, or the ${itB.name} for ${b} dollars?`,
-            voice: [wantLess ? 'line/deal-less' : 'line/deal-more'],
-            choices: [{ value: 0, label: card(itA, a) }, { value: 1, label: card(itB, b) }],
-            answer: ans,
+            kind: 'mc', layout: 'deal', prompt,
+            speak: `${plain(prompt)} The ${itA.name} for ${a} dollars, or the ${itB.name} for ${b} dollars?`, voice: [vk],
+            choices: [{ value: 0, label: card(itA, a) }, { value: 1, label: card(itB, b) }], answer: ans,
             hint: 'Start with the biggest place. Compare the hundreds first, then the tens, then the ones.',
             explain: compareExplain(a, b),
           };
         }
-        const b = Math.random() < 0.12 ? a : closeTo(a, level);
-        const ans = a < b ? '<' : a > b ? '>' : '=';
+        if (r < 0.6) {
+          const b = Math.random() < 0.12 ? a : closeTo(a, level);
+          const ans = a < b ? '<' : a > b ? '>' : '=';
+          const [prompt, vk] = variant([
+            ['Pick the sign that makes it true.', 'line/deal-sign'],
+            ['Which sign goes in the box?', 'line/deal-sign-2'],
+            ['Compare the prices. Pick less than, greater than, or equal to.', 'line/deal-sign-3'],
+          ]);
+          return {
+            kind: 'mc', visual: `<div class="compare-row">${priceTag(a)}<span class="compare-q">?</span>${priceTag(b)}</div>`,
+            prompt, speak: `Is ${a} dollars less than, greater than, or equal to ${b} dollars?`, voice: [vk],
+            choices: [
+              { value: '<', label: '<span class="sym">&lt;</span><small>less than</small>' },
+              { value: '=', label: '<span class="sym">=</span><small>equal to</small>' },
+              { value: '>', label: '<span class="sym">&gt;</span><small>greater than</small>' },
+            ],
+            answer: ans,
+            hint: 'The open side of the sign faces the bigger number, like a hungry alligator! 🐊 Compare hundreds, then tens, then ones.',
+            explain: compareExplain(a, b),
+          };
+        }
+        if (r < 0.8) {
+          const set = new Set([a]);
+          for (const c of shuffle(lookAlikes(a))) if (set.size < 3) set.add(c);
+          while (set.size < 3) set.add(closeTo(a, level));
+          const prices = [...set], its = items(3), most = Math.random() < 0.5;
+          const target = most ? Math.max(...prices) : Math.min(...prices);
+          return {
+            kind: 'mc', layout: 'deal', prompt: `Which of these three costs the <b>${most ? 'most' : 'least'}</b>?`,
+            speak: `Which of these three costs the ${most ? 'most' : 'least'}?`, voice: [most ? 'line/deal-most3' : 'line/deal-least3'],
+            choices: prices.map((p, i) => ({ value: p, label: card(its[i], p) })), answer: target,
+            hint: 'Compare the hundreds of all three first. If two are the same, compare their tens.',
+            explain: `In order from least to greatest: ${[...prices].sort((x, y) => x - y).map(money).join(', ')}. So <b>${money(target)}</b> costs the ${most ? 'most' : 'least'}.`,
+          };
+        }
+        const lo = level <= 1 ? 10 : 100, hi = level <= 1 ? 99 : 999, step = level <= 1 ? 10 : 100;
+        const x = Math.max(lo + 2, Math.min(hi - 1, a));
+        const bigger = x + rand(1, Math.min(step, hi - x));
+        // The others are a bit less than x, or x itself (not greater!).
+        const below = Array.from({ length: Math.min(step, x - lo) }, (_, i) => x - 1 - i);
+        const opts = [bigger, ...shuffle([x, ...below]).slice(0, 2)];
         return {
-          kind: 'mc',
-          visual: `<div class="compare-row">${priceTag(a)}<span class="compare-q">?</span>${priceTag(b)}</div>`,
-          prompt: 'Pick the sign that makes it true.',
-          speak: `Is ${a} dollars less than, greater than, or equal to ${b} dollars?`, voice: ['line/deal-sign'],
-          choices: [
-            { value: '<', label: '<span class="sym">&lt;</span><small>less than</small>' },
-            { value: '=', label: '<span class="sym">=</span><small>equal to</small>' },
-            { value: '>', label: '<span class="sym">&gt;</span><small>greater than</small>' },
-          ],
-          answer: ans,
-          hint: 'The open side of the sign faces the bigger number, like a hungry alligator! 🐊 Compare hundreds, then tens, then ones.',
-          explain: compareExplain(a, b),
+          kind: 'mc', prompt: `Which price is <b>greater than</b> ${money(x)}?`, speak: `Which price is greater than ${x} dollars?`, voice: ['line/deal-over', `p/${x}`],
+          choices: shuffle(opts.slice(0, 3)).map((v) => ({ value: v, label: money(v) })), answer: bigger, tags: true,
+          hint: `Compare each price with ${money(x)}, starting with the biggest place.`,
+          explain: compareExplain(bigger, x),
         };
       },
     },
@@ -325,23 +461,58 @@
       name: 'Round-It Sale', emoji: '🎯', color: 'orange',
       skill: 'Round to the nearest 10 or 100',
       make(level) {
+        const r = Math.random(), roundTo = (n, to) => Math.round(n / to) * to;
+        if (r < 0.2) {
+          const to = level <= 1 ? 10 : pick([10, 100]);
+          const T = level <= 1 ? rand(2, 9) * 10 : to === 10 ? rand(11, 99) * 10 : rand(2, 9) * 100;
+          const inRange = () => T - to / 2 + rand(0, to - 1);
+          let good; do { good = inRange(); } while (good === T);
+          const bad1 = T + to / 2 + rand(0, to / 2 - 1), bad2 = T - to / 2 - rand(1, to / 2);
+          const place = to === 10 ? 'ten' : 'hundred';
+          return {
+            kind: 'mc', prompt: `Which price rounds to <b>${money(T)}</b> (nearest ${place})?`,
+            speak: `Rounding to the nearest ${place}, which price rounds to ${T} dollars?`, voice: [`line/round-which-${to}`, `p/${T}`],
+            choices: shuffle([good, bad1, bad2]).map((v) => ({ value: v, label: money(v) })), answer: good, tags: true,
+            hint: `Prices that round to ${T} are between ${T - to / 2} and ${T + to / 2 - 1}.`,
+            explain: `${good} rounds to ${roundTo(good, to)}. ${bad1} rounds to ${roundTo(bad1, to)}, and ${bad2} rounds to ${roundTo(bad2, to)}.`,
+          };
+        }
+        if (r < 0.35 && level >= 2) {
+          const to = level >= 3 ? pick([10, 100]) : 10, [i1, i2] = items(2);
+          const a = to === 10 ? rand(11, 99) : rand(101, 499), b = to === 10 ? rand(11, 99) : rand(101, 499);
+          const ans = roundTo(a, to) + roundTo(b, to);
+          const cands = [a + b, roundTo(a + b, to) === ans ? ans + to : roundTo(a + b, to), ans - to, ans + to];
+          const place = to === 10 ? 'ten' : 'hundred';
+          return {
+            kind: 'mc', visual: `<div class="compare-row"><span class="deal-emoji">${i1.emoji}</span>${priceTag(a)}<span class="sale-plus">+</span><span class="deal-emoji">${i2.emoji}</span>${priceTag(b)}</div>`,
+            prompt: `About how much for both? Round each price to the nearest <b>${place}</b>, then add.`,
+            speak: `About how much do both cost? Round each price to the nearest ${place}, then add.`, voice: [`line/round-estimate-${to}`],
+            choices: numChoices(ans, cands, money, 3).sort((x, y) => x.value - y.value), answer: ans, tags: true,
+            hint: `Round ${a} first, then round ${b}. Then add the two rounded prices.`,
+            explain: `${a} rounds to ${roundTo(a, to)}, and ${b} rounds to ${roundTo(b, to)}. ${roundTo(a, to)} + ${roundTo(b, to)} = <b>${money(ans)}</b>.`,
+          };
+        }
         let n, to;
         if (level <= 1) { to = 10; do { n = rand(11, 99); } while (n % 10 === 0); }
         else if (level === 2) { to = pick([10, 100]); do { n = rand(101, 999); } while (n % to === 0); }
         else {
           to = pick([10, 100]);
-          const r = Math.random();
-          if (to === 10) n = r < 0.4 ? rand(10, 99) * 10 + 5 : r < 0.6 ? rand(991, 999) : rand(101, 999);
-          else n = r < 0.4 ? rand(1, 9) * 100 + 50 + rand(0, 9) : r < 0.6 ? rand(951, 999) : rand(101, 999);
+          const rr = Math.random();
+          if (to === 10) n = rr < 0.4 ? rand(10, 99) * 10 + 5 : rr < 0.6 ? rand(991, 999) : rand(101, 999);
+          else n = rr < 0.4 ? rand(1, 9) * 100 + 50 + rand(0, 9) : rr < 0.6 ? rand(951, 999) : rand(101, 999);
           if (n % to === 0) n += 1;
         }
         const low = Math.floor(n / to) * to, high = low + to, mid = low + to / 2, ans = n >= mid ? high : low;
         const other = to === 10 && n >= 100 ? Math.round(n / 100) * 100 : (low - to > 0 ? low - to : high + to);
         const it = item(), place = to === 10 ? 'ten' : 'hundred';
+        const [prompt, vk] = variant([
+          [`The ${it.emoji} ${it.name} costs ${money(n)}. Round it to the nearest <b>${place}</b>.`, `line/round-${to}`],
+          [`What is ${money(n)} rounded to the nearest <b>${place}</b>?`, `line/round-${to}-2`],
+          [`Sale sign! Estimate the ${it.emoji} ${it.name}'s price, ${money(n)}, to the nearest <b>${place}</b>.`, `line/round-${to}-3`],
+        ]);
         return {
-          kind: 'mc', visual: numberLine(n, low, high),
-          prompt: `The ${it.emoji} ${it.name} costs ${money(n)}. Round it to the nearest <b>${place}</b>.`,
-          speak: `The ${it.name} costs ${n} dollars. Round it to the nearest ${place}.`, voice: [`line/round-${to}`, `p/${n}`],
+          kind: 'mc', visual: numberLine(n, low, high), prompt,
+          speak: `${plain(prompt)}`, voice: [vk, `p/${n}`],
           choices: numChoices(ans, [low, high, other], money, 3).sort((x, y) => x.value - y.value),
           answer: ans,
           hint: `Is ${n} closer to ${low} or ${high}? The middle is ${mid}.`,
@@ -360,13 +531,18 @@
           const facts = [
             ['Trade one $100 bill for $10 bills. How many $10 bills do you get?', 10, 'One hundred is the same as 10 tens.', 'fact-100-10'],
             ['Trade one $10 bill for $1 coins. How many coins do you get?', 10, 'One ten is the same as 10 ones.', 'fact-10-1'],
+            ['How many $10 bills are the same as one $100 bill?', 10, '10 tens make 1 hundred.', 'fact-10s-in-100'],
           ];
           if (level >= 2) {
             const k = rand(2, 9);
             facts.push([`How many $10 bills make ${money(k * 100)}?`, k * 10, `Each $100 is 10 tens, so ${k} hundreds = ${k * 10} tens.`, `fact-tens-${k}`]);
             facts.push(['How many $1 coins make $100?', 100, '10 tens = 100 ones.', 'fact-ones-100']);
+            facts.push(['Trade one $100 bill for $1 coins. How many coins do you get?', 100, '1 hundred = 10 tens = 100 ones.', 'fact-100-1']);
           }
-          if (level >= 3) facts.push(['How many $10 bills make $1,000?', 100, '1,000 is 10 hundreds, and each hundred is 10 tens, so that is 100 tens!', 'fact-1000']);
+          if (level >= 3) {
+            facts.push(['How many $10 bills make $1,000?', 100, '1,000 is 10 hundreds, and each hundred is 10 tens, so that is 100 tens!', 'fact-1000']);
+            facts.push(['How many $100 bills make $1,000?', 10, '10 hundreds make 1 thousand.', 'fact-1000-100']);
+          }
           const [q, ans, why, vkey] = pick(facts);
           return {
             kind: 'mc', visual: '<div class="machine">🏦 ⇄ 💵</div>', prompt: q, speak: q.replace(/\$/g, ''), voice: [`line/${vkey}`],
@@ -374,7 +550,7 @@
             hint: 'Think about 10 of the smaller one making 1 of the bigger one.', explain: why,
           };
         }
-        if (r < 0.6) {
+        if (r < 0.45) {
           let c;
           if (level <= 1) c = { h: 0, t: rand(1, 7), o: rand(10, 18) };
           else if (level === 2) c = { h: rand(1, 7), t: rand(10, 16), o: rand(0, 9) };
@@ -382,13 +558,42 @@
           const total = c.h * 100 + c.t * 10 + c.o, places = c.h ? ['h', 't', 'o'] : ['t', 'o'];
           const cands = [parseInt(places.map((p) => c[p]).join(''), 10), c.h + c.t + c.o,
             c.h * 100 + (c.t % 10) * 10 + (c.o % 10), total + pick([10, -10, 100])];
+          const [prompt, vk] = variant([
+            ['Look at all this money in the piggy bank! How much is it?', 'line/regroup-count'],
+            ['Count all the money. How much is there?', 'line/regroup-count-2'],
+            ['How much money is on the mat altogether?', 'line/regroup-count-3'],
+          ]);
           return {
-            kind: 'mc', visual: matHTML(c, places),
-            prompt: 'Look at all this money in the piggy bank! How much is it?',
-            speak: 'Look at the money in the piggy bank. How much is it altogether?', voice: ['line/regroup-count'],
+            kind: 'mc', visual: matHTML(c, places), prompt, speak: plain(prompt), voice: [vk],
             choices: numChoices(total, cands), answer: total, tags: true,
             hint: 'Watch out! There are more than 9 in a column. Trade 10 of them for 1 of the next bigger place.',
             explain: `${places.map((p) => unit(c[p], p)).join(' + ')} = ${places.map((p) => c[p] * PLACE[p].mult).join(' + ')} = <b>${money(total)}</b>.`,
+          };
+        }
+        if (r < 0.7) {
+          // Which shows the same amount after a trade?
+          let h, t, o, right, wrongs;
+          if (level <= 1) {
+            t = rand(2, 9); o = rand(0, 9); h = 0;
+            right = `${unit(t - 1, 't')}, ${unit(o + 10, 'o')}`;
+            wrongs = [`${unit(t - 1, 't')}, ${unit(o + 1, 'o')}`, `${unit(t, 't')}, ${unit(o + 10, 'o')}`, `${unit(t + 1, 't')}, ${unit(o, 'o')}`];
+          } else {
+            h = rand(2, 9); t = rand(0, 8); o = rand(0, 9);
+            if (Math.random() < 0.6 || t === 0) {
+              right = unitList(h - 1, t + 10, o);
+              wrongs = [unitList(h - 1, t + 1, o), unitList(h - 1, t, o + 10), unitList(h, t + 10, o)];
+            } else {
+              right = unitList(h, t - 1, o + 10);
+              wrongs = [unitList(h, t - 1, o + 1), unitList(h - 1, t - 1, o + 10), unitList(h, t, o + 10)];
+            }
+          }
+          const n = h * 100 + t * 10 + o;
+          return {
+            kind: 'mc', visual: `${priceTag(n)}<div class="word-tag eq">${h ? unitList(h, t, o) : `${unit(t, 't')}, ${unit(o, 'o')}`}</div>`,
+            prompt: 'Which one shows the <b>same amount</b> of money?', speak: 'Which one shows the same amount of money?', voice: ['line/regroup-same'],
+            choices: strChoices(right, wrongs), answer: right,
+            hint: 'When you trade 1 of a bigger bill, you get 10 of the next smaller one. The total stays the same.',
+            explain: `${right} is still ${money(n)}: one bill was traded for 10 smaller ones.`,
           };
         }
         let n, big, small, q, ans, cands, line;
@@ -413,10 +618,14 @@
             cands = [d.t, d.t + 1, d.t + 100, d.t + 20];
           }
         }
+        const [prompt, vk] = variant([
+          ['Break one bill into smaller ones. What goes in the box?', 'line/regroup-break'],
+          ['Trade a bill for smaller bills. What number goes in the box?', 'line/regroup-break-2'],
+          ['Fill in the box so it is the same amount of money.', 'line/regroup-break-3'],
+        ]);
         return {
           kind: 'mc', visual: `${priceTag(n)}<div class="word-tag eq">= ${line}</div>`,
-          prompt: 'Break one bill into smaller ones. What goes in the box?',
-          speak: q, voice: ['line/regroup-break'], choices: numChoices(ans, cands, String), answer: ans, big: true,
+          prompt, speak: q, voice: [vk], choices: numChoices(ans, cands, String), answer: ans, big: true,
           hint: `One ${PLACE[big].one} was traded for 10 ${PLACE[small].name}. Add 10 to the ${PLACE[small].name} digit.`,
           explain: `Trade 1 ${PLACE[big].one} for 10 ${PLACE[small].name}: ${ans - 10} + 10 = <b>${ans}</b> ${PLACE[small].name}.`,
         };
@@ -823,7 +1032,7 @@
     const sayBtn = canSpeak ? '<button class="say" id="sayBtn" aria-label="Read it to me">🔊</button>' : '';
     let body;
     if (q.kind === 'register') {
-      const places = q.n >= 100 || lv >= 2 ? ['h', 't', 'o'] : ['t', 'o'];
+      const places = q.noHundreds ? ['t', 'o'] : q.n >= 100 || lv >= 2 ? ['h', 't', 'o'] : ['t', 'o'];
       R.counts = { h: 0, t: 0, o: 0 };
       R.places = places;
       body = `
@@ -849,7 +1058,7 @@
     } else if (q.kind === 'steps') {
       body = stepsBody(q);
     } else {
-      const cls = q.layout === 'deal' ? 'choices deal' : `choices ${q.big ? 'big' : ''} ${q.tags ? 'tags' : ''} n${q.choices.length}`;
+      const cls = q.layout === 'deal' ? `choices deal n${q.choices.length}` : `choices ${q.big ? 'big' : ''} ${q.tags ? 'tags' : ''} n${q.choices.length}`;
       body = `
         <div class="play">
           <div class="q-card">
@@ -883,7 +1092,7 @@
     screen.querySelectorAll('.tray-btn').forEach((b) => {
       b.onclick = () => {
         if (R.locked) return;
-        if (R.counts[b.dataset.p] >= 19) return toast('That column is full!');
+        if (R.counts[b.dataset.p] >= (R.q.noHundreds ? 29 : 19)) return toast('That column is full!');
         R.counts[b.dataset.p]++; sfx.coin(); redraw();
       };
     });
@@ -892,14 +1101,15 @@
       if (R.locked) return;
       const paid = R.counts.h * 100 + R.counts.t * 10 + R.counts.o, n = R.q.n, d = digitsOf(n);
       if (paid === n) { onCorrect(); lockRegister(); return; }
-      const need = placesFor(n).map((p) => unit(d[p], p)).join(', ');
+      const target = R.q.noHundreds ? { h: 0, t: Math.floor(n / 10), o: n % 10 } : d;
+      const need = R.places.filter((p) => target[p] || p !== 'h').map((p) => unit(target[p], p)).join(', ');
       const paidMsg = `You paid <b>${money(paid)}</b>. That's ${paid < n ? 'not enough' : 'too much'}.`;
       const revealed = onWrong(`${paidMsg} ${money(n)} needs ${need}.${pvChart(n)}`, {
         title: `Here's how to pay ${money(n)} 💡`,
         body: `${paidMsg} Now the counter shows the right money: <b>${need}</b>.`,
       });
       if (revealed) {
-        R.counts = { h: d.h, t: d.t, o: d.o };
+        R.counts = { ...target };
         redraw();
         lockRegister();
         $('#matWrap').classList.add('mat-answer');
@@ -1003,43 +1213,60 @@
 
   // ---------- Spelling (Letter Bead Bar) ----------
   // [bracketed] letters are the tricky part, highlighted when the answer is shown.
+  // Each word has three sentences (each recorded), so she doesn't memorize them.
   const SPELL_DEFAULT = [
-    ['ro[ck]et', 'I want the rocket toy from the toy store.', 'After a short <b>o</b>, the “k” sound is spelled <b>c-k</b>, like in pocket.'],
-    ['po[ck]et', 'I put my change in my pocket.', 'After a short <b>o</b>, the “k” sound is spelled <b>c-k</b>, like in rocket.'],
-    ['h[old]', 'Can you hold my shopping bags, please?', '<b>o-l-d</b> says “old”, like in told and gold.'],
-    ['t[old]', 'Mom told me we could buy one treat.', '<b>o-l-d</b> says “old”, like in hold and gold.'],
-    ['of[t]en', 'We often get pretzels at the food court.', 'Tricky word! The <b>t</b> is quiet, but it is still there: o-f-t-e-n.'],
-    ['gr[ow]', 'My new plant will grow if I water it.', '<b>o-w</b> at the end can say “o”, like in snow and show.'],
-    ['[thr][o]n[e]', 'The princess doll sits on a sparkly throne.', 'It starts with <b>t-h-r</b>, and the silent <b>e</b> makes the <b>o</b> say its name.'],
-    ['s[o]', 'This dress is so pretty!', 'Just two letters! The <b>o</b> says its name at the end: s-o.'],
-    ['s[ew]', 'I can sew a patch on my backpack.', 'Tricky word! It sounds like “so”, but the “o” sound is spelled <b>e-w</b>.'],
-    ['m[o]st', 'This is the most fun store in the mall!', 'The <b>o</b> says its name before <b>s-t</b>, like in almost and post.'],
-    ['[al]most', 'We are almost at the food court.', '<b>al</b> + <b>most</b>. Only one <b>l</b> at the start!'],
-    ['b[o]th', 'I want both the red shoes and the blue shoes.', 'The <b>o</b> says its name, and it ends with <b>t-h</b>.'],
-    ['c[oa]ch', 'My soccer coach bought new balls at the sports store.', '<b>o-a</b> together says “o”, and it ends with <b>c-h</b>.'],
-    ['[o]pen', 'The new toy store is open today!', 'The <b>o</b> at the start says its name: o-p-e-n.'],
-    ['[al]so', 'I also want a cupcake!', '<b>al</b> + <b>so</b>. Only one <b>l</b>!'],
-    ['[ph]oto[syn]the[sis]', 'Plants make their own food from sunlight. That is called photosynthesis.', 'Bonus word! Say it in chunks: pho-to-syn-the-sis. <b>p-h</b> says “f”.'],
+    ['ro[ck]et', ['I want the rocket toy from the toy store.', 'The rocket ship ride at the mall goes up and down.', 'Look, that balloon is shaped like a rocket!'],
+      'After a short <b>o</b>, the “k” sound is spelled <b>c-k</b>, like in pocket.'],
+    ['po[ck]et', ['I put my change in my pocket.', 'My new jeans have a pocket with a zipper.', 'She found a coin in her coat pocket.'],
+      'After a short <b>o</b>, the “k” sound is spelled <b>c-k</b>, like in rocket.'],
+    ['h[old]', ['Can you hold my shopping bags, please?', 'Please hold my hand in the busy mall.', 'My new purse can hold all my stickers.'],
+      '<b>o-l-d</b> says “old”, like in told and gold.'],
+    ['t[old]', ['Mom told me we could buy one treat.', 'The cashier told us the shoes were on sale.', 'I told my friend about the new candy store.'],
+      '<b>o-l-d</b> says “old”, like in hold and gold.'],
+    ['of[t]en', ['We often get pretzels at the food court.', 'How often does the pet store get new puppies?', 'Dad often buys coffee before we shop.'],
+      'Tricky word! The <b>t</b> is quiet, but it is still there: o-f-t-e-n.'],
+    ['gr[ow]', ['My new plant will grow if I water it.', 'My feet grow so fast that I need new shoes.', 'The flower shop sells seeds that grow into sunflowers.'],
+      '<b>o-w</b> at the end can say “o”, like in snow and show.'],
+    ['[thr][o]n[e]', ['The princess doll sits on a sparkly throne.', 'The king in the toy castle has a golden throne.', 'I made a throne out of pillows in the furniture store.'],
+      'It starts with <b>t-h-r</b>, and the silent <b>e</b> makes the <b>o</b> say its name.'],
+    ['s[o]', ['This dress is so pretty!', 'The mall is so big that we got a map.', 'I was so happy when I found the last unicorn plush.'],
+      'Just two letters! The <b>o</b> says its name at the end: s-o.'],
+    ['s[ew]', ['I can sew a patch on my backpack.', 'Grandma will sew a button on my new coat.', 'The craft store sells kits to sew a pillow.'],
+      'Tricky word! It sounds like “so”, but the “o” sound is spelled <b>e-w</b>.'],
+    ['m[o]st', ['This is the most fun store in the mall!', 'Which toy costs the most money?', 'I like the bookstore the most.'],
+      'The <b>o</b> says its name before <b>s-t</b>, like in almost and post.'],
+    ['[al]most', ['We are almost at the food court.', 'My piggy bank is almost full of coins.', 'We almost forgot to buy the birthday card!'],
+      '<b>al</b> + <b>most</b>. Only one <b>l</b> at the start!'],
+    ['b[o]th', ['I want both the red shoes and the blue shoes.', 'I used both hands to carry my shopping bag.', 'Both of my friends got the same sparkly shoes.'],
+      'The <b>o</b> says its name, and it ends with <b>t-h</b>.'],
+    ['c[oa]ch', ['My soccer coach bought new balls at the sports store.', 'Our coach gave us all new water bottles.', 'The dance coach bought ribbons at the craft store.'],
+      '<b>o-a</b> together says “o”, and it ends with <b>c-h</b>.'],
+    ['[o]pen', ['The new toy store is open today!', 'Please open the door for the shoppers.', 'I can\'t wait to open my new paint set!'],
+      'The <b>o</b> at the start says its name: o-p-e-n.'],
+    ['[al]so', ['I also want a cupcake!', 'The shoe store also sells socks.', 'I want a pretzel, and I also want lemonade.'],
+      '<b>al</b> + <b>so</b>. Only one <b>l</b>!'],
+    ['[ph]oto[syn]the[sis]', ['Plants make their own food from sunlight. That is called photosynthesis.', 'The plant store sign says leaves use photosynthesis to make food.', 'A tree needs sunlight, water and air for photosynthesis.'],
+      'Bonus word! Say it in chunks: pho-to-syn-the-sis. <b>p-h</b> says “f”.'],
   ];
   const plainWord = (marked) => marked.replace(/[[\]]/g, '');
-  const SPELL_INFO = Object.fromEntries(SPELL_DEFAULT.map(([m, s, tip]) => [plainWord(m).toLowerCase(), { marked: m, sentence: s, tip }]));
+  const SPELL_INFO = Object.fromEntries(SPELL_DEFAULT.map(([m, ss, tip]) => [plainWord(m).toLowerCase(), { marked: m, sentences: ss, tip }]));
 
   // The active list: the default, or one a grown-up typed in ("word | sentence" per line).
   function spellWords() {
     const custom = Array.isArray(S.spellList) && S.spellList.length ? S.spellList : null;
-    const rows = custom || SPELL_DEFAULT.map(([m, s]) => [plainWord(m), s]);
+    const rows = custom || SPELL_DEFAULT.map(([m, ss]) => [plainWord(m), ss[0]]);
     return rows.map(([word, sentence]) => {
-      const info = SPELL_INFO[word.toLowerCase()] || {};
-      return { word, sentence: sentence || info.sentence || '', tip: info.tip || '', marked: info.marked || word };
+      const info = SPELL_INFO[word.toLowerCase()] || {}, recorded = info.sentences || [];
+      const first = sentence || recorded[0] || '';
+      // A grown-up's own sentence replaces the built-in ones.
+      const sentences = !recorded.length || first !== recorded[0] ? [first] : recorded;
+      return { word, sentence: first, sentences, recorded: !!recorded.length && recorded[0] === first, tip: info.tip || '', marked: info.marked || word };
     });
   }
   const markHTML = (marked) => escapeHTML(marked).replace(/\[([^\]]*)\]/g, '<mark>$1</mark>');
-  const sayWord = (w) => (w.sentence ? [[w.word, 0.75], [w.sentence, 0.9], [w.word, 0.75]] : [[w.word, 0.75], [w.word, 0.75]]);
-  // The recorded dictation only matches if the sentence is the one that was recorded.
-  const spellVoice = (w) => {
-    const info = SPELL_INFO[w.word.toLowerCase()];
-    return info && info.sentence === w.sentence ? [`spell/${w.word.toLowerCase()}`] : null;
-  };
+  const sayWord = (w, s) => (s ? [[w.word, 0.75], [s, 0.9], [w.word, 0.75]] : [[w.word, 0.75], [w.word, 0.75]]);
+  // The recorded dictation only matches if the sentence is one that was recorded.
+  const spellVoice = (w, i) => (w.recorded ? [`spell/${w.word.toLowerCase()}${i ? `-${i + 1}` : ''}`] : null);
 
   function pickSpellWord() {
     const list = spellWords(), used = (R && R.used) || [];
@@ -1053,9 +1280,10 @@
   }
 
   function spellQuestion(w, peek) {
+    const i = rand(0, w.sentences.length - 1), sentence = w.sentences[i];
     return {
-      kind: 'spell', w, peek, speakParts: sayWord(w), speak: `${w.word}. ${w.sentence} ${w.word}.`,
-      voice: spellVoice(w), slowVoice: [`slow/${w.word.toLowerCase()}`],
+      kind: 'spell', w, peek, sentence, speakParts: sayWord(w, sentence), speak: `${w.word}. ${sentence} ${w.word}.`,
+      voice: spellVoice(w, i), slowVoice: [`slow/${w.word.toLowerCase()}`],
       explain: `<span class="spelled">${markHTML(w.marked)}</span>${w.tip ? `<br>${w.tip}` : ''}`,
     };
   }
@@ -1079,7 +1307,7 @@
         <button class="btn listen" id="hearBtn">🔊 Hear the word</button>
         <button class="btn ghost slow" id="slowBtn">🐢 Slowly</button>
       </div>` : '';
-    const peek = q.peek ? `<div class="peek" id="peek"><small>Look closely, then spell it!</small><span class="peek-word">${markHTML(q.w.marked)}</span><small>${escapeHTML(q.w.sentence)}</small></div>` : '';
+    const peek = q.peek ? `<div class="peek" id="peek"><small>Look closely, then spell it!</small><span class="peek-word">${markHTML(q.w.marked)}</span><small>${escapeHTML(q.sentence)}</small></div>` : '';
     return `
       <div class="play spell">
         <div class="q-card">
@@ -1179,7 +1407,7 @@
       </section>`, { title: g.name });
     $('#practiceBtn').onclick = () => { sfx.tap(); startRound('spelling'); };
     $('#testBtn').onclick = () => { sfx.tap(); startSpellTest(); };
-    screen.querySelectorAll('.word-chip').forEach((b) => { b.onclick = () => { const w = words[+b.dataset.i]; say(spellVoice(w), sayWord(w)); }; });
+    screen.querySelectorAll('.word-chip').forEach((b) => { b.onclick = () => { const w = words[+b.dataset.i]; say(spellVoice(w, 0), sayWord(w, w.sentence)); }; });
   }
 
   function renderTestEnd() {
@@ -1303,10 +1531,22 @@
     (a, b) => ({ text: `The craft store has ${a} red beads and ${b} blue beads. How many beads does it have altogether?`, why: 'Altogether means put them together, so add.' }),
     (a, b) => ({ text: `${pick(['Mia', 'Ava', 'Zoe', 'Lily'])} has ${a} stickers. She buys ${b} more stickers at the mall. How many stickers does she have now?`, why: 'She gets more, so add.' }),
     (a, b) => ({ text: `The book store sold ${a} books last week. This week it sold ${b} more books than last week. How many books did it sell this week?`, why: `This week was ${b} <b>more</b>, so add.` }),
+    (a, b) => ({ text: `The pet store has ${a} goldfish and ${b} guppies. How many fish does it have in all?`, why: 'In all means put them together, so add.' }),
+    (a, b) => ({ text: `The food court sold ${a} pretzels on Friday and ${b} pretzels on Saturday. How many pretzels did it sell on both days?`, why: 'Both days together means add.' }),
+    (a, b) => ({ text: `The movie theater had ${a} people at the first show. The second show had ${b} more people than the first show. How many people were at the second show?`, why: `The second show had ${b} <b>more</b>, so add.` }),
+    (a, b) => ({ text: `The game store had ${a} video games. A truck brought ${b} more. How many video games does the store have now?`, why: 'More games came in, so add.' }),
+    (a, b) => ({ text: `${pick(['Hannah', 'Maya', 'Emma', 'Nia'])} saved $${a}. Her grandma gave her $${b} more. How much money does she have now?`, why: 'She got more money, so add.' }),
+    (a, b) => ({ text: `The flower shop sold ${a} roses and ${b} tulips. How many flowers did it sell altogether?`, why: 'Altogether means put them together, so add.' }),
+    (a, b) => ({ text: `The sports store sold ${a} soccer balls in May. In May it sold ${b} fewer than in June. How many soccer balls did it sell in June?`, why: `May had <b>fewer</b>, so June had <b>more</b>. Add to find June.` }),
+    (a, b) => ({ text: `The candy store has ${a} red lollipops and ${b} green lollipops. How many lollipops are there in all?`, why: 'In all means put them together, so add.' }),
+    (a, b) => ({ text: `The parking lot had ${a} cars in the morning. Then ${b} more cars parked. How many cars are in the lot now?`, why: 'More cars came, so add.' }),
+    (a, b) => ({ text: `The art store sold ${a} crayons on Tuesday. On Wednesday it sold ${b} more crayons than on Tuesday. How many crayons did it sell on Wednesday?`, why: `Wednesday was ${b} <b>more</b>, so add.` }),
+    (a, b) => ({ text: `The mall gave out ${a} balloons at the front door and ${b} balloons at the back door. How many balloons did it give out in all?`, why: 'In all means put them together, so add.' }),
+    (a, b) => ({ text: `The jewelry stand has ${a} rings. It gets ${b} more rings in a delivery. How many rings does it have now?`, why: 'More rings came, so add.' }),
   ];
 
   function receiptQuestion(level) {
-    const [i1, i2] = shuffle(ITEMS).slice(0, 2).map(([e, name]) => ({ e, name }));
+    const [i1, i2] = items(2).map(({ emoji, name }) => ({ e: emoji, name }));
     const receipt = (a, b) => `<div class="receipt">
       <div class="r-line"><span>${i1.e} ${i1.name}</span><b>${money(a)}</b></div>
       <div class="r-line"><span>${i2.e} ${i2.name}</span><b>${money(b)}</b></div>
@@ -1377,12 +1617,17 @@
       const hidden = shuffle(['h', 't', 'o']).slice(0, rand(1, 3));
       const D = digitsOf(row === 'a' ? a : b);
       const order = ['o', 't', 'h'].filter((p) => hidden.includes(p));
+      const miss = variant([
+        ['Thinking Cap! What are the missing numbers?', 'line/add-missing'],
+        ['Thinking Cap! Some digits fell off the receipt. Which digits are missing?', 'line/add-missing-2'],
+        ['Thinking Cap! Find the hidden digits that make the addition true.', 'line/add-missing-3'],
+      ]);
       return {
         kind: 'steps', guided: false, nums: { a, b, s, row, hidden },
-        prompt: 'Thinking Cap! What are the missing numbers?',
+        prompt: miss[0],
         steps: [{
           text: 'Fill in the missing digits so the addition is correct.',
-          blanks: order.map((p) => ({ id: `${row}${p}`, ans: D[p] })), voice: ['line/add-missing'], speak: 'What are the missing numbers?',
+          blanks: order.map((p) => ({ id: `${row}${p}`, ans: D[p] })), voice: [miss[1]], speak: plain(miss[0]),
         }],
         board: () => `<div class="thinking">🧢</div>${addGrid(a, b, { hide: { [row]: hidden }, fill: ['o', 't', 'h'], carry: [] })}`,
         explain: `${a} + ${b} = ${s}.${workedAdd(a, b)}`,
@@ -1405,13 +1650,18 @@
     // On your own: the whole column (levels 2+).
     const kind = level <= 2 ? pick(['none', 'ones', 'ones', 'tens', 'tens']) : pick(['ones', 'tens', 'both', 'both', 'both']);
     const { a, b, s } = genAdd(kind, level <= 2 ? pick([2, 3]) : 3);
+    const [ownPrompt, ownVoice, ownSpeak] = variant([
+      ['Add up the receipt. Write the total in the boxes.', 'line/add-own', 'Add the two prices. Remember to regroup when a column makes ten or more.'],
+      ['What is the total? Add the two prices.', 'line/add-own-2', 'What is the total? Add the two prices, starting with the ones.'],
+      ['The cashier needs the total. Add it up!', 'line/add-own-3', 'The cashier needs your help. Add up the receipt, and remember to regroup.'],
+    ]);
     return {
       kind: 'steps', guided: false, nums: { a, b, s },
-      prompt: 'Add up the receipt. Write the total in the boxes.',
+      prompt: ownPrompt,
       steps: [{
         text: 'Write each digit of the total. You can write any regrouped 1s in the small boxes.',
         blanks: [{ id: 'so', ans: digitsOf(s).o }, { id: 'st', ans: digitsOf(s).t }, { id: 'sh', ans: digitsOf(s).h }, { id: 'ct', ans: null }, { id: 'ch', ans: null }],
-        voice: ['line/add-own'], speak: 'Add the two prices. Remember to regroup when a column makes ten or more.',
+        voice: [ownVoice], speak: ownSpeak,
       }],
       board: () => `${receipt(a, b)}${addGrid(a, b, { input: true })}`,
       explain: workedAdd(a, b),
@@ -1419,7 +1669,12 @@
   }
 
   // ----- Display Window: addition patterns -----
-  const PAT_EMOJI = ['🎁', '🧁', '👜', '⭐', '🌸', '🧸'];
+  const PAT_EMOJI = ['🎁', '🧁', '👜', '⭐', '🌸', '🧸', '🍩', '🎈', '💎', '🦋', '🍓', '🎀', '🌈', '🐠', '🍪', '👑', '🌻', '🦄'];
+  // Where the number patterns show up in the mall.
+  const PAT_PLACES = ['The sale sign numbers grow in a pattern!', 'The parking spots are numbered in a pattern!',
+    'The lockers at the ice rink are numbered in a pattern!', 'The raffle tickets are numbered in a pattern!',
+    'The prize counter points grow in a pattern!', 'The elevator buttons skip in a pattern!'];
+  const CODE_JOBS = ['number the sale tags', 'count the shopping carts', 'number the raffle tickets', 'count the gift boxes', 'number the parking spots', 'count coins in the fountain'];
 
   function seqBoard(terms, d, shown, opts = {}) {
     return `<div class="seq">${terms.map((t, i) => `${i ? `<span class="jump">+${opts.hideJump ? '?' : d}</span>` : ''}<span class="seq-term">${shown.includes(i) ? t : bx(`n${i}`)}</span>`).join('')}</div>`;
@@ -1453,9 +1708,9 @@
     const type = level <= 1 ? pick(['num', 'num', 'shape', 'code']) : level === 2 ? 'num' : pick(['shape', 'code', 'code']);
 
     if (type === 'num') {
-      const d = pick(level <= 1 ? [2, 5, 10, 25, 50, 100, 3, 4] : [3, 4, 6, 7, 9, 11, 12, 15, 20, 25, 50, 100]);
+      const d = pick(level <= 1 ? [2, 3, 4, 5, 10, 20, 25, 30, 50, 100] : [3, 4, 6, 7, 8, 9, 11, 12, 13, 15, 18, 20, 25, 30, 40, 50, 75, 100, 150]);
       let s;
-      do { s = level <= 1 ? pick([0, rand(1, 60), rand(100, 400)]) : rand(0, 700); } while (s + d * 6 > 999);
+      do { s = level <= 1 ? pick([0, rand(1, 60), rand(100, 400), rand(1, 8) * 100]) : rand(0, 800); } while (s + d * 6 > 999);
       const terms = Array.from({ length: 7 }, (_, i) => s + i * d);
       const rule = `Pattern rule: Start at ${s}, and add ${d} each time.`;
       const explain = `${rule}<br>${terms.join(', ')}`;
@@ -1478,11 +1733,11 @@
           },
         ];
         return {
-          kind: 'steps', guided: true, steps, pat: { s, d }, prompt: 'The sale sign numbers grow in a pattern!',
+          kind: 'steps', guided: true, steps, pat: { s, d }, prompt: pick(PAT_PLACES),
           board: (st) => seqBoard(terms, d, [0, 1, 2, 3], { hideJump: st < 1 }), explain,
         };
       }
-      const hidden = shuffle([2, 3, 4, 5, 6]).slice(0, 3).sort((x, y) => x - y);
+      const hidden = shuffle([1, 2, 3, 4, 5, 6]).slice(0, rand(2, 4)).sort((x, y) => x - y);
       const askRule = Math.random() < 0.5;
       return {
         kind: 'steps', guided: false, pat: { s, d }, prompt: 'What are the missing numbers in the pattern?',
@@ -1496,7 +1751,7 @@
     }
 
     if (type === 'shape') {
-      const start = rand(1, 5), d = rand(1, level <= 1 ? 3 : 4), emoji = pick(PAT_EMOJI);
+      const start = rand(1, level <= 1 ? 5 : 7), d = rand(1, level <= 1 ? 3 : 5), emoji = pick(PAT_EMOJI);
       const rule = `Pattern rule: Start at ${start}, and add ${d} each time.`;
       const counts = [1, 2, 3, 4, 5].map((n) => start + (n - 1) * d);
       const explain = `${rule}<br>Figures 1 to 5: ${counts.join(', ')}.`;
@@ -1525,9 +1780,10 @@
     }
 
     // Robot cashier code.
-    const d = pick([5, 10, 25, 50, 100, 20]), r = pick([4, 5]);
+    const r = pick([3, 4, 5, 5, 6]), d = pick((level <= 1 ? [2, 5, 10, 20, 25, 50, 100] : [2, 3, 4, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 200]).filter((x) => x * r <= 800));
+    const job = pick(CODE_JOBS);
     let s;
-    do { s = pick([0, 50, 100, 150, 200, 250, 300, 450, 500, rand(1, 60) * 5]); } while (s + d * r > 999);
+    do { s = pick([0, 50, 100, 150, 200, 250, 300, 450, 500, 600, 750, rand(1, 60) * 5, rand(1, 99)]); } while (s + d * r > 999);
     const outs = Array.from({ length: r }, (_, i) => s + (i + 1) * d);
     const explain = `SET starts the Value at ${s}. Each time through the loop, ADD ${d}, then OUTPUT.<br>Pattern: ${[s, ...outs].join(', ')}.`;
     if (level <= 1) {
@@ -1538,28 +1794,28 @@
         { text: `The loop repeats ${r} times. What are the other outputs?`, blanks: outs.slice(1).map((o, i) => ({ id: `o${i + 1}`, ans: o })), voice: ['line/code-outputs'], speak: 'Follow the code. What are the outputs?', hint: `Each output is ${d} more than the one before.`, reveal: outs.slice(1).join(', ') },
       ];
       return {
-        kind: 'steps', guided: true, steps, pat: { s, d }, prompt: '🤖 The robot cashier follows this code to number the sale tags.',
+        kind: 'steps', guided: true, steps, pat: { s, d }, prompt: `🤖 The robot cashier follows this code to ${job}.`,
         board: (st) => codeBoard(s, d, r, { shownOuts: st >= 3 ? [0] : [], outputs: st >= 2 }), explain,
       };
     }
-    const variant = pick(['run', 'make', 'missing']);
-    if (variant === 'make') {
+    const form = pick(['run', 'make', 'missing']);
+    if (form === 'make') {
       return {
         kind: 'steps', guided: false, pat: { s, d }, prompt: `🤖 Make a pattern that starts at ${s} and increases by ${d} each time.`,
         steps: [{ text: 'Fill in the code.', blanks: [{ id: 'cs', ans: s }, { id: 'cd', ans: d }], voice: ['line/code-make'], speak: 'Fill in the code to make this pattern.' }],
         board: () => codeBoard(s, d, r, { askSet: true, askAdd: true, outputs: false }), explain,
       };
     }
-    if (variant === 'missing') {
-      const pattern = [s, ...outs], hidden = shuffle([1, 2, 3, 4]).slice(0, 2);
+    if (form === 'missing') {
+      const pattern = [s, ...outs], hidden = shuffle(outs.map((_, i) => i + 1)).slice(0, rand(2, 3));
       return {
-        kind: 'steps', guided: false, pat: { s, d }, prompt: '🤖 What are the missing numbers in the pattern this code makes?',
+        kind: 'steps', guided: false, pat: { s, d }, prompt: `🤖 The robot uses this code to ${job}. What are the missing numbers?`,
         steps: [{ text: 'Fill in the missing numbers.', blanks: hidden.sort((x, y) => x - y).map((i) => ({ id: `n${i}`, ans: pattern[i] })), voice: ['line/pat-missing'], speak: 'What are the missing numbers in the pattern?' }],
         board: () => `${codeBoard(s, d, r, { outputs: false })}${seqBoard(pattern, d, pattern.map((_, i) => i).filter((i) => !hidden.includes(i)), { hideJump: true })}`, explain,
       };
     }
     return {
-      kind: 'steps', guided: false, pat: { s, d }, prompt: '🤖 Follow the code. What are the outputs?',
+      kind: 'steps', guided: false, pat: { s, d }, prompt: `🤖 The robot uses this code to ${job}. What are the outputs?`,
       steps: [{ text: 'Write every output.', blanks: outs.map((o, i) => ({ id: `o${i}`, ans: o })), voice: ['line/code-outputs'], speak: 'Follow the code. What are the outputs?' }],
       board: () => codeBoard(s, d, r, {}), explain,
     };
@@ -1811,7 +2067,17 @@
 
   // ---------- Open for Business: making change ----------
   const CUSTOMERS = [['👩', 'Mia'], ['👧', 'Ava'], ['👵', 'Grandma Rose'], ['👨', 'Mr. Lee'], ['🧒', 'Sam'], ['👦', 'Leo'],
-    ['👩‍🦰', 'Ruby'], ['🧕', 'Amira'], ['👱‍♀️', 'Lily'], ['👩‍🦳', 'Mrs. Green'], ['🧑', 'Jordan'], ['👸', 'Princess Pearl']];
+    ['👩‍🦰', 'Ruby'], ['🧕', 'Amira'], ['👱‍♀️', 'Lily'], ['👩‍🦳', 'Mrs. Green'], ['🧑', 'Jordan'], ['👸', 'Princess Pearl'],
+    ['👴', 'Grandpa Joe'], ['👩‍🦱', 'Zoe'], ['👨‍🦰', 'Mr. Fox'], ['👧🏽', 'Maya'], ['👦🏻', 'Ethan'], ['👩🏾', 'Nia'],
+    ['🧑‍🍳', 'Chef Marco'], ['👮‍♀️', 'Officer Kim'], ['👩‍🚀', 'Astronaut Ally'], ['🧙', 'Wizard Wes'], ['🧚', 'Fairy Fern'], ['🤴', 'Prince Max'],
+    ['👩‍🎨', 'Artist Ana'], ['👨‍🏫', 'Mr. Patel'], ['👩‍⚕️', 'Dr. Rivera'], ['🧑‍🎤', 'Rockstar Riley'], ['👱', 'Chloe'], ['👦🏾', 'Malik'],
+    ['👧🏻', 'Emma'], ['👨‍🦳', 'Mr. Brown'], ['🧝‍♀️', 'Elf Ivy'], ['🦸‍♀️', 'Super Sadie'], ['🐻', 'Bear Buddy'], ['🐼', 'Panda Pip'],
+    ['🦊', 'Foxy Finn'], ['🐰', 'Bunny Bea'], ['🐸', 'Frog Fred'], ['🐨', 'Koala Kai']];
+  // What customers say: [text before the items, text after, voice key]. The price always comes last.
+  const GREETINGS = {
+    1: [["Hi! I'd like the", 'please.', 'line/sell-1'], ['Hello! Can I buy the', 'please?', 'line/sell-1b'], ["I'll take the", 'thank you!', 'line/sell-1c']],
+    2: [["Hi! I'd like the", 'please.', 'line/sell-2'], ['Hello! Can I buy the', 'please?', 'line/sell-2b'], ["I'll take the", 'thank you!', 'line/sell-2c']],
+  };
 
   // Jumps for counting up from the price to the money paid: to the next ten, the next hundred, then the rest.
   function countUpSteps(from, to) {
@@ -1856,11 +2122,12 @@
     const jumps = `<div class="jumps">${steps.map(([a, b]) => `<span class="jump">${money(a)} → ${money(b)} <b>+${money(b - a)}</b></span>`).join('')}</div>`;
     const totalLine = two ? `First add: ${money(prices[0])} + ${money(prices[1])} = <b>${money(total)}</b>.<br>` : '';
     const wants = items.map((it) => `${it.m.e} <b>${it.m.name.toLowerCase()}</b>`).join(' and the ');
+    const [before, after, vk] = pick(GREETINGS[two ? 2 : 1]);
     return {
       kind: 'change', items, prices, total, paid, answer, customer: [ce, cname],
-      wantsHTML: `Hi! I'd like the ${wants}, please. Here's <b>${money(paid)}</b>.`,
-      speak: `Hi! I'd like the ${items.map((it) => it.m.name).join(' and the ')}, please. Here's ${paid} dollars. How much change do I get?`,
-      voice: [two ? 'line/sell-2' : 'line/sell-1', `p/${paid}`],
+      wantsHTML: `${before} ${wants}, ${after} Here's <b>${money(paid)}</b>.`,
+      speak: `${before} ${items.map((it) => it.m.name).join(' and the ')}, ${after} Here's ${paid} dollars. How much change do I get?`,
+      voice: [vk, `p/${paid}`],
       hintSteps: two
         ? `Two things! First add ${money(prices[0])} + ${money(prices[1])}. Then count up from your total to ${money(paid)}: to the next ten, then the next hundred, then to ${money(paid)}.`
         : `Count up from the price: ${[total, ...steps.map(([, b]) => b)].map(money).join(' → ')}. How much did you add in all?`,

@@ -23,9 +23,11 @@ function arrayLiteral(name) {
   return vm.runInNewContext(`(${app.slice(start, end + 1)})`);
 }
 
-for (const [marked, sentence] of arrayLiteral('SPELL_DEFAULT')) {
+for (const [marked, sentences] of arrayLiteral('SPELL_DEFAULT')) {
   const word = marked.replace(/[[\]]/g, ''), key = word.toLowerCase();
-  lines[`spell/${key}`] = { text: `${word}. ${sentence} ${word}.` };
+  sentences.forEach((sentence, i) => {
+    lines[`spell/${key}${i ? `-${i + 1}` : ''}`] = { text: `${word}. ${sentence} ${word}.` };
+  });
   lines[`slow/${key}`] = { text: `${word}.`, speed: 0.75 };
 }
 arrayLiteral('CHEERS').forEach((cheer, i) => { lines[`cheer/${i}`] = { text: cheer }; });
