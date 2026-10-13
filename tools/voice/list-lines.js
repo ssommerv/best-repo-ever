@@ -23,10 +23,10 @@ function arrayLiteral(name) {
   return vm.runInNewContext(`(${app.slice(start, end + 1)})`);
 }
 
-for (const [marked, sentences] of arrayLiteral('SPELL_DEFAULT')) {
-  const word = marked.replace(/[[\]]/g, ''), key = word.toLowerCase();
+for (const [marked, sentences, , sayAs] of arrayLiteral('SPELL_DEFAULT')) {
+  const key = marked.replace(/[[\]]/g, '').toLowerCase(), word = sayAs || key; // sayAs: e.g. "liv" so "live" isn't read as "lyve"
   sentences.forEach((sentence, i) => {
-    lines[`spell/${key}${i ? `-${i + 1}` : ''}`] = { text: `${word}. ${sentence} ${word}.` };
+    lines[`spell/${key}${i ? `-${i + 1}` : ''}`] = { text: `${word[0].toUpperCase() + word.slice(1)}. ${sentence} ${word}.` };
   });
   lines[`slow/${key}`] = { text: `${word}.`, speed: 0.75 };
 }

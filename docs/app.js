@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '10 (Oct 8, 2026)';
+  const APP_VERSION = '11 (Oct 13, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -1214,42 +1214,41 @@
   // ---------- Spelling (Letter Bead Bar) ----------
   // [bracketed] letters are the tricky part, highlighted when the answer is shown.
   // Each word has three sentences (each recorded), so she doesn't memorize them.
+  // An optional 4th item is how to say the word on its own (“live” as in “I live here”, not “live music”).
   const SPELL_DEFAULT = [
-    ['ro[ck]et', ['I want the rocket toy from the toy store.', 'The rocket ship ride at the mall goes up and down.', 'Look, that balloon is shaped like a rocket!'],
-      'After a short <b>o</b>, the “k” sound is spelled <b>c-k</b>, like in pocket.'],
-    ['po[ck]et', ['I put my change in my pocket.', 'My new jeans have a pocket with a zipper.', 'She found a coin in her coat pocket.'],
-      'After a short <b>o</b>, the “k” sound is spelled <b>c-k</b>, like in rocket.'],
-    ['h[old]', ['Can you hold my shopping bags, please?', 'Please hold my hand in the busy mall.', 'My new purse can hold all my stickers.'],
-      '<b>o-l-d</b> says “old”, like in told and gold.'],
-    ['t[old]', ['Mom told me we could buy one treat.', 'The cashier told us the shoes were on sale.', 'I told my friend about the new candy store.'],
-      '<b>o-l-d</b> says “old”, like in hold and gold.'],
-    ['of[t]en', ['We often get pretzels at the food court.', 'How often does the pet store get new puppies?', 'Dad often buys coffee before we shop.'],
-      'Tricky word! The <b>t</b> is quiet, but it is still there: o-f-t-e-n.'],
-    ['gr[ow]', ['My new plant will grow if I water it.', 'My feet grow so fast that I need new shoes.', 'The flower shop sells seeds that grow into sunflowers.'],
-      '<b>o-w</b> at the end can say “o”, like in snow and show.'],
-    ['[thr][o]n[e]', ['The princess doll sits on a sparkly throne.', 'The king in the toy castle has a golden throne.', 'I made a throne out of pillows in the furniture store.'],
-      'It starts with <b>t-h-r</b>, and the silent <b>e</b> makes the <b>o</b> say its name.'],
-    ['s[o]', ['This dress is so pretty!', 'The mall is so big that we got a map.', 'I was so happy when I found the last unicorn plush.'],
-      'Just two letters! The <b>o</b> says its name at the end: s-o.'],
-    ['s[ew]', ['I can sew a patch on my backpack.', 'Grandma will sew a button on my new coat.', 'The craft store sells kits to sew a pillow.'],
-      'Tricky word! It sounds like “so”, but the “o” sound is spelled <b>e-w</b>.'],
-    ['m[o]st', ['This is the most fun store in the mall!', 'Which toy costs the most money?', 'I like the bookstore the most.'],
-      'The <b>o</b> says its name before <b>s-t</b>, like in almost and post.'],
-    ['[al]most', ['We are almost at the food court.', 'My piggy bank is almost full of coins.', 'We almost forgot to buy the birthday card!'],
-      '<b>al</b> + <b>most</b>. Only one <b>l</b> at the start!'],
-    ['b[o]th', ['I want both the red shoes and the blue shoes.', 'I used both hands to carry my shopping bag.', 'Both of my friends got the same sparkly shoes.'],
-      'The <b>o</b> says its name, and it ends with <b>t-h</b>.'],
-    ['c[oa]ch', ['My soccer coach bought new balls at the sports store.', 'Our coach gave us all new water bottles.', 'The dance coach bought ribbons at the craft store.'],
-      '<b>o-a</b> together says “o”, and it ends with <b>c-h</b>.'],
-    ['[o]pen', ['The new toy store is open today!', 'Please open the door for the shoppers.', 'I can\'t wait to open my new paint set!'],
-      'The <b>o</b> at the start says its name: o-p-e-n.'],
-    ['[al]so', ['I also want a cupcake!', 'The shoe store also sells socks.', 'I want a pretzel, and I also want lemonade.'],
-      '<b>al</b> + <b>so</b>. Only one <b>l</b>!'],
-    ['[ph]oto[syn]the[sis]', ['Plants make their own food from sunlight. That is called photosynthesis.', 'The plant store sign says leaves use photosynthesis to make food.', 'A tree needs sunlight, water and air for photosynthesis.'],
-      'Bonus word! Say it in chunks: pho-to-syn-the-sis. <b>p-h</b> says “f”.'],
+    ['sa[ve]', ['I want to save my coins for the toy store.', 'Put your money in the piggy bank to save it.', 'We can save money when the shoes are on sale.'],
+      'English words don’t end in <b>v</b>, so add an <b>e</b>: s-a-v-e. The <b>a</b> says its name.'],
+    ['gi[ve]', ['I will give the cashier ten dollars.', 'Can you give me a shopping bag, please?', 'Let’s give Grandma a present from the gift shop.'],
+      'Tricky! The <b>i</b> is short, but it still ends in <b>v-e</b>, because words don’t end in <b>v</b>.'],
+    ['ha[ve]', ['Do you have this dress in my size?', 'I have five dollars to spend at the mall.', 'We have to find the pet store.'],
+      'Tricky! The <b>a</b> is short, but it still ends in <b>v-e</b>, because words don’t end in <b>v</b>.'],
+    ['li[ve]', ['The bunnies live in a big pen at the pet store.', 'My friend and I live near the mall.', 'Do the fish live in that tank all day?'],
+      'Like give: a short <b>i</b>, then <b>v-e</b> at the end. l-i-v-e.', 'liv'],
+    ['m[o]ve', ['The escalator stairs move up to the second floor.', 'Please move your cart so people can walk by.', 'Help me move the big box to the car.'],
+      'Tricky! The <b>o</b> says “oo”, and it ends with <b>v-e</b>: m-o-v-e.'],
+    ['ab[o]ve', ['The sale sign is above the door.', 'The lights hang above the toy shelves.', 'Look at the balloons floating above the food court!'],
+      'a + b + <b>o</b> + <b>v-e</b>. The <b>o</b> says “uh”, like in love.'],
+    ['al[i]ve', ['The plants at the flower shop are alive and need water.', 'Is that crab at the pet store alive? Yes, it moved!', 'Water keeps the flowers alive.'],
+      '<b>a</b> + live, but the silent <b>e</b> makes the <b>i</b> say its name: a-l-i-v-e.'],
+    ['al[i]ke', ['These two dresses look alike.', 'My sister and I have shoes that look alike.', 'The twins wore hats that were alike.'],
+      '<b>a</b> + like: a-l-i-k-e. The silent <b>e</b> makes the <b>i</b> say its name.'],
+    ['t[o]', ['We are going to the mall today.', 'I gave the money to the cashier.', 'Let’s walk to the food court.'],
+      'Just two letters: t-o. This “to” means going somewhere or giving something, like “to the mall”.'],
+    ['t[w]o', ['I bought two cupcakes at the bakery.', 'The sticker costs two dollars.', 'Mom is carrying two shopping bags.'],
+      'This is the number 2! It has a quiet <b>w</b>: t-w-o.'],
+    ['t[oo]', ['I want ice cream too!', 'Can my friend come shopping too?', 'Dad bought a hat, and Mom got one too.'],
+      'This “too” means <b>also</b>. It has two <b>o</b>’s: t-o-o.'],
+    ['[kn]ew', ['I knew the toy store was upstairs.', 'She knew how much change to give back.', 'We knew the bakery had fresh cookies.'],
+      'Silent <b>k</b>! k-n-e-w. The <b>e-w</b> says “oo”, like in blew.'],
+    ['d[o]', ['What do you want to buy?', 'Do you like this sparkly hat?', 'I do my best when I count the coins.'],
+      'Just two letters: d-o. The <b>o</b> says “oo”, like in to.'],
+    ['bl[ew]', ['The wind blew my shopping bag away!', 'I blew a big bubble with my new gum.', 'She blew out the candles on her birthday cake.'],
+      'The wind <b>blew</b>: <b>e-w</b> says “oo”. It sounds like blue, the color, but it is spelled b-l-e-w.'],
+    ['bl[ue]', ['I want the blue backpack.', 'Her new nail polish is bright blue.', 'The sky outside the mall is blue today.'],
+      'The color! <b>u-e</b> says “oo”: b-l-u-e. It sounds like blew, but this one is the color.'],
   ];
   const plainWord = (marked) => marked.replace(/[[\]]/g, '');
-  const SPELL_INFO = Object.fromEntries(SPELL_DEFAULT.map(([m, ss, tip]) => [plainWord(m).toLowerCase(), { marked: m, sentences: ss, tip }]));
+  const SPELL_INFO = Object.fromEntries(SPELL_DEFAULT.map(([m, ss, tip, sayAs]) => [plainWord(m).toLowerCase(), { marked: m, sentences: ss, tip, sayAs }]));
 
   // The active list: the default, or one a grown-up typed in ("word | sentence" per line).
   function spellWords() {
@@ -1260,11 +1259,11 @@
       const first = sentence || recorded[0] || '';
       // A grown-up's own sentence replaces the built-in ones.
       const sentences = !recorded.length || first !== recorded[0] ? [first] : recorded;
-      return { word, sentence: first, sentences, recorded: !!recorded.length && recorded[0] === first, tip: info.tip || '', marked: info.marked || word };
+      return { word, sentence: first, sentences, recorded: !!recorded.length && recorded[0] === first, tip: info.tip || '', marked: info.marked || word, sayAs: info.sayAs || word };
     });
   }
   const markHTML = (marked) => escapeHTML(marked).replace(/\[([^\]]*)\]/g, '<mark>$1</mark>');
-  const sayWord = (w, s) => (s ? [[w.word, 0.75], [s, 0.9], [w.word, 0.75]] : [[w.word, 0.75], [w.word, 0.75]]);
+  const sayWord = (w, s) => (s ? [[w.sayAs, 0.75], [s, 0.9], [w.sayAs, 0.75]] : [[w.sayAs, 0.75], [w.sayAs, 0.75]]);
   // The recorded dictation only matches if the sentence is one that was recorded.
   const spellVoice = (w, i) => (w.recorded ? [`spell/${w.word.toLowerCase()}${i ? `-${i + 1}` : ''}`] : null);
 
@@ -1364,7 +1363,7 @@
         if (R.test) R.results.push({ word: q.w.word, typed, ok: false });
         R.typed = q.w.word; drawBracelet([...q.w.word].map(() => true));
         lockSpell();
-      } else say(q.slowVoice, [[q.w.word, 0.75]]);
+      } else say(q.slowVoice, [[q.w.sayAs, 0.75]]);
     };
     screen.querySelectorAll('.bead-key').forEach((b) => { b.onclick = () => add(b.dataset.ch); });
     $('#backBtn').onclick = back;
@@ -1376,7 +1375,7 @@
     };
     if (canSpeak) {
       $('#hearBtn').onclick = () => say(q.voice, q.speakParts);
-      $('#slowBtn').onclick = () => say(q.slowVoice, [[q.w.word, 0.45]]);
+      $('#slowBtn').onclick = () => say(q.slowVoice, [[q.w.sayAs, 0.45]]);
       say(q.voice, q.speakParts);
     }
   }
