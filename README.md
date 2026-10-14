@@ -8,6 +8,7 @@ A shopping-themed iPad game for practising **place value up to 1,000**. It lives
 ### The stores
 | Store | Skill |
 |---|---|
+| 🎁 Gift Card Desk | Subtraction up to 1000 with regrouping. Level 1 teaches it step by step: decide if there are enough to take away, tap a $10 or $100 on the money mat to trade it for 10 smaller ones, cross out and write the new numbers, then subtract each column. Level 2 regroups once on her own, Level 3 twice plus word problems ("how much is left", "how many more", "how many fewer"), Level 4 zeros in the tens ($503 − $268) and missing-digit puzzles |
 | 🧾 Receipt Counter | Chapter 2, Addition up to 1000. Level 1 teaches the book's method step by step (add the ones, regroup, add the tens, …) with hints that teach rather than tell. Levels 2–4 are on her own: regrouping in ones or tens, then both plus word problems (including "fewer than" traps), then missing-digit puzzles |
 | 🎀 Display Window | Chapter 2, Lesson 5 Addition Patterns. Level 1 guides number patterns, shape patterns with tables, and SET/REPEAT/ADD/OUTPUT code; levels 2–3 are on her own |
 | 💳 Cash Register | Build a price with $100 bills, $10 bills and $1 coins on a place value mat, plus "no $100 bills" challenges (pay $167 with 16 tens and 7 ones) |
