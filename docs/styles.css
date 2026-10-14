@@ -715,6 +715,24 @@ mark { background: #ffd1e8; color: var(--pink-deep); border-radius: 6px; padding
 .am-split { grid-column: 1 / -1; border-top: 2px dotted #c9b8d6; }
 .am-label { align-self: center; font-weight: 900; font-size: 15px; color: var(--ink-soft); text-align: center; }
 .thinking { font-size: 48px; line-height: 1; }
+
+/* Gift Card Desk (subtraction) */
+.g-x { color: var(--ink-soft); text-decoration: line-through; text-decoration-color: var(--pink-deep); text-decoration-thickness: 4px; }
+.g-carry s { color: var(--ink-soft); opacity: 0.7; text-decoration-thickness: 2px; }
+.sub-grid .g-carry { white-space: nowrap; }
+.money.gone { opacity: 0.22; filter: grayscale(1); }
+.tap-bill { border: 0; background: none; padding: 0; line-height: 0; cursor: pointer; border-radius: 6px; }
+.tap-bill:disabled { cursor: default; }
+.sub-mat.tapping .tap-bill:not(:disabled) .money { animation: wiggle 1.2s ease-in-out infinite; box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--purple); }
+.tap-bill.break .money { animation: pop 0.35s ease-out; }
+@keyframes wiggle { 0%, 70%, 100% { transform: none; } 80% { transform: rotate(-6deg); } 90% { transform: rotate(6deg); } }
+.step-choices { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.step-choice { font-size: 19px; padding: 10px 16px; min-height: 52px; background: #fff; border: 3px solid #ddd0ff; color: var(--ink); }
+.step-choice.picked { border-color: var(--green); background: #e8fbe9; }
+.step-choice.nope { border-color: #fecdd3; background: #fff1f2; }
+.step-choice:disabled { opacity: 1; }
+.step-choice:disabled:not(.picked) { opacity: 0.45; }
+.keypad.idle { opacity: 0.4; }
 .story { font-size: 22px; line-height: 1.5; margin: 0 0 8px; }
 .story-ans { font-size: 22px; font-weight: 800; }
 .worked { text-align: left; margin: 8px 0 0; padding-left: 22px; font-size: 18px; }
