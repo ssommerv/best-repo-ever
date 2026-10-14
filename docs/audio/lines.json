@@ -399,14 +399,17 @@
 "next": "one thousand dollars.",
 "text": "I'll take these two, thank you! Here's"
 },
+"line/sub-check": {
+"text": "Check! Add to check your answer."
+},
 "line/sub-enough-ones": {
-"text": "Subtract the ones. Are there enough ones to take away?"
+"text": "Subtract the ones. Can you take away the ones, or do you need to regroup?"
 },
 "line/sub-enough-tens": {
-"text": "Subtract the tens. Are there enough tens to take away?"
+"text": "Subtract the tens. Can you take away the tens, or do you need to regroup?"
 },
 "line/sub-hundreds": {
-"text": "Take away the hundreds."
+"text": "Subtract the hundreds."
 },
 "line/sub-missing": {
 "text": "Thinking cap time! What are the missing digits?"
@@ -418,34 +421,40 @@
 "text": "Thinking cap time! Find the hidden digits that make the subtraction true."
 },
 "line/sub-now": {
-"text": "Cross out, and write the new numbers."
+"text": "Regroup. What are the missing numbers?"
 },
 "line/sub-ones": {
-"text": "Take away the ones."
+"text": "Now subtract the ones."
 },
 "line/sub-own": {
-"text": "Subtract, and remember to regroup when there are not enough to take away."
+"text": "How much is left? Subtract, and remember to regroup when you do not have enough to subtract."
 },
 "line/sub-own-2": {
-"text": "Subtract to find the answer. Regroup if you need to!"
+"text": "Subtract. Remember to regroup when you do not have enough to subtract."
 },
 "line/sub-own-3": {
 "text": "Work it out! Start with the ones, then the tens, then the hundreds."
 },
 "line/sub-tens": {
-"text": "Take away the tens."
+"text": "Now subtract the tens."
+},
+"line/sub-tf": {
+"text": "True or false? Use addition to check if the answer is correct."
+},
+"line/sub-tf-2": {
+"text": "Is the answer correct? Add to check it."
 },
 "line/sub-total": {
 "text": "Now write the answer."
 },
 "line/sub-trade-hundred": {
-"text": "Tap a hundred-dollar bill to trade it for ten tens."
+"text": "Regroup the hundreds and tens. Tap a hundred-dollar bill to regroup it as ten tens."
 },
 "line/sub-trade-ten": {
-"text": "Tap a ten-dollar bill to trade it for ten ones."
+"text": "Regroup the tens and ones. Tap a ten-dollar bill to regroup it as ten ones."
 },
 "line/sub-trade-zero": {
-"text": "Not enough ones, and there are no tens to trade! Tap a hundred-dollar bill to trade it for ten tens first."
+"text": "There are zero tens, so start with the hundreds! Tap a hundred-dollar bill to regroup it as ten tens."
 },
 "line/sub-zero": {
 "text": "Careful, there's a zero! Subtract, and regroup if you need to."

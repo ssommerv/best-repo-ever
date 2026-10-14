@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '12 (Oct 14, 2026)';
+  const APP_VERSION = '13 (Oct 14, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -666,12 +666,12 @@
   GAMES.subtract = {
     name: 'Gift Card Desk', emoji: '🎁', color: 'teal',
     skill: 'Subtract up to 1000 with regrouping',
-    maxLevel: 4, chip: 'New: Subtraction',
+    maxLevel: 4, chip: 'New: Chapter 3',
     levels: {
       1: { label: 'Learn: subtract step by step', short: 'Learn it' },
       2: { label: 'On your own: regroup once', short: 'On your own' },
-      3: { label: 'Regroup twice + stories', short: 'Harder' },
-      4: { label: 'Zeros + Thinking Cap', short: 'Challenge' },
+      3: { label: 'Regroup twice, stories & checking', short: 'Harder' },
+      4: { label: 'Zeros, missing digits & checking', short: 'Challenge' },
     },
     make: (level) => subtractQuestion(level),
   };
@@ -1255,9 +1255,9 @@
     ['d[o]', ['What do you want to buy?', 'Do you like this sparkly hat?', 'I do my best when I count the coins.'],
       'Just two letters: d-o. The <b>o</b> says “oo”, like in to.'],
     ['bl[ew]', ['The wind blew my shopping bag away!', 'I blew a big bubble with my new gum.', 'She blew out the candles on her birthday cake.'],
-      'The wind <b>blew</b>: <b>e-w</b> says “oo”. It sounds like blue, the color, but it is spelled b-l-e-w.'],
+      'The wind <b>blew</b>: <b>e-w</b> says “oo”. It sounds like blue, the colour, but it is spelled b-l-e-w.'],
     ['bl[ue]', ['I want the blue backpack.', 'Her new nail polish is bright blue.', 'The sky outside the mall is blue today.'],
-      'The color! <b>u-e</b> says “oo”: b-l-u-e. It sounds like blew, but this one is the color.'],
+      'The colour! <b>u-e</b> says “oo”: b-l-u-e. It sounds like blew, but this one is the colour.'],
   ];
   const plainWord = (marked) => marked.replace(/[[\]]/g, '');
   const SPELL_INFO = Object.fromEntries(SPELL_DEFAULT.map(([m, ss, tip, sayAs]) => [plainWord(m).toLowerCase(), { marked: m, sentences: ss, tip, sayAs }]));
@@ -1544,7 +1544,7 @@
     (a, b) => ({ text: `The book store sold ${a} books last week. This week it sold ${b} more books than last week. How many books did it sell this week?`, why: `This week was ${b} <b>more</b>, so add.` }),
     (a, b) => ({ text: `The pet store has ${a} goldfish and ${b} guppies. How many fish does it have in all?`, why: 'In all means put them together, so add.' }),
     (a, b) => ({ text: `The food court sold ${a} pretzels on Friday and ${b} pretzels on Saturday. How many pretzels did it sell on both days?`, why: 'Both days together means add.' }),
-    (a, b) => ({ text: `The movie theater had ${a} people at the first show. The second show had ${b} more people than the first show. How many people were at the second show?`, why: `The second show had ${b} <b>more</b>, so add.` }),
+    (a, b) => ({ text: `The movie theatre had ${a} people at the first show. The second show had ${b} more people than the first show. How many people were at the second show?`, why: `The second show had ${b} <b>more</b>, so add.` }),
     (a, b) => ({ text: `The game store had ${a} video games. A truck brought ${b} more. How many video games does the store have now?`, why: 'More games came in, so add.' }),
     (a, b) => ({ text: `${pick(['Hannah', 'Maya', 'Emma', 'Nia'])} saved $${a}. Her grandma gave her $${b} more. How much money does she have now?`, why: 'She got more money, so add.' }),
     (a, b) => ({ text: `The flower shop sold ${a} roses and ${b} tulips. How many flowers did it sell altogether?`, why: 'Altogether means put them together, so add.' }),
@@ -1553,7 +1553,7 @@
     (a, b) => ({ text: `The parking lot had ${a} cars in the morning. Then ${b} more cars parked. How many cars are in the lot now?`, why: 'More cars came, so add.' }),
     (a, b) => ({ text: `The art store sold ${a} crayons on Tuesday. On Wednesday it sold ${b} more crayons than on Tuesday. How many crayons did it sell on Wednesday?`, why: `Wednesday was ${b} <b>more</b>, so add.` }),
     (a, b) => ({ text: `The mall gave out ${a} balloons at the front door and ${b} balloons at the back door. How many balloons did it give out in all?`, why: 'In all means put them together, so add.' }),
-    (a, b) => ({ text: `The jewelry stand has ${a} rings. It gets ${b} more rings in a delivery. How many rings does it have now?`, why: 'More rings came, so add.' }),
+    (a, b) => ({ text: `The jewellery stand has ${a} rings. It gets ${b} more rings in a delivery. How many rings does it have now?`, why: 'More rings came, so add.' }),
   ];
 
   function receiptQuestion(level) {
@@ -1832,10 +1832,11 @@
     };
   }
 
-  // ----- Gift Card Desk: subtraction up to 1000 with regrouping -----
-  // Subtract the ones, then the tens, then the hundreds. When there are not enough to take
-  // away, regroup: trade 1 of the next bigger place for 10 (cross it out, write the new
-  // numbers above). With a 0 in the tens, regroup a hundred into tens first.
+  // ----- Gift Card Desk: subtraction up to 1000 (Chapter 3) -----
+  // The book's method: subtract the ones, then the tens, then the hundreds. "You cannot take
+  // away 8 ones from 2 ones. So, regroup the tens and ones": 4 tens 2 ones = 3 tens 12 ones.
+  // Written work: cross out the digit that gives 1 and write the new number above it; put a
+  // small 1 in front of the digit that gets 10 (²4̸ ¹2). Then "Check!" by adding.
 
   function subCols(a, b) {
     const A = digitsOf(a), B = digitsOf(b), top = { ...A }, trades = [];
@@ -1848,54 +1849,77 @@
     return { A, B, top, afterOnes, trades, ro, rt, zero, d: { h: top.h - B.h, t: top.t - B.t, o: top.o - B.o } };
   }
 
+  // How the regrouping is written on the problem. Per place: x = the digit is crossed out,
+  // one = small 1 in front of the digit, above = { v, one, x } written above it.
+  const newMarks = () => ({ h: {}, t: {}, o: {} });
+  function markTrade(m, from, to, newFrom) {
+    const f = m[from];
+    f.x = true; f.above = { v: newFrom }; // a place only ever gives once
+    const t = m[to];
+    if (t.above && !t.above.x) t.above.one = true; else t.one = true;
+  }
+  function finalMarks(a, b) {
+    const c = subCols(a, b), m = newMarks(), cur = { ...c.A };
+    for (const [from, to] of c.trades) { cur[from]--; cur[to] += 10; markTrade(m, from, to, cur[from]); }
+    return m;
+  }
+
   // kind: none | ones | tens | both | zero (a 0 in the tens, so regroup across it). bLen: digits in b.
   function genSub(kind, bLen) {
     for (let i = 0; i < 5000; i++) {
       const a = kind === 'zero' ? rand(2, 9) * 100 + (Math.random() < 0.3 ? 0 : rand(1, 8)) : rand(200, 999);
       const b = bLen === 2 ? rand(11, 99) : rand(101, 899);
-      if (a - b < 100) continue;
+      if (a - b < 10) continue;
       const c = subCols(a, b);
       const got = c.zero ? 'zero' : c.ro && c.rt ? 'both' : c.ro ? 'ones' : c.rt ? 'tens' : 'none';
       if (got === kind) return { a, b, s: a - b, c };
     }
-    return { a: 432, b: 158, s: 274, c: subCols(432, 158) };
+    return { a: 432, b: 178, s: 254, c: subCols(432, 178) };
   }
+
+  const cannot = (need, have, p) => `You cannot take away ${unit(need, p)} from ${unit(have, p)}.`;
+  const regroupName = (from, to) => `the ${PLACE[from].name} and ${PLACE[to].name}`;
 
   function workedSub(a, b) {
     const c = subCols(a, b), { A, B, top, afterOnes, d } = c, L = [];
     if (c.zero) {
-      L.push(`<b>Subtract the ones.</b> ${unit(A.o, 'o')} − ${unit(B.o, 'o')}: not enough ones, and there are 0 tens to trade! <b>Regroup</b> 1 hundred as 10 tens, then 1 ten as 10 ones. Now there are ${unit(afterOnes.h, 'h')}, ${unit(afterOnes.t, 't')} and ${unit(afterOnes.o, 'o')}. ${afterOnes.o} − ${B.o} = ${unit(d.o, 'o')}.`);
+      L.push(`<b>Subtract the ones.</b> ${cannot(B.o, A.o, 'o')} There are 0 tens, so first regroup the hundreds and tens: ${unit(A.h, 'h')} 0 tens = ${unit(A.h - 1, 'h')} 10 tens. Then regroup the tens and ones: 10 tens ${unit(A.o, 'o')} = 9 tens ${unit(afterOnes.o, 'o')}. ${unit(afterOnes.o, 'o')} − ${unit(B.o, 'o')} = ${unit(d.o, 'o')}.`);
     } else if (c.ro) {
-      L.push(`<b>Subtract the ones.</b> ${unit(A.o, 'o')} − ${unit(B.o, 'o')}: not enough ones! <b>Regroup</b> 1 ten as 10 ones: ${unit(afterOnes.t, 't')} and ${unit(afterOnes.o, 'o')}. ${afterOnes.o} − ${B.o} = ${unit(d.o, 'o')}.`);
+      L.push(`<b>Subtract the ones.</b> ${cannot(B.o, A.o, 'o')} So, regroup the tens and ones: ${unit(A.t, 't')} ${unit(A.o, 'o')} = ${unit(afterOnes.t, 't')} ${unit(afterOnes.o, 'o')}. ${unit(afterOnes.o, 'o')} − ${unit(B.o, 'o')} = ${unit(d.o, 'o')}.`);
     } else L.push(`<b>Subtract the ones.</b> ${unit(A.o, 'o')} − ${unit(B.o, 'o')} = ${unit(d.o, 'o')}.`);
     if (c.rt) {
-      L.push(`<b>Subtract the tens.</b> ${unit(afterOnes.t, 't')} − ${unit(B.t, 't')}: not enough tens! <b>Regroup</b> 1 hundred as 10 tens: ${unit(top.h, 'h')} and ${unit(top.t, 't')}. ${top.t} − ${B.t} = ${unit(d.t, 't')}.`);
+      L.push(`<b>Subtract the tens.</b> ${cannot(B.t, afterOnes.t, 't')} So, regroup the hundreds and tens: ${unit(afterOnes.h, 'h')} ${unit(afterOnes.t, 't')} = ${unit(top.h, 'h')} ${unit(top.t, 't')}. ${unit(top.t, 't')} − ${unit(B.t, 't')} = ${unit(d.t, 't')}.`);
     } else L.push(`<b>Subtract the tens.</b> ${unit(top.t, 't')} − ${unit(B.t, 't')} = ${unit(d.t, 't')}.`);
     L.push(`<b>Subtract the hundreds.</b> ${unit(top.h, 'h')} − ${unit(B.h, 'h')} = ${unit(d.h, 'h')}.`);
-    L.push(`So, ${a} − ${b} = <b>${a - b}</b>. Check by adding: ${a - b} + ${b} = ${a} ✔`);
-    return `<ol class="worked">${L.map((l) => `<li>${l}</li>`).join('')}</ol>`;
+    L.push(`So, ${a} − ${b} = <b>${a - b}</b>.`);
+    L.push(`<b>Check!</b> ${a - b} + ${b} = ${a}. The answer is correct.`);
+    return `${subGrid(a, b, { marks: finalMarks(a, b), fill: ['h', 't', 'o'] })}<ol class="worked">${L.map((l) => `<li>${l}</li>`).join('')}</ol>`;
   }
 
-  // Column subtraction. opts.marks: { place: [new values written above, in order] } (guided);
-  // opts.fill: answer places shown; opts.input: answer and regroup rows are boxes;
+  // Column subtraction. opts.marks: regrouping written so far (guided); opts.fill: answer places
+  // shown; opts.hl: the column being worked on; opts.input: answer and regroup rows are boxes;
   // opts.hide: { a: [places], b: [places] } become boxes.
   function subGrid(a, b, opts = {}) {
-    const { A, B, d } = subCols(a, b), places = ['h', 't', 'o'], marks = opts.marks || {}, hide = opts.hide || {};
-    const lenB = String(b).length;
+    const { A, B, d } = subCols(a, b), places = ['h', 't', 'o'], marks = opts.marks || newMarks(), hide = opts.hide || {};
+    const lenB = String(b).length, hl = (p) => (opts.hl === p ? 'g-hl' : '');
+    const one = (on) => (on ? '<sup class="g-one">1</sup>' : '');
     const above = (p) => {
       if (opts.input) return `<span class="g-cell g-carry">${bx(`r${p}`, 'carry')}</span>`;
-      const m = marks[p] || [];
-      return `<span class="g-cell g-carry">${m.map((v, i) => (i < m.length - 1 ? `<s>${v}</s>` : v)).join(' ')}</span>`;
+      const ab = marks[p].above;
+      return `<span class="g-cell g-carry">${ab ? `<span class="${ab.x ? 'g-x' : ''}">${one(ab.one)}${ab.v}</span>` : ''}</span>`;
     };
-    const topCell = (p) => ((hide.a || []).includes(p) ? `<span class="g-cell">${bx(`a${p}`, 'g')}</span>`
-      : `<span class="g-cell ${(marks[p] || []).length ? 'g-x' : ''}">${A[p]}</span>`);
+    const topCell = (p) => ((hide.a || []).includes(p) ? `<span class="g-cell ${hl(p)}">${bx(`a${p}`, 'g')}</span>`
+      : `<span class="g-cell ${hl(p)}"><span class="${marks[p].x ? 'g-x' : ''}">${one(marks[p].one)}${A[p]}</span></span>`);
     const botCell = (p) => {
-      if ((hide.b || []).includes(p)) return `<span class="g-cell">${bx(`b${p}`, 'g')}</span>`;
+      if ((hide.b || []).includes(p)) return `<span class="g-cell ${hl(p)}">${bx(`b${p}`, 'g')}</span>`;
       const show = p === 'o' || (p === 't' && lenB >= 2) || (p === 'h' && lenB >= 3);
-      return `<span class="g-cell">${show ? B[p] : ''}</span>`;
+      return `<span class="g-cell ${hl(p)}">${show ? B[p] : ''}</span>`;
     };
-    const ansCell = (p) => (opts.input ? `<span class="g-cell">${bx(`s${p}`, 'g')}</span>`
-      : `<span class="g-cell g-ans">${(opts.fill || []).includes(p) ? d[p] : ''}</span>`);
+    const ansCell = (p) => {
+      if (opts.input) return `<span class="g-cell">${bx(`s${p}`, 'g')}</span>`;
+      const shown = (opts.fill || []).includes(p) && !(p === 'h' && d.h === 0); // no leading zero
+      return `<span class="g-cell g-ans ${hl(p)}">${shown ? d[p] : ''}</span>`;
+    };
     return `<div class="add-grid sub-grid" aria-label="${a} minus ${b}">
       <span class="g-cell"></span>${places.map((p) => `<span class="g-cell g-head pv-${p}">${PLACE[p].name}</span>`).join('')}
       <span class="g-cell"></span>${places.map(above).join('')}
@@ -1906,20 +1930,20 @@
     </div>`;
   }
 
-  // The money she starts with. Taken-away bills fade out; when tapping is on, $100s and $10s
-  // can be tapped to break them into 10 of the next smaller one.
-  function subMat(counts, taken, tapping) {
+  // The money she starts with, in a place-value chart (the book's base 10 blocks). Taken-away
+  // money gets an ✗; when tapping is on, $100s and $10s can be tapped to regroup them.
+  function subMat(counts, taken, tapping, label) {
     const cell = (p) => {
       const keep = counts[p] - (taken[p] || 0);
       const bills = Array.from({ length: counts[p] }, (_, i) => {
         const html = billHTML(p, `sm ${i >= keep ? 'gone' : ''}`);
-        return tapping && p !== 'o' ? `<button class="tap-bill" data-p="${p}" aria-label="Trade a ${PLACE[p].bill}">${html}</button>` : html;
+        return tapping && p !== 'o' ? `<button class="tap-bill" data-p="${p}" aria-label="Regroup a ${PLACE[p].bill}">${html}</button>` : html;
       }).join('');
       return `<div class="am-cell pv-${p}">${bills}</div>`;
     };
     return `<div class="add-mat sub-mat ${tapping ? 'tapping' : ''}">
       <div></div>${['h', 't', 'o'].map((p) => `<div class="pv-head am-head pv-${p}">${PLACE[p].name}</div>`).join('')}
-      <div class="am-label">💳</div>${['h', 't', 'o'].map(cell).join('')}
+      <div class="am-label">${label}</div>${['h', 't', 'o'].map(cell).join('')}
     </div>`;
   }
 
@@ -1938,113 +1962,184 @@
       <div class="r-line r-total"><span>${ctx.left}</span><b>?</b></div></div>`;
   };
 
+  const kid = () => pick(['Mia', 'Ava', 'Hannah', 'Nia', 'Zoe', 'Lily', 'Emma', 'Ruby']);
   const SUB_STORIES = [
-    (a, b) => ({ text: `${pick(['Mia', 'Ava', 'Hannah', 'Nia'])} has a $${a} gift card. She spends $${b} on a new bike. How much is left on her card?`, why: 'She spent some, so take it away: subtract.' }),
+    (a, b) => ({ text: `${kid()} has a $${a} gift card. She spends $${b} on a new bike. How much is left on her card?`, why: 'She spent some, so subtract to find how much is left.' }),
     (a, b) => ({ text: `The toy store had ${a} toys. It sold ${b} of them. How many toys are left?`, why: 'Some were sold, so subtract to find how many are left.' }),
     (a, b) => ({ text: `A guitar costs $${a}. Today it is $${b} off. What is the sale price?`, why: '“Off” means take away, so subtract.' }),
-    (a, b) => ({ text: `The book store has ${a} books. The card shop has ${b} books. How many more books does the book store have?`, why: '“How many more” means compare the two numbers: subtract the smaller one from the bigger one.' }),
+    (a, b) => ({ text: `The bakery made ${a} rolls in the morning. ${b} rolls are sold during the day. How many rolls are left?`, why: 'Some were sold, so subtract.' }),
+    (a, b) => ({ text: `${a} people visit the food court. ${b} are adults. How many are children?`, why: 'You know all the people and the adults. Subtract to find the children.' }),
+    (a, b) => ({ text: `The mall parking lot has ${a} spots. ${b} spots are in the garage. The rest are outside. How many spots are outside?`, why: 'Take the garage spots away from all the spots: subtract.' }),
+    (a, b) => ({ text: `The bookstore has ${a} books. ${b} books are new. How many books are not new?`, why: 'Take the new books away from all the books: subtract.' }),
+    (a, b) => ({ text: `${kid()} wants to collect ${a} stickers. She has ${b} stickers. How many more stickers does she need?`, why: '“How many more does she need” means find the difference: subtract.' }),
+    (a, b) => ({ text: `Movie Theatre A has ${b} seats. Movie Theatre B has ${a} seats. How many more seats does Theatre B have than Theatre A?`, why: '“How many more” means compare: subtract the smaller number from the bigger one.' }),
+    (a, b) => ({ text: `The shoe store has ${a} pairs of sneakers. The boot store has ${b} fewer pairs than the shoe store. How many pairs does the boot store have?`, why: 'The boot store has <b>fewer</b>, so subtract.' }),
+    (a, b) => ({ text: `The flower shop has ${a} yellow tulips. It has ${b} fewer orange tulips. How many orange tulips are there?`, why: '<b>Fewer</b> orange tulips means subtract.' }),
+    (a, b) => ({ text: `The craft store used ${a} beads to make keychains and ${b} beads to make bracelets. How many more beads were used for the keychains?`, why: '“How many more” means compare: subtract.' }),
+    (a, b) => ({ text: `A tablet costs $${a}. ${pick(['Leo', 'Sam', 'Ethan', 'Malik'])} has saved $${b}. How much more money does he need?`, why: '“How much more does he need” means find the difference: subtract.' }),
     (a, b) => ({ text: `The party store had ${a} balloons. ${b} balloons floated away! How many balloons are left?`, why: 'Some floated away, so subtract.' }),
-    (a, b) => ({ text: `The bakery baked ${a} cookies. It sold ${b} cookies. How many cookies are left?`, why: 'Some were sold, so subtract.' }),
-    (a, b) => ({ text: `A tablet costs $${a}. ${pick(['Leo', 'Sam', 'Ethan', 'Malik'])} has saved $${b}. How much more money does he need?`, why: '“How much more does he need” means find the difference: subtract what he has from the price.' }),
-    (a, b) => ({ text: `The parking lot has ${a} spots. ${b} cars are parked. How many spots are empty?`, why: 'Take the parked cars away from all the spots: subtract.' }),
-    (a, b) => ({ text: `The movie theater has ${a} seats. ${b} people bought tickets. How many seats are still empty?`, why: 'Take the full seats away from all the seats: subtract.' }),
-    (a, b) => ({ text: `The craft store had ${a} beads. ${pick(['Lily', 'Zoe', 'Emma', 'Ruby'])} used ${b} beads to make bracelets. How many beads are left?`, why: 'Some beads were used up, so subtract.' }),
-    (a, b) => ({ text: `${pick(['Leo', 'Max', 'Finn', 'Kai'])} has ${a} arcade tickets. He trades ${b} tickets for a prize. How many tickets does he have left?`, why: 'He gave some tickets away, so subtract.' }),
-    (a, b) => ({ text: `The flower shop had ${a} roses. It sold ${b} roses for a wedding. How many roses are left?`, why: 'Some were sold, so subtract.' }),
-    (a, b) => ({ text: `The shoe store sold ${a} pairs of shoes in May. In June it sold ${b}. How many fewer pairs did it sell in June?`, why: '“How many fewer” means compare: subtract the smaller number from the bigger one.' }),
-    (a, b) => ({ text: `The pet store had ${a} fish. ${b} fish went to new homes. How many fish are still at the store?`, why: 'Some fish left, so subtract.' }),
+    (a, b) => ({ text: `${pick(['Leo', 'Max', 'Finn', 'Kai'])} has ${a} arcade tickets. He trades ${b} tickets for a prize. How many tickets does he have left?`, why: 'He used some tickets, so subtract.' }),
+    (a, b) => ({ text: `The movie theatre has ${a} seats. ${b} people bought tickets. How many seats are still empty?`, why: 'Take the full seats away from all the seats: subtract.' }),
     (a, b) => ({ text: `A scooter costs $${a}. A skateboard costs $${b}. How much more does the scooter cost?`, why: '“How much more” means find the difference: subtract.' }),
-    (a, b) => ({ text: `The candy store had ${a} lollipops in the morning. By night it had sold ${b}. How many lollipops are left?`, why: 'Some were sold, so subtract.' }),
-    (a, b) => ({ text: `The mall had ${a} shopping carts. Shoppers are using ${b} of them. How many carts are free?`, why: 'Take away the carts being used: subtract.' }),
-    (a, b) => ({ text: `The jewelry stand had ${a} rings. It sold ${b} rings at the big sale. How many rings are left?`, why: 'Some were sold, so subtract.' }),
+    (a, b) => ({ text: `The pet store had ${a} fish. ${b} fish went to new homes. How many fish are still at the store?`, why: 'Some fish left, so subtract.' }),
   ];
 
-  // Level 1: the method one step at a time, with the money mat.
+  const choiceBtns = (labels) => `<span class="step-choices">${labels.map((l, i) => `<button class="btn step-choice" data-c="${i}">${l}</button>`).join('')}</span>`;
+
+  // Level 1: the book's method one step at a time, with the money chart.
   function subLesson(a, b, ctx, it) {
-    const c = subCols(a, b), { A, B, d } = c, steps = [];
-    const st = { counts: { ...A }, taken: { h: 0, t: 0, o: 0 }, marks: {}, fill: [] };
-    const push = (s) => { s.before = JSON.parse(JSON.stringify(st)); steps.push(s); };
-    const yesNo = '<span class="step-choices"><button class="btn step-choice" data-c="0">✔ Yes, enough</button><button class="btn step-choice" data-c="1">✖ No, regroup</button></span>';
+    const c = subCols(a, b), { A, B, d } = c, s = a - b, steps = [];
+    const st = { counts: { ...A }, taken: { h: 0, t: 0, o: 0 }, marks: newMarks(), fill: [] };
+    const push = (x) => { x.before = JSON.parse(JSON.stringify(st)); steps.push(x); };
     const coins = { h: '$100 bills', t: '$10 bills', o: '$1 coins' };
+    const asked = {};
 
     const ask = (p) => {
       const have = st.counts[p], need = B[p];
       if (!need) return;
+      asked[p] = true;
       push({
-        text: `<b>Subtract the ${PLACE[p].name}.</b> ${unit(have, p)} − ${unit(need, p)}.<br>Are there enough ${PLACE[p].name} to take away?${yesNo}`,
-        blanks: [], choice: have >= need ? 0 : 1, voice: [`line/sub-enough-${p === 'o' ? 'ones' : 'tens'}`], speak: `Subtract the ${PLACE[p].name}. Are there enough ${PLACE[p].name} to take away?`,
-        hint: `Look at the ${coins[p]} on the mat. You have ${have}, and you need to take away ${need}. Is ${have} at least ${need}?`,
-        reveal: have >= need ? `${have} is at least ${need}, so there are enough ${PLACE[p].name}. No regrouping needed!`
-          : `${have} is less than ${need}, so there are not enough ${PLACE[p].name}. You need to regroup!`,
+        col: p, text: `<b>Subtract the ${PLACE[p].name}.</b><br>Can you take away ${unit(need, p)} from ${unit(have, p)}?${choiceBtns(['✔ Yes, subtract', '✖ No, regroup'])}`,
+        blanks: [], choice: have >= need ? 0 : 1, voice: [`line/sub-enough-${p === 'o' ? 'ones' : 'tens'}`],
+        speak: `Subtract the ${PLACE[p].name}. Can you take away ${need} ${PLACE[p].name} from ${have} ${PLACE[p].name}?`,
+        hint: `Look at the ${coins[p]} on the chart. There ${have === 1 ? 'is' : 'are'} ${have}. Can you take ${need} away from ${have}?`,
+        reveal: have >= need ? `You can take away ${unit(need, p)} from ${unit(have, p)}. No need to regroup!`
+          : `${cannot(need, have, p)} So, regroup ${regroupName(p === 'o' ? 't' : 'h', p)}.`,
       });
     };
-    const trade = (from, to, first) => {
+    const regroup = (from, to, first) => {
       const oldFrom = st.counts[from], oldTo = st.counts[to];
       push({
+        col: to,
         text: first
-          ? `<b>Regroup.</b> Not enough ones, and there are <b>0 tens</b> to trade! Tap a <b>$100 bill</b> to trade it for 10 tens first.`
-          : `<b>Regroup.</b> Tap a <b>${PLACE[from].bill}</b> to trade it for 10 ${PLACE[to].name}.`,
+          ? `<b>Regroup the hundreds and tens in ${a}.</b> There are 0 tens, so start with the hundreds! Tap a <b>$100 bill</b> to regroup it as 10 tens.`
+          : `<b>Regroup ${regroupName(from, to)} in ${a}.</b> Tap a <b>${PLACE[from].bill}</b> to regroup it as 10 ${PLACE[to].name}.`,
         blanks: [], tap: from, voice: [first ? 'line/sub-trade-zero' : from === 't' ? 'line/sub-trade-ten' : 'line/sub-trade-hundred'],
-        speak: first ? 'There are no tens to trade! Tap a hundred-dollar bill to trade it for ten tens first.' : `Tap a ${PLACE[from].bill} to trade it for ten ${PLACE[to].name}.`,
-        hint: `You need more ${PLACE[to].name}. Which bill can you break into 10 ${coins[to]}? Tap one on the mat.`,
-        reveal: `Trade 1 ${PLACE[from].bill} for 10 ${coins[to]}.`,
+        speak: `Regroup ${regroupName(from, to)}. Tap a ${PLACE[from].bill} to regroup it as ten ${PLACE[to].name}.`,
+        hint: `You need more ${PLACE[to].name}. Which bill is worth 10 ${coins[to]}? Tap one on the chart.`,
+        reveal: `Regroup 1 ${PLACE[from].one} as 10 ${PLACE[to].name}: tap a ${PLACE[from].bill}.`,
       });
       st.counts[from]--; st.counts[to] += 10;
+      const id1 = `n${from}${steps.length}`, id2 = `n${to}${steps.length}`;
       push({
-        text: `Cross out and write the new numbers:<br>Now there are ${bx(`n${from}${steps.length}`)} ${PLACE[from].name} and ${bx(`n${to}${steps.length}`)} ${PLACE[to].name}.`,
-        blanks: [{ id: `n${from}${steps.length}`, ans: st.counts[from] }, { id: `n${to}${steps.length}`, ans: st.counts[to] }],
-        voice: ['line/sub-now'], speak: 'Cross out, and write the new numbers.',
-        hint: `You traded away 1 ${PLACE[from].one}, so there is 1 less than ${oldFrom}. The 10 new ${PLACE[to].name} join the ${oldTo} you had. Count the mat!`,
-        reveal: `${unit(oldFrom, from)} becomes ${unit(st.counts[from], from)}, and ${oldTo} + 10 = ${unit(st.counts[to], to)}.`,
+        col: to,
+        text: `${unit(oldFrom, from)} ${unit(oldTo, to)}<br>= ${bx(id1)} ${PLACE[from].name} ${bx(id2)} ${PLACE[to].name}`,
+        blanks: [{ id: id1, ans: st.counts[from] }, { id: id2, ans: st.counts[to] }],
+        voice: ['line/sub-now'], speak: 'Regroup. What are the missing numbers?',
+        hint: `You regrouped 1 ${PLACE[from].one} as 10 ${PLACE[to].name}. So there is 1 ${PLACE[from].one} less, and 10 more ${PLACE[to].name}. Count the chart!`,
+        reveal: `${unit(oldFrom, from)} ${unit(oldTo, to)} = ${unit(st.counts[from], from)} ${unit(st.counts[to], to)}. Cross out the ${oldFrom} and write ${st.counts[from]} above it. Write a small 1 in front of the ${oldTo} to make ${st.counts[to]}.`,
       });
-      st.marks[from] = [...(st.marks[from] || []), st.counts[from]];
-      st.marks[to] = [...(st.marks[to] || []), st.counts[to]];
+      markTrade(st.marks, from, to, st.counts[from]);
     };
     const take = (p) => {
       const have = st.counts[p], need = B[p];
       push({
-        text: `<b>Take away the ${PLACE[p].name}.</b><br>${unit(have, p)} − ${unit(need, p)} = ${bx(`d${p}`)} ${PLACE[p].name}`,
-        blanks: [{ id: `d${p}`, ans: d[p] }], voice: [`line/sub-${PLACE[p].name}`], speak: `Take away the ${PLACE[p].name}.`,
+        col: p, text: `<b>${asked[p] ? 'Subtract.' : `Subtract the ${PLACE[p].name}.`}</b><br>${unit(have, p)} − ${unit(need, p)} = ${bx(`d${p}`)} ${PLACE[p].name}`,
+        blanks: [{ id: `d${p}`, ans: d[p] }], voice: [`line/sub-${PLACE[p].name}`], speak: `Subtract the ${PLACE[p].name}.`,
         hint: need === 0 ? `Taking away 0 ${PLACE[p].name} leaves the same number of ${PLACE[p].name}!`
-          : `Start at ${have} and count back ${need}. Or cover ${need} of the ${coins[p]} on the mat and count the rest.`,
-        reveal: `${have} − ${need} = ${d[p]}.`,
+          : `Start at ${have} and count back ${need}. Or cross out ${need} of the ${coins[p]} on the chart and count the rest.`,
+        reveal: `${unit(have, p)} − ${unit(need, p)} = ${unit(d[p], p)}.`,
       });
       st.taken[p] = need; st.fill.push(p);
     };
 
     ask('o');
-    if (c.ro) { if (c.zero) trade('h', 't', true); trade('t', 'o'); }
+    if (c.ro) { if (c.zero) regroup('h', 't', true); regroup('t', 'o'); }
     take('o');
     ask('t');
-    if (c.rt) trade('h', 't');
+    if (c.rt) regroup('h', 't');
     take('t');
     take('h');
     push({
-      text: `So, ${a} − ${b} = ${bx('tot')}`, blanks: [{ id: 'tot', ans: a - b }], voice: ['line/sub-total'], speak: 'Now write the answer.',
-      hint: 'Read the answer row from left to right: hundreds, tens, then ones.', reveal: `${a} − ${b} = ${a - b}.`,
+      text: `So, ${a} − ${b} = ${bx('tot')}.`, blanks: [{ id: 'tot', ans: s }], voice: ['line/sub-total'], speak: 'Now write the answer.',
+      hint: `Read the answer row from left to right: hundreds, tens, then ones.${d.h === 0 ? ' There are 0 hundreds, so the answer has only 2 digits.' : ''}`,
+      reveal: `${a} − ${b} = ${s}.`,
+    });
+    push({
+      text: `<b>Check!</b> If ${a} − ${b} = ${s}, then ${s} + ${b} should equal ${a}.<br>${s} + ${b} = ${bx('chk')}`,
+      blanks: [{ id: 'chk', ans: a }], voice: ['line/sub-check'], speak: 'Check! Add to check your answer.',
+      hint: 'Add the ones, then the tens, then the hundreds. Remember to regroup when you add!',
+      reveal: `${s} + ${b} = ${a}. The answer is correct!`,
     });
     return {
-      kind: 'steps', guided: true, steps, nums: { a, b, s: a - b },
+      kind: 'steps', guided: true, steps, nums: { a, b, s },
       prompt: `${ctx.learn} Subtract one step at a time.`,
       board: (i) => {
-        const s = steps[Math.min(i, steps.length - 1)].before;
-        return `${subTicket(a, b, ctx, it)}${subGrid(a, b, { marks: s.marks, fill: s.fill })}${subMat(s.counts, s.taken, !!steps[i] && !!steps[i].tap)}`;
+        const x = steps[Math.min(i, steps.length - 1)];
+        return `${subTicket(a, b, ctx, it)}${subGrid(a, b, { marks: x.before.marks, fill: x.before.fill, hl: x.col })}${subMat(x.before.counts, x.before.taken, !!x.tap && i < steps.length, a)}`;
       },
       explain: workedSub(a, b),
     };
+  }
+
+  // Answers with the usual mistakes: forgetting to cross out after regrouping, or taking the
+  // smaller digit from the bigger one in every column.
+  function subMistakes(a, b) {
+    const A = digitsOf(a), B = digitsOf(b), c = subCols(a, b), out = new Set();
+    if (c.ro || c.rt) {
+      const o = c.ro ? A.o + 10 - B.o : A.o - B.o, t = (c.rt ? A.t + 10 : A.t) - B.t, h = A.h - B.h;
+      if (t >= 0 && t < 10 && h >= 0) out.add(h * 100 + t * 10 + o);
+      out.add(Math.abs(A.h - B.h) * 100 + Math.abs(A.t - B.t) * 10 + Math.abs(A.o - B.o));
+    }
+    out.add(a - b + pick([10, -10, 100]));
+    return [...out].filter((v) => v > 0 && v !== a - b);
   }
 
   function subtractQuestion(level) {
     const it = items(1).map(({ emoji, name }) => ({ e: emoji, name }))[0], ctx = pick(SUB_PLACES);
 
     if (level <= 1) {
-      // Now and then a zero in the tens, so she has seen it taught before level 4.
-      const { a, b } = genSub(pick(['none', 'ones', 'ones', 'tens', 'both', 'both', 'both', 'zero']), pick([2, 3, 3]));
+      // Lessons 2-4: regroup tens and ones, hundreds and tens, or both. (Zeros are Lesson 5.)
+      const { a, b } = genSub(pick(['none', 'ones', 'ones', 'tens', 'tens', 'both', 'both', 'both']), pick([2, 3, 3]));
       return subLesson(a, b, ctx, it);
     }
 
-    // Thinking Cap: missing digits (level 4).
-    if (level >= 4 && Math.random() < 0.3) {
+    const r = Math.random();
+    const form = level === 2 ? (r < 0.25 ? 'regroup' : 'own')
+      : level === 3 ? (r < 0.3 ? 'story' : r < 0.45 ? 'tf' : r < 0.55 ? 'regroup' : 'own')
+        : (r < 0.25 ? 'missing' : r < 0.45 ? 'story' : r < 0.6 ? 'tf' : 'own');
+    const kindFor = () => (level <= 2 ? pick(['none', 'ones', 'ones', 'tens', 'tens']) : level === 3 ? pick(['ones', 'tens', 'both', 'both', 'both'])
+      : pick(['both', 'both', 'zero', 'zero', 'zero']));
+
+    // "Regroup the tens and ones. What are the missing numbers?" (Let's Practise)
+    if (form === 'regroup') {
+      let n, D;
+      do { n = rand(110, 989); D = digitsOf(n); } while (D.t === 0);
+      const H = unit(D.h, 'h'), T = unit(D.t, 't'), O = unit(D.o, 'o');
+      const lines = pick([
+        [`${n} = ${H} ${T} ${bx('g1')} ones`, `= ${H} ${unit(D.t - 1, 't')} ${bx('g2')} ones`, [D.o, D.o + 10]],
+        [`${n} = ${bx('g1')} hundreds ${D.t + 10} tens ${O}`, null, [D.h - 1]],
+        [`${n} = ${unit(D.h - 1, 'h')} ${bx('g1')} tens ${O}`, null, [D.t + 10]],
+        [`${n} = ${H} ${T} ${bx('g1')} ones`, `= ${H} ${unit(D.t - 1, 't')} ${bx('g2')} ones<br>= ${unit(D.h - 1, 'h')} ${bx('g3')} tens ${bx('g4')} ones`, [D.o, D.o + 10, D.t + 9, D.o + 10]],
+      ].filter(([, , ans]) => ans.every((v) => v >= 0)));
+      const [l1, l2, ans] = lines;
+      const blanks = ans.map((v, i) => ({ id: `g${i + 1}`, ans: v }));
+      return {
+        kind: 'steps', guided: false, nums: { n }, prompt: 'Regroup. What are the missing numbers? Use the money chart to help you.',
+        steps: [{ text: `<div class="regroup-eq">${l1}${l2 ? `<br>${l2}` : ''}</div>`, blanks, voice: ['line/sub-now'], speak: 'Regroup. What are the missing numbers?' }],
+        board: () => `${priceTag(n)}${subMat(D, {}, false, n)}`,
+        explain: `Regrouping changes how the money is grouped, not how much there is.<br>${n} = ${H} ${T} ${O}<br>= ${H} ${unit(D.t - 1, 't')} ${unit(D.o + 10, 'o')}<br>= ${unit(D.h - 1, 'h')} ${unit(D.t + 10, 't')} ${O}`,
+      };
+    }
+
+    // True or false? Use addition to check.
+    if (form === 'tf') {
+      const { a, b, s } = genSub(kindFor(), pick([2, 3, 3]));
+      const wrongs = subMistakes(a, b), shown = Math.random() < 0.5 || !wrongs.length ? s : pick(wrongs);
+      const [prompt, vk] = variant([
+        ['True or false? Use addition to check if the answer is correct.', 'line/sub-tf'],
+        ['Is the answer correct? Add to check it.', 'line/sub-tf-2'],
+      ]);
+      return {
+        kind: 'steps', guided: false, nums: { a, b, s, shown }, prompt,
+        steps: [{ text: `<div class="tf-eq">${a} − ${b} = ${shown}</div>${choiceBtns(['✔ True', '✖ False'])}`, blanks: [], choice: shown === s ? 0 : 1, voice: [vk], speak: `True or false? ${a} minus ${b} equals ${shown}.` }],
+        board: () => `<div class="thinking">🤔</div>`,
+        explain: `<b>Check:</b> ${shown} + ${b} = ${shown + b}. ${shown === s ? `That equals ${a}, so it is <b>true</b>. The answer is correct.` : `That is not ${a}, so it is <b>false</b>. The correct answer is ${a} − ${b} = ${s}.`}${workedSub(a, b)}`,
+      };
+    }
+
+    // Thinking Cap: missing digits.
+    if (form === 'missing') {
       const { a, b, s } = genSub(pick(['ones', 'tens', 'both', 'zero']), 3);
       const row = pick(['a', 'b', 'b']), hidden = shuffle(['h', 't', 'o']).slice(0, rand(1, 3));
       const D = digitsOf(row === 'a' ? a : b);
@@ -2064,8 +2159,8 @@
       };
     }
 
-    // Word problems (levels 3 and 4).
-    if (level >= 3 && Math.random() < 0.35) {
+    // Word problems.
+    if (form === 'story') {
       const { a, b, s } = genSub(level >= 4 ? pick(['both', 'zero']) : pick(['ones', 'tens', 'both']), pick([2, 3, 3]));
       const story = pick(SUB_STORIES)(a, b);
       return {
@@ -2077,23 +2172,22 @@
       };
     }
 
-    // On your own: the whole subtraction (levels 2+).
-    const kind = level <= 2 ? pick(['none', 'ones', 'ones', 'tens', 'tens']) : level === 3 ? pick(['ones', 'tens', 'both', 'both', 'both'])
-      : pick(['both', 'zero', 'zero', 'zero']);
+    // On your own: the whole subtraction.
+    const kind = kindFor();
     const { a, b, s } = genSub(kind, level <= 2 ? pick([2, 3]) : 3);
     const [prompt, vk, speak] = kind === 'zero' && Math.random() < 0.5
       ? ['Careful, there’s a zero! Subtract and write the answer.', 'line/sub-zero', 'Careful, there is a zero! Subtract, and regroup if you need to.']
       : variant([
-        [`${ctx.learn} Subtract and write the answer.`, 'line/sub-own', 'Subtract, and remember to regroup when there are not enough to take away.'],
-        ['Subtract to find the answer. Regroup if you need to!', 'line/sub-own-2', 'Subtract to find the answer. Regroup if you need to!'],
-        ['Work it out! Start with the ones.', 'line/sub-own-3', 'Work it out! Start with the ones, then the tens, then the hundreds.'],
+        [`${ctx.learn} Subtract and write the answer.`, 'line/sub-own', 'How much is left? Subtract, and remember to regroup when you do not have enough to subtract.'],
+        ['Subtract. Remember to regroup when you do not have enough to subtract.', 'line/sub-own-2', 'Subtract. Remember to regroup when you do not have enough to subtract.'],
+        ['Write it this way, then subtract. Start with the ones!', 'line/sub-own-3', 'Work it out! Start with the ones, then the tens, then the hundreds.'],
       ]);
     const D = digitsOf(s);
     return {
       kind: 'steps', guided: false, nums: { a, b, s }, prompt,
       steps: [{
-        text: 'Write each digit of the answer. You can write regrouped numbers in the small boxes.',
-        blanks: [{ id: 'so', ans: D.o }, { id: 'st', ans: D.t }, { id: 'sh', ans: D.h }, { id: 'ro', ans: null, len: 2 }, { id: 'rt', ans: null, len: 2 }, { id: 'rh', ans: null, len: 1 }],
+        text: 'Write each digit of the answer. You can write your regrouping in the small boxes.',
+        blanks: [{ id: 'so', ans: D.o }, { id: 'st', ans: D.t }, { id: 'sh', ans: D.h, zeroOk: D.h === 0 }, { id: 'ro', ans: null, len: 2 }, { id: 'rt', ans: null, len: 2 }, { id: 'rh', ans: null, len: 1 }],
         voice: [vk], speak,
       }],
       board: () => `${subTicket(a, b, ctx, it)}${subGrid(a, b, { input: true })}`,
@@ -2196,11 +2290,11 @@
     };
     const check = () => {
       if (R.locked) return;
-      if (step().tap) return toast('Tap a bill on the mat to trade it!');
-      if (step().choice != null) return toast('Tap Yes or No first!');
+      if (step().tap) return toast('Tap a bill on the chart to regroup it!');
+      if (step().choice != null) return toast('Tap an answer first!');
       const graded = step().blanks.filter((b) => b.ans != null);
-      if (graded.some((b) => !R.vals[b.id])) return toast('Fill in every box first!');
-      const wrong = graded.filter((b) => +R.vals[b.id] !== b.ans);
+      if (graded.some((b) => !R.vals[b.id] && !b.zeroOk)) return toast('Fill in every box first!');
+      const wrong = graded.filter((b) => +(R.vals[b.id] || 0) !== b.ans);
       screen.querySelectorAll('.bx.bad').forEach((el) => el.classList.remove('bad'));
       if (!wrong.length) {
         sfx.coin();
@@ -2216,7 +2310,8 @@
       sfx.bad();
       const card = screen.querySelector('.play');
       card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
-      if (R.stepTries === 1) {
+      // A true/false question on your own gets one try.
+      if (R.stepTries === 1 && (q.guided || step().choice == null)) {
         if (q.guided) wrong.forEach((b) => { const el = screen.querySelector(`.bx[data-b="${b.id}"]`); if (el) el.classList.add('bad'); });
         const tip = q.guided ? step().hint : 'Not quite. Check your work again.';
         showFeedback('hint', `<div class="fb-title">${q.guided ? pick(['Almost! Here is a tip:', 'Not quite. Think about it like this:']) : 'Not quite!'}</div><div class="fb-body">${tip}</div>`, false);

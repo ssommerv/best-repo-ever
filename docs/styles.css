@@ -720,7 +720,15 @@ mark { background: #ffd1e8; color: var(--pink-deep); border-radius: 6px; padding
 .g-x { color: var(--ink-soft); text-decoration: line-through; text-decoration-color: var(--pink-deep); text-decoration-thickness: 4px; }
 .g-carry s { color: var(--ink-soft); opacity: 0.7; text-decoration-thickness: 2px; }
 .sub-grid .g-carry { white-space: nowrap; }
-.money.gone { opacity: 0.22; filter: grayscale(1); }
+.money.gone::after { content: "✗"; position: absolute; inset: -3px; display: flex; align-items: center; justify-content: center; color: #dc2626; font-size: 30px; font-weight: 900; line-height: 1; background: rgba(255, 255, 255, 0.6); border-radius: inherit; }
+.am-cell .money.gone::after { font-size: 20px; }
+.g-one { font-size: 0.5em; vertical-align: 0.9em; margin-right: 1px; color: var(--pink-deep); }
+.g-carry .g-one { font-size: 0.7em; vertical-align: 0.5em; }
+.sub-grid .g-hl { background: #dbeafe; }
+.sub-grid .g-cell.g-hl { border-radius: 10px; }
+.regroup-eq { font-size: 24px; line-height: 2.2; }
+.regroup-eq .bx { min-width: 56px; height: 46px; font-size: 24px; }
+.tf-eq { font: 900 40px ui-monospace, Menlo, monospace; text-align: center; margin: 6px 0; }
 .tap-bill { border: 0; background: none; padding: 0; line-height: 0; cursor: pointer; border-radius: 6px; }
 .tap-bill:disabled { cursor: default; }
 .sub-mat.tapping .tap-bill:not(:disabled) .money { animation: wiggle 1.2s ease-in-out infinite; box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--purple); }
