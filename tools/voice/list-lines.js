@@ -31,5 +31,10 @@ for (const [marked, sentences, , sayAs] of arrayLiteral('SPELL_DEFAULT')) {
   lines[`slow/${key}`] = { text: `${word}.`, speed: 0.75 };
 }
 arrayLiteral('CHEERS').forEach((cheer, i) => { lines[`cheer/${i}`] = { text: cheer }; });
+// French vocabulary, said by itself ("La dinde."). The model reads it as French.
+for (const { key, fr } of arrayLiteral('FR_WORDS')) {
+  const text = fr.replace(/’/g, "'");
+  lines[`fr/${key}`] = { text: `${text[0].toUpperCase()}${text.slice(1)}.`, prev: 'Voici un mot en français :' };
+}
 
 process.stdout.write(JSON.stringify(lines, null, 1));

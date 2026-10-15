@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '13 (Oct 14, 2026)';
+  const APP_VERSION = '14 (Oct 15, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -640,6 +640,18 @@
     make(level) { return spellQuestion(pickSpellWord(), level <= 1 || !canSpeak); },
     home: () => renderSpellHome(),
   };
+  GAMES.french = {
+    name: 'Marché d’automne', emoji: '🦃', color: 'orange', featured: true,
+    skill: 'French words for l’Action de grâces',
+    maxLevel: 3,
+    levels: {
+      1: { label: 'Learn: picture → word (3 choices)', short: 'Learn' },
+      2: { label: 'Both ways, with look-alike words', short: 'Practice' },
+      3: { label: 'Match them all, like the test', short: 'Like the test' },
+    },
+    make: (level) => frQuestion(level),
+    home: () => renderFrHome(),
+  };
   GAMES.receipt = {
     name: 'Receipt Counter', emoji: '🧾', color: 'pink',
     skill: 'Add up to 1000 with regrouping',
@@ -689,7 +701,7 @@
   // What she's learning now comes first in the mall.
   const CURRENT = ['subtract', 'receipt', 'patterns'];
   const GAME_IDS = [...CURRENT, ...Object.keys(GAMES).filter((id) => !CURRENT.includes(id) && !GAMES[id].featured && !GAMES[id].hidden)];
-  const ALL_IDS = ['spelling', ...GAME_IDS, 'sell'];
+  const ALL_IDS = ['spelling', 'french', ...GAME_IDS, 'sell'];
   const maxLevel = (id) => GAMES[id].maxLevel || 3;
   const levelInfo = (id, lv) => (GAMES[id].levels || LEVELS)[lv];
 
@@ -769,7 +781,7 @@
 
   // ---------- Saved progress ----------
   const KEY = 'pvb-v1';
-  const DEFAULT = { started: false, name: '', coins: 0, levels: {}, streaks: {}, stats: {}, owned: [], walls: ['pink'], wall: 'pink', sound: true, autoRead: false, spell: {}, spellList: null, inv: {}, shelves: [], shelfCount: 2 };
+  const DEFAULT = { started: false, name: '', coins: 0, levels: {}, streaks: {}, stats: {}, owned: [], walls: ['pink'], wall: 'pink', sound: true, autoRead: false, spell: {}, spellList: null, fr: {}, inv: {}, shelves: [], shelfCount: 2 };
   const fresh = () => JSON.parse(JSON.stringify(DEFAULT));
   let S = load();
   function load() {
@@ -841,9 +853,9 @@
   function speakSeq(parts) {
     if (!canSpeak) return;
     speechSynthesis.cancel();
-    for (const [text, rate] of parts) {
+    for (const [text, rate, lang] of parts) {
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US'; u.rate = rate || 0.9; u.pitch = 1.1;
+      u.lang = lang || 'en-US'; u.rate = rate || 0.9; u.pitch = 1.1;
       speechSynthesis.speak(u);
     }
   }
@@ -979,10 +991,21 @@
           <span class="store-level" aria-label="Level ${spLv}">${stars(spLv, 2)} <small>${sp.levels[spLv].short}</small></span>
         </span>
       </button>`;
+    const fr = GAMES.french, frLv = levelOf('french');
+    const seasonal = `<button class="store featured seasonal c-${fr.color}" data-game="french">
+        <span class="store-awning"></span>
+        <span class="store-emoji">${fr.emoji}</span>
+        <span class="featured-text">
+          <span class="store-name">${fr.name}</span>
+          <span class="store-skill">${fr.skill}: ${FR_WORDS.length} words</span>
+          <span class="store-level" aria-label="Level ${frLv}">${stars(frLv, 3)} <small>${fr.levels[frLv].short}</small></span>
+        </span>
+        <span class="new-chip">🍂 Seasonal · French</span>
+      </button>`;
     setScreen(`
       <section class="mall">
         <div class="guide">${avatar('lg')}<p class="bubble">Hi${S.name ? ' ' + escapeHTML(S.name) : ''}! Pick a store to play. 👋</p></div>
-        ${featured}
+        ${featured}${seasonal}
         <div class="store-grid">${cards}</div>
         <div class="mall-extras">
           <button class="extra c-pink" id="shopBtn"><span>🛍️</span>Sparkle Shop<small>Spend your coins</small></button>
@@ -1020,9 +1043,11 @@
   }
 
   function nextQuestion() {
-    if (R.index >= R.len || (R.id === 'sell' && !stockedSlots().length)) return R.test ? renderTestEnd() : renderRoundEnd();
-    R.q = R.test ? spellQuestion(R.order[R.index], false) : GAMES[R.id].make(levelOf(R.id));
+    if (R.index >= R.len || (R.id === 'sell' && !stockedSlots().length)) return R.test ? (R.testEnd || renderTestEnd)() : renderRoundEnd();
+    R.q = R.test ? (R.testQ ? R.testQ(R.index) : spellQuestion(R.order[R.index], false)) : GAMES[R.id].make(levelOf(R.id));
     if (R.q.w) R.used.push(R.q.w.word);
+    if (R.q.fr) R.used.push(R.q.fr);
+    if (R.q.keys) R.used.push(...R.q.keys);
     R.attempts = 0;
     R.locked = false;
     renderQuestion();
@@ -1069,8 +1094,10 @@
       body = changeBody(q);
     } else if (q.kind === 'steps') {
       body = stepsBody(q);
+    } else if (q.kind === 'match') {
+      body = matchBody(q);
     } else {
-      const cls = q.layout === 'deal' ? `choices deal n${q.choices.length}` : `choices ${q.big ? 'big' : ''} ${q.tags ? 'tags' : ''} n${q.choices.length}`;
+      const cls = q.layout === 'deal' ? `choices deal n${q.choices.length}` : q.layout ? `choices ${q.layout} n${q.choices.length}` : `choices ${q.big ? 'big' : ''} ${q.tags ? 'tags' : ''} n${q.choices.length}`;
       body = `
         <div class="play">
           <div class="q-card">
@@ -1086,10 +1113,11 @@
     if (q.kind === 'spell') { wireSpell(); return; }
     if (q.kind === 'change') { wireChange(); return; }
     if (q.kind === 'steps') { wireSteps(); return; }
-    if (canSpeak) $('#sayBtn').onclick = () => say(q.voice, [[q.speak]]);
+    if (q.kind === 'match') { wireMatch(); return; }
+    if (canSpeak) $('#sayBtn').onclick = () => say(q.voice, q.speakParts || [[q.speak]]);
     if (q.kind === 'register') wireRegister();
     else screen.querySelectorAll('.choice').forEach((b) => { b.onclick = () => answerMC(b, q.choices[+b.dataset.i].value); });
-    if (S.autoRead) say(q.voice, [[q.speak]]);
+    if (S.autoRead || q.autoSay) say(q.voice, q.speakParts || [[q.speak]]);
   }
 
   function wireRegister() {
@@ -1136,13 +1164,18 @@
 
   function answerMC(btn, value) {
     if (R.locked || btn.disabled) return;
+    const fr = R.q.fr && FR_BY_KEY[R.q.fr];
     if (String(value) === String(R.q.answer)) {
       btn.classList.add('correct');
+      if (fr) recordFr(fr.key, R.attempts === 0);
       onCorrect();
+      if (fr) setTimeout(() => frSayWord(fr), 1300);
     } else {
       btn.classList.add('wrong');
       btn.disabled = true;
-      if (onWrong(R.q.hint)) {
+      const revealed = onWrong(R.q.hint);
+      if (revealed && fr) { recordFr(fr.key, false); setTimeout(() => frSayWord(fr), 300); }
+      if (revealed) {
         screen.querySelectorAll('.choice').forEach((b) => {
           if (String(R.q.choices[+b.dataset.i].value) === String(R.q.answer)) b.classList.add('reveal');
         });
@@ -1445,6 +1478,291 @@
     if (pct === 1) confetti();
     $('#againBtn').onclick = startSpellTest;
     $('#mallBtn').onclick = renderSpellHome;
+  }
+
+  // ---------- Marché d'automne: French Thanksgiving words (seasonal) ----------
+  // Her French test: match each word to its picture. Pictures are iPad emoji where a good
+  // one exists, otherwise simple drawings made for this game (no outside images).
+  const SVG = (body) => `<svg viewBox="0 0 100 100" class="fr-svg" aria-hidden="true">${body}</svg>`;
+  const INK = 'stroke="#5b3a29" stroke-width="2.5" stroke-linejoin="round"';
+  const FR_ART = {
+    automne: SVG(`<ellipse cx="50" cy="93" rx="40" ry="5" fill="#e9c99f"/>
+      <path d="M44 93 Q47 76 46 60 L54 60 Q53 76 57 93 Z" fill="#8b5a2b" ${INK}/>
+      <path d="M49 66 L37 54 M51 63 L64 52" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="34" cy="42" r="17" fill="#f97316" ${INK}/><circle cx="66" cy="42" r="17" fill="#f59e0b" ${INK}/>
+      <circle cx="50" cy="27" r="19" fill="#ef4444" ${INK}/><circle cx="50" cy="50" r="15" fill="#fb923c" ${INK}/>
+      <ellipse cx="18" cy="74" rx="5" ry="3" fill="#ef4444" transform="rotate(-30 18 74)"/>
+      <ellipse cx="82" cy="70" rx="5" ry="3" fill="#f59e0b" transform="rotate(25 82 70)"/>
+      <ellipse cx="74" cy="86" rx="5" ry="3" fill="#f97316" transform="rotate(-15 74 86)"/>`),
+    recolte: SVG(`<path d="M30 52 L26 14 M38 52 L38 10 M46 52 L50 14" stroke="#c99a3c" stroke-width="3"/>
+      <ellipse cx="26" cy="16" rx="4" ry="8" fill="#e6b84f"/><ellipse cx="38" cy="12" rx="4" ry="8" fill="#e6b84f"/><ellipse cx="50" cy="16" rx="4" ry="8" fill="#e6b84f"/>
+      <ellipse cx="36" cy="52" rx="16" ry="12" fill="#f97316" ${INK}/><path d="M36 41 L37 35" stroke="#4d7c0f" stroke-width="4"/>
+      <circle cx="60" cy="52" r="8" fill="#ef4444" ${INK}/><circle cx="73" cy="50" r="8" fill="#dc2626" ${INK}/>
+      <ellipse cx="66" cy="38" rx="5" ry="14" fill="#facc15" ${INK} transform="rotate(35 66 38)"/>
+      <path d="M58 46 Q62 30 74 26" stroke="#65a30d" stroke-width="4" fill="none"/>
+      <rect x="16" y="56" width="68" height="34" rx="3" fill="#c98b4e" ${INK}/>
+      <path d="M16 67 H84 M16 78 H84" stroke="#8b5a2b" stroke-width="2.5"/>`),
+    epouvantail: SVG(`<path d="M50 40 V97" stroke="#8b5a2b" stroke-width="5"/>
+      <path d="M14 50 H86" stroke="#8b5a2b" stroke-width="4"/>
+      <path d="M10 46 L16 50 L10 54 M90 46 L84 50 L90 54" stroke="#e6b450" stroke-width="3" fill="none"/>
+      <path d="M18 45 H82 L80 56 H66 L68 80 H32 L34 56 H20 Z" fill="#ef4444" ${INK}/>
+      <path d="M40 45 V80 M60 45 V80 M20 51 H80 M33 66 H67" stroke="#b91c1c" stroke-width="2"/>
+      <rect x="44" y="56" width="10" height="9" fill="#60a5fa" ${INK}/>
+      <path d="M36 80 L33 88 M42 80 L41 89 M58 80 L59 89 M64 80 L67 88" stroke="#e6b450" stroke-width="3"/>
+      <circle cx="50" cy="33" r="11" fill="#f3d9a4" ${INK}/>
+      <path d="M45 31 l2 2 m0 -2 l-2 2 M53 31 l2 2 m0 -2 l-2 2" stroke="#5b3a29" stroke-width="1.6"/>
+      <path d="M44 38 Q50 42 56 38" stroke="#5b3a29" stroke-width="1.8" fill="none"/>
+      <ellipse cx="50" cy="24" rx="20" ry="4.5" fill="#e6b450" ${INK}/>
+      <path d="M40 24 Q40 9 50 9 Q60 9 60 24 Z" fill="#e6b450" ${INK}/><path d="M40 20 H60" stroke="#ef4444" stroke-width="3"/>`),
+    pelerins: SVG(`<path d="M8 96 Q10 70 34 68 Q56 70 58 96 Z" fill="#475569" ${INK}/>
+      <path d="M22 70 L34 82 L46 70 Z" fill="#fff" ${INK}/>
+      <circle cx="34" cy="54" r="12" fill="#f8d9b8" ${INK}/>
+      <path d="M20 58 Q18 36 34 35 Q50 36 48 58 Q46 46 34 45 Q22 46 20 58 Z" fill="#fff" ${INK}/>
+      <circle cx="30" cy="55" r="1.6" fill="#5b3a29"/><circle cx="38" cy="55" r="1.6" fill="#5b3a29"/>
+      <path d="M31 60 Q34 62 37 60" stroke="#5b3a29" stroke-width="1.5" fill="none"/>
+      <path d="M44 96 Q46 70 68 68 Q90 70 92 96 Z" fill="#1f2937" ${INK}/>
+      <path d="M56 70 L68 80 L80 70 Z" fill="#fff" ${INK}/>
+      <circle cx="68" cy="54" r="12" fill="#f8d9b8" ${INK}/>
+      <circle cx="64" cy="55" r="1.6" fill="#5b3a29"/><circle cx="72" cy="55" r="1.6" fill="#5b3a29"/>
+      <path d="M65 60 Q68 62 71 60" stroke="#5b3a29" stroke-width="1.5" fill="none"/>
+      <ellipse cx="68" cy="43" rx="18" ry="4" fill="#111827" ${INK}/>
+      <path d="M57 43 L59 18 H77 L79 43 Z" fill="#111827" ${INK}/>
+      <rect x="58" y="34" width="20" height="5" fill="#374151"/><rect x="64" y="32" width="8" height="9" fill="none" stroke="#facc15" stroke-width="2.5"/>`),
+    corne: SVG(`<path d="M8 22 Q14 64 52 80 L60 46 Q26 46 8 22 Z" fill="#d4a056" ${INK}/>
+      <path d="M18 40 Q34 54 56 56 M26 54 Q40 64 54 68 M34 66 Q44 72 52 74" stroke="#8b5a2b" stroke-width="2" fill="none"/>
+      <ellipse cx="58" cy="63" rx="7" ry="18" fill="#8b5a2b" ${INK} transform="rotate(14 58 63)"/>
+      <circle cx="70" cy="48" r="7" fill="#7c3aed" ${INK}/><circle cx="78" cy="54" r="7" fill="#8b5cf6" ${INK}/><circle cx="70" cy="60" r="7" fill="#7c3aed" ${INK}/>
+      <circle cx="74" cy="76" r="10" fill="#ef4444" ${INK}/><path d="M74 66 L76 61" stroke="#5b3a29" stroke-width="2.5"/>
+      <path d="M88 60 Q96 72 90 82 Q84 88 80 80 Q80 70 88 60 Z" fill="#a3e635" ${INK}/>
+      <circle cx="60" cy="88" r="8" fill="#fb923c" ${INK}/>`),
+    dinde: SVG(`<ellipse cx="50" cy="80" rx="46" ry="11" fill="#e0f2fe" ${INK}/>
+      <ellipse cx="50" cy="77" rx="38" ry="7" fill="#fff"/>
+      <path d="M14 74 Q12 44 44 40 Q76 36 86 60 Q90 74 80 78 H20 Q14 78 14 74 Z" fill="#c97a3a" ${INK}/>
+      <path d="M28 52 Q40 46 54 48" stroke="#e8a66a" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M66 54 Q74 40 82 30" stroke="#a65d26" stroke-width="12" stroke-linecap="round"/>
+      <path d="M66 54 Q74 40 82 30" stroke="#c97a3a" stroke-width="8" stroke-linecap="round"/>
+      <path d="M82 30 L88 22" stroke="#f3e7d3" stroke-width="5" stroke-linecap="round"/>
+      <path d="M84 20 l6 -2 m-6 2 l1 -6 m3 4 l5 0" stroke="#fff" stroke-width="2.5"/>
+      <path d="M22 60 Q16 44 20 32" stroke="#a65d26" stroke-width="12" stroke-linecap="round"/>
+      <path d="M22 60 Q16 44 20 32" stroke="#c97a3a" stroke-width="8" stroke-linecap="round"/>
+      <path d="M20 32 L21 22" stroke="#f3e7d3" stroke-width="5" stroke-linecap="round"/>`),
+    gland: SVG(`<path d="M30 46 Q28 84 50 92 Q72 84 70 46 Z" fill="#d08c45" ${INK}/>
+      <path d="M40 56 Q39 72 46 82" stroke="#f0c48a" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M22 48 Q22 24 50 22 Q78 24 78 48 Q50 54 22 48 Z" fill="#8b5a2b" ${INK}/>
+      <path d="M30 34 l5 5 m3 -9 l5 5 m3 -7 l5 5 m3 -3 l5 5 m-28 8 l5 5 m6 -5 l5 5 m6 -5 l5 5" stroke="#5b3a29" stroke-width="2"/>
+      <path d="M50 22 Q52 12 58 8" stroke="#5b3a29" stroke-width="4" stroke-linecap="round" fill="none"/>`),
+    brechet: SVG(`<path d="M24 14 Q26 58 50 82 Q74 58 76 14" stroke="#b08c5a" stroke-width="15" stroke-linecap="round" fill="none"/>
+      <path d="M24 14 Q26 58 50 82 Q74 58 76 14" stroke="#f6ead2" stroke-width="10" stroke-linecap="round" fill="none"/>
+      <circle cx="50" cy="84" r="9" fill="#f6ead2" stroke="#b08c5a" stroke-width="2.5"/>
+      <path d="M30 26 Q32 52 46 70" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none"/>`),
+    citrouille: SVG(`<path d="M50 30 Q52 16 60 10" stroke="#4d7c0f" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <path d="M56 24 Q70 12 80 20 Q70 30 56 24 Z" fill="#65a30d" ${INK}/>
+      <ellipse cx="50" cy="62" rx="40" ry="30" fill="#f97316" ${INK}/>
+      <ellipse cx="50" cy="62" rx="24" ry="30" fill="#fb923c" ${INK}/>
+      <ellipse cx="50" cy="62" rx="9" ry="30" fill="#f97316" ${INK}/>`),
+    courge: SVG(`<path d="M46 12 Q36 14 38 38 Q22 56 30 78 Q42 96 60 88 Q76 78 66 52 Q58 38 58 20 Q56 10 46 12 Z" fill="#f2c27b" ${INK}/>
+      <path d="M50 12 L52 4" stroke="#4d7c0f" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="48" cy="76" rx="9" ry="6" fill="#e3a857"/>
+      <path d="M44 22 Q42 34 44 44" stroke="#fbe2b4" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="80" cy="80" r="13" fill="#facc15" ${INK}/>
+      <path d="M80 67 Q76 80 80 93 M80 67 Q86 80 80 93" stroke="#65a30d" stroke-width="3" fill="none"/>
+      <path d="M80 67 L82 61" stroke="#4d7c0f" stroke-width="4" stroke-linecap="round"/>`),
+  };
+
+  // fr: the word as on her worksheet; en: what it means; tip: a memory trick.
+  const FR_WORDS = [
+    { key: 'eglise', fr: 'l’église', en: 'the church', pic: '⛪', tip: 'L’église has a bell tower and a cross on top.' },
+    { key: 'automne', fr: 'l’automne', en: 'autumn (fall)', art: 'automne', tip: 'L’automne sounds like “autumn”: the season of red and orange trees.' },
+    { key: 'dindon', fr: 'le dindon', en: 'the turkey (the bird)', pic: '🦃', tip: 'Le dindon is the turkey bird with its feathers, alive and saying “glou-glou”! (La dinde is the one you eat.)' },
+    { key: 'recolte', fr: 'la récolte', en: 'the harvest', art: 'recolte', tip: 'La récolte is everything the farmer picks from the field: a big crate of food.' },
+    { key: 'epouvantail', fr: 'l’épouvantail', en: 'the scarecrow', art: 'epouvantail', tip: '“Épouvanter” means “to scare”. L’épouvantail scares the birds away!' },
+    { key: 'pelerins', fr: 'les pèlerins', en: 'the pilgrims', art: 'pelerins', tip: 'Les pèlerins sounds a bit like “pilgrims”: the people with the tall black hat and the white bonnet.' },
+    { key: 'corne', fr: 'la corne d’abondance', en: 'the cornucopia (horn of plenty)', art: 'corne', tip: 'Une corne is a horn. La corne d’abondance is the horn full of fruit.' },
+    { key: 'dinde', fr: 'la dinde', en: 'the turkey (to eat)', art: 'dinde', tip: 'La dinde is the roast turkey on the dinner table. (Le dindon is the live bird.)' },
+    { key: 'aborigenes', fr: 'les aborigènes', en: 'Indigenous peoples', pic: '🪶', tip: 'Les aborigènes are the First Peoples of Canada. Look for the feather.' },
+    { key: 'gland', fr: 'un gland', en: 'an acorn', art: 'gland', tip: 'Un gland is the little nut with a hat that squirrels love.' },
+    { key: 'tarte', fr: 'la tarte', en: 'the pie', pic: '🥧', tip: 'La tarte sounds like “tart”: a yummy pie!' },
+    { key: 'brechet', fr: 'le bréchet', en: 'the wishbone', art: 'brechet', tip: 'You “break” le bréchet to make a wish: bré-chet!' },
+    { key: 'citrouille', fr: 'une citrouille', en: 'a pumpkin', art: 'citrouille', tip: 'Une citrouille is big, round and orange, like a giant citrus fruit!' },
+    { key: 'courge', fr: 'la courge', en: 'the squash', art: 'courge', tip: 'La courge sounds like “gourd”: the long squash, not the round pumpkin.' },
+    { key: 'panier', fr: 'le panier', en: 'the basket', pic: '🧺', tip: '“Pain” means bread. Le panier is a basket you could carry bread in!' },
+    { key: 'mais', fr: 'le maïs', en: 'the corn', pic: '🌽', tip: 'Le maïs sounds like “maize”, another word for corn.' },
+    { key: 'feuilles', fr: 'les feuilles', en: 'the leaves', pic: '🍂', tip: 'Les feuilles fall from the trees in l’automne.' },
+    { key: 'ecureuil', fr: 'un écureuil', en: 'a squirrel', pic: '🐿️', tip: 'Un écureuil has a big curly tail and hides glands (acorns)!' },
+  ];
+  const FR_BY_KEY = Object.fromEntries(FR_WORDS.map((w) => [w.key, w]));
+  // Words that are easy to mix up are often shown together.
+  const FR_TRICKY = [['dinde', 'dindon'], ['citrouille', 'courge'], ['automne', 'feuilles'], ['recolte', 'corne'], ['recolte', 'panier'],
+    ['pelerins', 'aborigenes'], ['gland', 'ecureuil'], ['tarte', 'citrouille'], ['mais', 'recolte'], ['epouvantail', 'pelerins']];
+  const frPic = (w, cls = '') => `<span class="fr-pic ${cls}" role="img" aria-label="${w.en}">${w.art ? FR_ART[w.art] : `<span class="fr-emoji">${w.pic}</span>`}</span>`;
+  const frSayWord = (w) => say([`fr/${w.key}`], [[w.fr.replace(/’/g, "'"), 0.8, 'fr-CA']]);
+  const frStat = (key) => S.fr[key];
+  function recordFr(key, ok) {
+    const st = S.fr[key] || (S.fr[key] = { right: 0, total: 0 });
+    st.total++; if (ok) st.right++;
+    save();
+  }
+  // Words she misses come up more often.
+  function pickFrWords(n, avoid = []) {
+    const weight = (w) => { const st = frStat(w.key); return 1 + (st ? (st.total - st.right) * 2 : 1); };
+    const pool = FR_WORDS.filter((w) => !avoid.includes(w.key)), out = [];
+    while (out.length < n && pool.length) {
+      let r = Math.random() * pool.reduce((a, w) => a + weight(w), 0), i = 0;
+      for (; i < pool.length - 1; i++) { r -= weight(pool[i]); if (r <= 0) break; }
+      out.push(pool.splice(i, 1)[0]);
+    }
+    return out;
+  }
+  function frDistractors(target, n, tricky) {
+    const out = [];
+    if (tricky) for (const pair of shuffle(FR_TRICKY)) if (pair.includes(target.key) && out.length < 1) out.push(FR_BY_KEY[pair.find((k) => k !== target.key)]);
+    for (const w of shuffle(FR_WORDS)) if (out.length < n && w !== target && !out.includes(w)) out.push(w);
+    return out;
+  }
+  const frExplain = (w) => `<div class="fr-answer">${frPic(w, 'sm')}<div><b class="fr-big">${w.fr}</b><br><small>${w.en}</small></div></div>${w.tip}`;
+
+  function frQuestion(level) {
+    const recent = (n) => (R && R.used ? R.used.slice(-n) : []);
+    if (level >= 3) return frMatch(pickFrWords(5, recent(10)), false);
+    const target = pickFrWords(1, recent(4))[0];
+    const wordToPic = level >= 2 && Math.random() < 0.5;
+    const choices = shuffle([target, ...frDistractors(target, level <= 1 ? 2 : 3, level >= 2)]);
+    const base = { kind: 'mc', fr: target.key, answer: target.key, hint: target.tip, explain: frExplain(target) };
+    if (wordToPic) {
+      return {
+        ...base, layout: 'pics', visual: `<div class="word-tag fr-tag">${target.fr}</div>`,
+        prompt: 'Écoute! Which picture matches the French word?', autoSay: true,
+        speak: 'Which picture matches the French word?', voice: ['line/fr-word', `fr/${target.key}`],
+        speakParts: [['Which picture matches the French word?', 0.9], [target.fr.replace(/’/g, "'"), 0.8, 'fr-CA']],
+        choices: choices.map((w) => ({ value: w.key, label: frPic(w) })),
+      };
+    }
+    return {
+      ...base, layout: 'fr-words', visual: frPic(target, 'big'),
+      prompt: 'Quel mot? Which French word matches the picture?', speak: 'Which French word matches the picture?', voice: ['line/fr-pic'],
+      choices: choices.map((w) => ({ value: w.key, label: `<span class="fr-word">${w.fr}</span>` })),
+    };
+  }
+
+  // Like the test: match every word to its picture.
+  function frMatch(words, test) {
+    const keys = words.map((w) => w.key);
+    return {
+      kind: 'match', keys, pics: shuffle(keys), words: shuffle(keys), test,
+      prompt: 'Match each French word to its picture. Tap a picture, then its word.',
+      speak: 'Match each French word to its picture.', voice: ['line/fr-match'],
+      explain: '',
+    };
+  }
+
+  function matchBody(q) {
+    return `
+      <div class="play match-play">
+        <div class="q-card"><p class="prompt">${q.prompt} ${canSpeak ? '<button class="say" id="sayBtn" aria-label="Read it to me">🔊</button>' : ''}</p></div>
+        <div class="match-board">
+          <div class="match-col">${q.pics.map((k) => `<button class="match-card m-pic" data-k="${k}">${frPic(FR_BY_KEY[k])}</button>`).join('')}</div>
+          <div class="match-col">${q.words.map((k) => `<button class="match-card m-word" data-k="${k}">${FR_BY_KEY[k].fr}</button>`).join('')}</div>
+        </div>
+      </div>`;
+  }
+
+  function wireMatch() {
+    const q = R.q, missed = new Set(), tries = {};
+    let sel = null, done = 0, mistakes = 0;
+    const card = (side, k) => screen.querySelector(`.match-card.${side}[data-k="${k}"]`);
+    const pair = (k, how) => {
+      done++;
+      [card('m-pic', k), card('m-word', k)].forEach((el) => { el.classList.remove('sel'); el.classList.add(how, `c${done % 6}`); el.disabled = true; el.dataset.n = done; });
+      frSayWord(FR_BY_KEY[k]);
+      if (done === q.keys.length) {
+        q.keys.forEach((key) => { recordFr(key, !missed.has(key)); if (R.test) R.results.push({ key, ok: !missed.has(key) }); });
+        R.attempts = mistakes ? 1 : 0;
+        q.explain = `${mistakes ? `${mistakes} mix-up${mistakes > 1 ? 's' : ''}. Keep practising the ones with a ✘!` : 'All matched on the first try!'}<div class="fr-recap">${q.keys.map((key) => `<span class="${missed.has(key) ? 'miss' : ''}">${missed.has(key) ? '✘' : '✔'} ${frPic(FR_BY_KEY[key], 'xs')} ${FR_BY_KEY[key].fr}</span>`).join('')}</div>`;
+        setTimeout(onCorrect, 500);
+      }
+    };
+    screen.querySelectorAll('.match-card').forEach((el) => {
+      el.onclick = () => {
+        if (R.locked || el.disabled) return;
+        const side = el.classList.contains('m-pic') ? 'm-pic' : 'm-word';
+        if (!sel || sel.side === side) {
+          screen.querySelectorAll('.match-card.sel').forEach((x) => x.classList.remove('sel'));
+          el.classList.add('sel'); sel = { side, k: el.dataset.k, el }; sfx.tap();
+          if (side === 'm-word') frSayWord(FR_BY_KEY[el.dataset.k]);
+          return;
+        }
+        const picKey = side === 'm-pic' ? el.dataset.k : sel.k, wordKey = side === 'm-word' ? el.dataset.k : sel.k;
+        const other = sel.el; sel = null;
+        if (picKey === wordKey) { sfx.coin(); pair(picKey, 'matched'); return; }
+        mistakes++; missed.add(picKey); missed.add(wordKey); sfx.bad();
+        [el, other].forEach((x) => { x.classList.remove('sel'); x.classList.add('nope'); setTimeout(() => x.classList.remove('nope'), 600); });
+        tries[picKey] = (tries[picKey] || 0) + 1;
+        // Practice: after two mix-ups with the same picture, show the right word.
+        if (!R.test && tries[picKey] >= 2) { toast(`That one is <b>${FR_BY_KEY[picKey].fr}</b>`); setTimeout(() => pair(picKey, 'revealed'), 700); }
+        else toast(pick(['Not that one, try again!', 'Oops, look again!', 'Almost! Try another word.']));
+      };
+    });
+    if (canSpeak) $('#sayBtn').onclick = () => say(q.voice, [[q.speak]]);
+    if (S.autoRead) say(q.voice, [[q.speak]]);
+  }
+
+  // Practice test: all 18 words in boards of 6, like the real test.
+  function startFrTest() {
+    const order = shuffle(FR_WORDS), boards = [];
+    for (let i = 0; i < order.length; i += 6) boards.push(order.slice(i, i + 6));
+    R = { id: 'french', test: true, boards, results: [], index: 0, firstTries: 0, coins: 0, len: boards.length, used: [],
+      testQ: (i) => frMatch(boards[i], true), testEnd: renderFrTestEnd };
+    nextQuestion();
+  }
+
+  function renderFrHome() {
+    const g = GAMES.french, lv = levelOf('french');
+    const cards = FR_WORDS.map((w, i) => {
+      const st = frStat(w.key);
+      const cls = !st ? '' : st.right === st.total ? 'ok' : st.right / st.total >= 0.5 ? 'mid' : 'low';
+      return `<button class="fr-card ${cls}" data-i="${i}">${frPic(w)}<b>${w.fr}</b><small class="fr-en">${w.en}</small></button>`;
+    }).join('');
+    setScreen(`
+      <section class="spell-home fr-home">
+        <div class="guide">${avatar('lg')}<p class="bubble">Bonjour! The autumn market is open for <b>l’Action de grâces</b>. Learn your French words for the test! 🍂</p></div>
+        <div class="spell-modes">
+          <button class="mode-card c-orange" id="practiceBtn"><span class="mode-emoji">🍁</span><b>Practice</b><small>5 questions · ${g.levels[lv].label}</small></button>
+          <button class="mode-card c-purple" id="testBtn"><span class="mode-emoji">📝</span><b>Practice test</b><small>Match all ${FR_WORDS.length} words to their pictures, just like the test</small></button>
+        </div>
+        <h3>Study the words <label class="en-toggle"><input type="checkbox" id="enToggle" ${S.frEnglish === false ? '' : 'checked'}> Show English</label></h3>
+        <p class="subtle">Tap a card to hear the word in French. Colours show how you're doing: <span class="ok-txt">green</span> = always right, <span class="mid-txt">yellow</span> = sometimes, <span class="bad-txt">red</span> = needs practice.</p>
+        <div class="fr-cards ${S.frEnglish === false ? 'no-en' : ''}">${cards}</div>
+      </section>`, { title: g.name });
+    $('#practiceBtn').onclick = () => { sfx.tap(); startRound('french'); };
+    $('#testBtn').onclick = () => { sfx.tap(); startFrTest(); };
+    $('#enToggle').onchange = (e) => { S.frEnglish = e.target.checked; save(); $('.fr-cards').classList.toggle('no-en', !e.target.checked); };
+    screen.querySelectorAll('.fr-card').forEach((b) => { b.onclick = () => frSayWord(FR_WORDS[+b.dataset.i]); });
+  }
+
+  function renderFrTestEnd() {
+    const n = R.results.length, right = R.results.filter((r) => r.ok).length;
+    const bonus = right * 2;
+    S.coins += bonus;
+    save();
+    const pct = n ? right / n : 0;
+    const msg = pct === 1 ? 'Parfait! You are ready for your test! 🎉' : pct >= 0.8 ? 'Très bien! Almost there!' : 'Good practice! Keep going!';
+    const rows = R.results.map((r) => { const w = FR_BY_KEY[r.key]; return `<li class="${r.ok ? 'ok' : 'bad'}"><span>${r.ok ? '✔' : '✘'}</span>${frPic(w, 'xs')}<b>${w.fr}</b></li>`; }).join('');
+    setScreen(`
+      <section class="round-end test-end">
+        ${avatar('xl')}
+        <h2>${msg}</h2>
+        <p>You matched <b>${right} of ${n}</b> words on the first try.</p>
+        <ul class="test-results fr-results">${rows}</ul>
+        <div class="coin-total">🪙 ${R.coins} + ${bonus} bonus = <b>${R.coins + bonus} Sparkle Coins</b></div>
+        <div class="actions">
+          <button class="btn primary big" id="againBtn">Take the test again</button>
+          <button class="btn ghost big" id="mallBtn">Back to the Marché d’automne</button>
+        </div>
+      </section>`, { title: 'Practice test' });
+    sfx.fanfare();
+    if (pct === 1) confetti();
+    $('#againBtn').onclick = startFrTest;
+    $('#mallBtn').onclick = renderFrHome;
   }
 
   // ---------- Step-by-step questions (Receipt Counter, Display Window) ----------

@@ -23,6 +23,78 @@
 "cheer/7": {
 "text": "Wow, great thinking!"
 },
+"fr/aborigenes": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Les aborig\u00e8nes."
+},
+"fr/automne": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "L'automne."
+},
+"fr/brechet": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Le br\u00e9chet."
+},
+"fr/citrouille": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Une citrouille."
+},
+"fr/corne": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "La corne d'abondance."
+},
+"fr/courge": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "La courge."
+},
+"fr/dinde": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "La dinde."
+},
+"fr/dindon": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Le dindon."
+},
+"fr/ecureuil": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Un \u00e9cureuil."
+},
+"fr/eglise": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "L'\u00e9glise."
+},
+"fr/epouvantail": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "L'\u00e9pouvantail."
+},
+"fr/feuilles": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Les feuilles."
+},
+"fr/gland": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Un gland."
+},
+"fr/mais": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Le ma\u00efs."
+},
+"fr/panier": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Le panier."
+},
+"fr/pelerins": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "Les p\u00e8lerins."
+},
+"fr/recolte": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "La r\u00e9colte."
+},
+"fr/tarte": {
+"prev": "Voici un mot en fran\u00e7ais :",
+"text": "La tarte."
+},
 "line/add-hundreds": {
 "text": "Add the hundreds."
 },
@@ -275,6 +347,16 @@
 },
 "line/fact-tens-9": {
 "text": "How many ten-dollar bills make nine hundred dollars?"
+},
+"line/fr-match": {
+"text": "Match each French word to its picture."
+},
+"line/fr-pic": {
+"text": "Which French word matches the picture?"
+},
+"line/fr-word": {
+"next": "La citrouille.",
+"text": "Listen! Which picture matches this French word?"
 },
 "line/pat-added": {
 "text": "How many are added each time?"
