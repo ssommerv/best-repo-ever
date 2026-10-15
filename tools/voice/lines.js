@@ -124,6 +124,10 @@
     'line/sub-missing': { text: 'Thinking cap time! What are the missing digits?' },
     'line/sub-missing-2': { text: 'Thinking cap time! Some digits rubbed off the gift card. Which digits are missing?' },
     'line/sub-missing-3': { text: 'Thinking cap time! Find the hidden digits that make the subtraction true.' },
+    // Marché d'automne (French words). The French words themselves come from FR_WORDS in app.js.
+    'line/fr-pic': { text: 'Which French word matches the picture?' },
+    'line/fr-word': { text: 'Listen! Which picture matches this French word?', next: 'La citrouille.' },
+    'line/fr-match': { text: 'Match each French word to its picture.' },
     // Display Window (addition patterns and code).
     'line/pat-jump': { text: 'How much is added each time?' },
     'line/pat-rule': { text: 'Write the pattern rule.' },
