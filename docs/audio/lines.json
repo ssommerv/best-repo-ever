@@ -23,78 +23,6 @@
 "cheer/7": {
 "text": "Wow, great thinking!"
 },
-"fr/aborigenes": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Les aborig\u00e8nes."
-},
-"fr/automne": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "L'automne."
-},
-"fr/brechet": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Le br\u00e9chet."
-},
-"fr/citrouille": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Une citrouille."
-},
-"fr/corne": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "La corne d'abondance."
-},
-"fr/courge": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "La courge."
-},
-"fr/dinde": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "La dinde."
-},
-"fr/dindon": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Le dindon."
-},
-"fr/ecureuil": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Un \u00e9cureuil."
-},
-"fr/eglise": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "L'\u00e9glise."
-},
-"fr/epouvantail": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "L'\u00e9pouvantail."
-},
-"fr/feuilles": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Les feuilles."
-},
-"fr/gland": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Un gland."
-},
-"fr/mais": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Le ma\u00efs."
-},
-"fr/panier": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Le panier."
-},
-"fr/pelerins": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "Les p\u00e8lerins."
-},
-"fr/recolte": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "La r\u00e9colte."
-},
-"fr/tarte": {
-"prev": "Voici un mot en fran\u00e7ais :",
-"text": "La tarte."
-},
 "line/add-hundreds": {
 "text": "Add the hundreds."
 },
@@ -347,16 +275,6 @@
 },
 "line/fact-tens-9": {
 "text": "How many ten-dollar bills make nine hundred dollars?"
-},
-"line/fr-match": {
-"text": "Match each French word to its picture."
-},
-"line/fr-pic": {
-"text": "Which French word matches the picture?"
-},
-"line/fr-word": {
-"next": "La citrouille.",
-"text": "Listen! Which picture matches this French word?"
 },
 "line/pat-added": {
 "text": "How many are added each time?"
@@ -4547,199 +4465,199 @@
 "prev": "It costs exactly",
 "text": "nine hundred ninety-nine dollars."
 },
-"slow/above": {
+"slow/added": {
 "speed": 0.75,
-"text": "above."
+"text": "added."
 },
-"slow/alike": {
+"slow/balloon": {
 "speed": 0.75,
-"text": "alike."
+"text": "balloon."
 },
-"slow/alive": {
+"slow/carry": {
 "speed": 0.75,
-"text": "alive."
+"text": "carry."
 },
-"slow/blew": {
+"slow/different": {
 "speed": 0.75,
-"text": "blew."
+"text": "different."
 },
-"slow/blue": {
+"slow/letter": {
 "speed": 0.75,
-"text": "blue."
+"text": "letter."
 },
-"slow/do": {
+"slow/middle": {
 "speed": 0.75,
-"text": "do."
+"text": "middle."
 },
-"slow/give": {
+"slow/missed": {
 "speed": 0.75,
-"text": "give."
+"text": "missed."
 },
-"slow/have": {
+"slow/mississippi": {
 "speed": 0.75,
-"text": "have."
+"text": "mississippi."
 },
-"slow/knew": {
+"slow/off": {
 "speed": 0.75,
-"text": "knew."
+"text": "off."
 },
-"slow/live": {
+"slow/pattern": {
 "speed": 0.75,
-"text": "liv."
+"text": "pattern."
 },
-"slow/move": {
+"slow/pretty": {
 "speed": 0.75,
-"text": "move."
+"text": "pretty."
 },
-"slow/save": {
+"slow/spelling": {
 "speed": 0.75,
-"text": "save."
+"text": "spelling."
 },
-"slow/to": {
+"slow/still": {
 "speed": 0.75,
-"text": "to."
+"text": "still."
 },
-"slow/too": {
+"slow/willing": {
 "speed": 0.75,
-"text": "too."
+"text": "willing."
 },
-"slow/two": {
+"slow/zipper": {
 "speed": 0.75,
-"text": "two."
+"text": "zipper."
 },
-"spell/above": {
-"text": "Above. The sale sign is above the door. above."
+"spell/added": {
+"text": "Added. I added a bow to the present. added."
 },
-"spell/above-2": {
-"text": "Above. The lights hang above the toy shelves. above."
+"spell/added-2": {
+"text": "Added. Mom added up all the prices. added."
 },
-"spell/above-3": {
-"text": "Above. Look at the balloons floating above the food court! above."
+"spell/added-3": {
+"text": "Added. We added sprinkles to our ice cream. added."
 },
-"spell/alike": {
-"text": "Alike. These two dresses look alike. alike."
+"spell/balloon": {
+"text": "Balloon. I got a red balloon at the toy store. balloon."
 },
-"spell/alike-2": {
-"text": "Alike. My sister and I have shoes that look alike. alike."
+"spell/balloon-2": {
+"text": "Balloon. The balloon floated up to the mall ceiling. balloon."
 },
-"spell/alike-3": {
-"text": "Alike. The twins wore hats that were alike. alike."
+"spell/balloon-3": {
+"text": "Balloon. Hold the balloon string tight! balloon."
 },
-"spell/alive": {
-"text": "Alive. The plants at the flower shop are alive and need water. alive."
+"spell/carry": {
+"text": "Carry. Can you help me carry the shopping bags? carry."
 },
-"spell/alive-2": {
-"text": "Alive. Is that crab at the pet store alive? Yes, it moved! alive."
+"spell/carry-2": {
+"text": "Carry. I carry my wallet in my purse. carry."
 },
-"spell/alive-3": {
-"text": "Alive. Water keeps the flowers alive. alive."
+"spell/carry-3": {
+"text": "Carry. The cart can carry lots of groceries. carry."
 },
-"spell/blew": {
-"text": "Blew. The wind blew my shopping bag away! blew."
+"spell/different": {
+"text": "Different. I want a different colour of shoes. different."
 },
-"spell/blew-2": {
-"text": "Blew. I blew a big bubble with my new gum. blew."
+"spell/different-2": {
+"text": "Different. Every store sells something different. different."
 },
-"spell/blew-3": {
-"text": "Blew. She blew out the candles on her birthday cake. blew."
+"spell/different-3": {
+"text": "Different. These two shirts look different. different."
 },
-"spell/blue": {
-"text": "Blue. I want the blue backpack. blue."
+"spell/letter": {
+"text": "Letter. I wrote a letter to Grandma. letter."
 },
-"spell/blue-2": {
-"text": "Blue. Her new nail polish is bright blue. blue."
+"spell/letter-2": {
+"text": "Letter. The store sign starts with the letter H. letter."
 },
-"spell/blue-3": {
-"text": "Blue. The sky outside the mall is blue today. blue."
+"spell/letter-3": {
+"text": "Letter. Put the letter in the mailbox. letter."
 },
-"spell/do": {
-"text": "Do. What do you want to buy? do."
+"spell/middle": {
+"text": "Middle. The fountain is in the middle of the mall. middle."
 },
-"spell/do-2": {
-"text": "Do. Do you like this sparkly hat? do."
+"spell/middle-2": {
+"text": "Middle. I sat in the middle seat. middle."
 },
-"spell/do-3": {
-"text": "Do. I do my best when I count the coins. do."
+"spell/middle-3": {
+"text": "Middle. Put the cherry in the middle of the cake. middle."
 },
-"spell/give": {
-"text": "Give. I will give the cashier ten dollars. give."
+"spell/missed": {
+"text": "Missed. I missed the bus, so we got to the mall late. missed."
 },
-"spell/give-2": {
-"text": "Give. Can you give me a shopping bag, please? give."
+"spell/missed-2": {
+"text": "Missed. She missed the big sale on sparkly shoes. missed."
 },
-"spell/give-3": {
-"text": "Give. Let\u2019s give Grandma a present from the gift shop. give."
+"spell/missed-3": {
+"text": "Missed. I missed you while you were shopping! missed."
 },
-"spell/have": {
-"text": "Have. Do you have this dress in my size? have."
+"spell/mississippi": {
+"text": "Mississippi. The Mississippi is a very long river. mississippi."
 },
-"spell/have-2": {
-"text": "Have. I have five dollars to spend at the mall. have."
+"spell/mississippi-2": {
+"text": "Mississippi. I found a map of the Mississippi River at the bookstore. mississippi."
 },
-"spell/have-3": {
-"text": "Have. We have to find the pet store. have."
+"spell/mississippi-3": {
+"text": "Mississippi. We saw a big boat on the Mississippi in a movie. mississippi."
 },
-"spell/knew": {
-"text": "Knew. I knew the toy store was upstairs. knew."
+"spell/off": {
+"text": "Off. Please turn off the light. off."
 },
-"spell/knew-2": {
-"text": "Knew. She knew how much change to give back. knew."
+"spell/off-2": {
+"text": "Off. Everything is ten dollars off today! off."
 },
-"spell/knew-3": {
-"text": "Knew. We knew the bakery had fresh cookies. knew."
+"spell/off-3": {
+"text": "Off. I took off my wet boots at the door. off."
 },
-"spell/live": {
-"text": "Liv. The bunnies live in a big pen at the pet store. liv."
+"spell/pattern": {
+"text": "Pattern. My new dress has a flower pattern. pattern."
 },
-"spell/live-2": {
-"text": "Liv. My friend and I live near the mall. liv."
+"spell/pattern-2": {
+"text": "Pattern. The floor tiles make a pattern. pattern."
 },
-"spell/live-3": {
-"text": "Liv. Do the fish live in that tank all day? liv."
+"spell/pattern-3": {
+"text": "Pattern. Can you find the pattern on the wrapping paper? pattern."
 },
-"spell/move": {
-"text": "Move. The escalator stairs move up to the second floor. move."
+"spell/pretty": {
+"text": "Pretty. That is a pretty dress! pretty."
 },
-"spell/move-2": {
-"text": "Move. Please move your cart so people can walk by. move."
+"spell/pretty-2": {
+"text": "Pretty. She bought a pretty hair bow. pretty."
 },
-"spell/move-3": {
-"text": "Move. Help me move the big box to the car. move."
+"spell/pretty-3": {
+"text": "Pretty. The mall looks pretty with all the lights. pretty."
 },
-"spell/save": {
-"text": "Save. I want to save my coins for the toy store. save."
+"spell/spelling": {
+"text": "Spelling. I practise my spelling words in the car. spelling."
 },
-"spell/save-2": {
-"text": "Save. Put your money in the piggy bank to save it. save."
+"spell/spelling-2": {
+"text": "Spelling. The bookstore sells a fun spelling game. spelling."
 },
-"spell/save-3": {
-"text": "Save. We can save money when the shoes are on sale. save."
+"spell/spelling-3": {
+"text": "Spelling. My spelling test is on Friday. spelling."
 },
-"spell/to": {
-"text": "To. We are going to the mall today. to."
+"spell/still": {
+"text": "Still. Are you still hungry after lunch? still."
 },
-"spell/to-2": {
-"text": "To. I gave the money to the cashier. to."
+"spell/still-2": {
+"text": "Still. Stand still while I take your picture. still."
 },
-"spell/to-3": {
-"text": "To. Let\u2019s walk to the food court. to."
+"spell/still-3": {
+"text": "Still. The toy store is still open! still."
 },
-"spell/too": {
-"text": "Too. I want ice cream too! too."
+"spell/willing": {
+"text": "Willing. Are you willing to share your popcorn? willing."
 },
-"spell/too-2": {
-"text": "Too. Can my friend come shopping too? too."
+"spell/willing-2": {
+"text": "Willing. Dad was willing to carry all the bags. willing."
 },
-"spell/too-3": {
-"text": "Too. Dad bought a hat, and Mom got one too. too."
+"spell/willing-3": {
+"text": "Willing. I am willing to wait in line for ice cream. willing."
 },
-"spell/two": {
-"text": "Two. I bought two cupcakes at the bakery. two."
+"spell/zipper": {
+"text": "Zipper. The zipper on my backpack is stuck! zipper."
 },
-"spell/two-2": {
-"text": "Two. The sticker costs two dollars. two."
+"spell/zipper-2": {
+"text": "Zipper. My new coat has a pink zipper. zipper."
 },
-"spell/two-3": {
-"text": "Two. Mom is carrying two shopping bags. two."
+"spell/zipper-3": {
+"text": "Zipper. Pull the zipper all the way up. zipper."
 }
 }
