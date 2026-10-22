@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '15 (Oct 20, 2026)';
+  const APP_VERSION = '16 (Oct 22, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -654,11 +654,11 @@
   };
   GAMES.patterns = {
     name: 'Display Window', emoji: '🎀', color: 'purple',
-    skill: 'Addition patterns and code',
-    maxLevel: 3,
+    skill: 'Add & subtract patterns and code',
+    maxLevel: 3, chip: 'New: Subtraction patterns',
     levels: {
-      1: { label: 'Learn: patterns step by step', short: 'Learn it' },
-      2: { label: 'On your own: number patterns', short: 'On your own' },
+      1: { label: 'Learn: find the pattern step by step', short: 'Learn it' },
+      2: { label: 'On your own: number patterns & stories', short: 'On your own' },
       3: { label: 'On your own: shapes and code', short: 'Shapes & code' },
     },
     make: (level) => patternQuestion(level),
@@ -666,7 +666,7 @@
   GAMES.subtract = {
     name: 'Gift Card Desk', emoji: '🎁', color: 'teal',
     skill: 'Subtract up to 1000 with regrouping',
-    maxLevel: 4, chip: 'New: Chapter 3',
+    maxLevel: 4, chip: 'Chapter 3',
     levels: {
       1: { label: 'Learn: subtract step by step', short: 'Learn it' },
       2: { label: 'On your own: regroup once', short: 'On your own' },
@@ -686,9 +686,11 @@
     make: (level) => changeQuestion(level),
     home: () => renderRoom(), homeLabel: 'Back to My Boutique',
   };
+  // Stores she has finished with. Their code stays, so they can come back: remove the id here.
+  for (const id of ['register', 'tagmaker']) GAMES[id].archived = true;
   // What she's learning now comes first in the mall.
-  const CURRENT = ['subtract', 'receipt', 'patterns'];
-  const GAME_IDS = [...CURRENT, ...Object.keys(GAMES).filter((id) => !CURRENT.includes(id) && !GAMES[id].featured && !GAMES[id].hidden)];
+  const CURRENT = ['patterns', 'subtract', 'receipt'];
+  const GAME_IDS = [...CURRENT, ...Object.keys(GAMES).filter((id) => !CURRENT.includes(id) && !GAMES[id].featured && !GAMES[id].hidden && !GAMES[id].archived)];
   const ALL_IDS = ['spelling', ...GAME_IDS, 'sell'];
   const maxLevel = (id) => GAMES[id].maxLevel || 3;
   const levelInfo = (id, lv) => (GAMES[id].levels || LEVELS)[lv];
@@ -772,6 +774,15 @@
   const DEFAULT = { started: false, name: '', coins: 0, levels: {}, streaks: {}, stats: {}, owned: [], walls: ['pink'], wall: 'pink', sound: true, autoRead: false, spell: {}, spellList: null, inv: {}, shelves: [], shelfCount: 2 };
   const fresh = () => JSON.parse(JSON.stringify(DEFAULT));
   let S = load();
+  // One-time changes a grown-up asked for. Each runs once on each device.
+  const ONE_TIME = {
+    'patterns-subtraction': () => { S.levels.patterns = 1; S.streaks.patterns = 0; }, // Display Window back to Learn for Lesson 6
+  };
+  S.done = S.done || [];
+  if (Object.keys(ONE_TIME).some((id) => !S.done.includes(id))) {
+    for (const [id, fn] of Object.entries(ONE_TIME)) if (!S.done.includes(id)) { if (S.started) fn(); S.done.push(id); }
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* storage unavailable */ }
+  }
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
@@ -1679,16 +1690,54 @@
     };
   }
 
-  // ----- Display Window: addition patterns -----
+  // ----- Display Window: addition and subtraction patterns (Chapter 2 Lesson 5, Chapter 3 Lesson 6) -----
+  // A pattern goes up (add) or down (subtract) by the same jump each time. k is that jump with
+  // its sign: +5 for "add 5", -5 for "subtract 5". The book: "This is a decreasing pattern. Each
+  // number is 2 less than the number before it. Pattern rule: Start at 96, and subtract 2 each time."
   const PAT_EMOJI = ['🎁', '🧁', '👜', '⭐', '🌸', '🧸', '🍩', '🎈', '💎', '🦋', '🍓', '🎀', '🌈', '🐠', '🍪', '👑', '🌻', '🦄'];
   // Where the number patterns show up in the mall.
-  const PAT_PLACES = ['The sale sign numbers grow in a pattern!', 'The parking spots are numbered in a pattern!',
+  const PAT_UP = ['The sale sign numbers grow in a pattern!', 'The parking spots are numbered in a pattern!',
     'The lockers at the ice rink are numbered in a pattern!', 'The raffle tickets are numbered in a pattern!',
     'The prize counter points grow in a pattern!', 'The elevator buttons skip in a pattern!'];
+  const PAT_DOWN = ['The sale prices drop in a pattern!', 'The countdown to the big sale goes down in a pattern!',
+    'The parking spots are numbered in a pattern!', 'The cupcakes left at the bakery go down in a pattern!',
+    'The lockers at the ice rink are numbered in a pattern!', 'The gift cards left at the desk go down in a pattern!'];
   const CODE_JOBS = ['number the sale tags', 'count the shopping carts', 'number the raffle tickets', 'count the gift boxes', 'number the parking spots', 'count coins in the fountain'];
+  const opWord = (k) => (k > 0 ? 'add' : 'subtract');
+  const opSign = (k) => (k > 0 ? '+' : '−');
+  const patRule = (s, k) => `Pattern rule: Start at ${s}, and ${opWord(k)} ${Math.abs(k)} each time.`;
+  const patTerms = (s, k, n) => Array.from({ length: n }, (_, i) => s + i * k);
 
-  function seqBoard(terms, d, shown, opts = {}) {
-    return `<div class="seq">${terms.map((t, i) => `${i ? `<span class="jump">+${opts.hideJump ? '?' : d}</span>` : ''}<span class="seq-term">${shown.includes(i) ? t : bx(`n${i}`)}</span>`).join('')}</div>`;
+  // A start for n terms with jump k that stays between 0 and 999.
+  function patStart(k, n, level) {
+    const span = Math.abs(k) * (n - 1);
+    if (k > 0) {
+      let s; do { s = level <= 1 ? pick([0, rand(1, 60), rand(100, 400), rand(1, 8) * 100]) : rand(0, 800); } while (s + span > 999);
+      return s;
+    }
+    let s; do { s = level <= 1 ? pick([rand(span, span + 60), rand(1, 9) * 100, rand(span, 999), 1000]) : pick([rand(span, 999), rand(span, 999), 1000]); } while (s - span < 0);
+    return s;
+  }
+
+  function seqBoard(terms, k, shown, opts = {}) {
+    return `<div class="seq">${terms.map((t, i) => `${i ? `<span class="jump">${opts.hideJump ? '?' : `${opSign(k)}${Math.abs(k)}`}</span>` : ''}<span class="seq-term">${shown.includes(i) ? t : bx(`n${i}`)}</span>`).join('')}</div>`;
+  }
+
+  // The book's number line: smallest number on the left, jumps drawn as arcs.
+  function patLine(terms, k, shown, hideJump) {
+    const n = terms.length, W = 520, x = (p) => 36 + p * ((W - 72) / (n - 1));
+    const pos = (i) => (k > 0 ? i : n - 1 - i);
+    const arcs = terms.slice(1).map((_, i) => {
+      const x1 = x(pos(i)), x2 = x(pos(i + 1)), mid = (x1 + x2) / 2, dir = x2 > x1 ? 1 : -1;
+      return `<path d="M${x1} 58 Q${mid} 18 ${x2 - dir * 4} 56" fill="none" stroke="#ec4899" stroke-width="2.5"/>
+        <path d="M${x2 - dir * 4} 56 l${-dir * 9} -5 M${x2 - dir * 4} 56 l${-dir * 2} -10" stroke="#ec4899" stroke-width="2.5" fill="none"/>
+        <text x="${mid}" y="30" text-anchor="middle" class="pl-jump">${hideJump ? '?' : `${opSign(k)}${Math.abs(k)}`}</text>`;
+    }).join('');
+    const ticks = terms.map((t, i) => `<line x1="${x(pos(i))}" y1="62" x2="${x(pos(i))}" y2="78" stroke="#3b1f4a" stroke-width="2.5"/>
+      <text x="${x(pos(i))}" y="100" text-anchor="middle" class="${shown.includes(i) ? 'pl-num' : 'pl-q'}">${shown.includes(i) ? t : '?'}</text>`).join('');
+    return `<svg class="pat-line" viewBox="0 0 ${W} 110" role="img" aria-label="Number line">
+      <line x1="12" y1="70" x2="${W - 12}" y2="70" stroke="#3b1f4a" stroke-width="2.5"/>
+      <path d="M12 70 l10 -6 v12 z M${W - 12} 70 l-10 -6 v12 z" fill="#3b1f4a"/>${arcs}${ticks}</svg>`;
   }
 
   function figuresBoard(start, d, emoji, count, guided) {
@@ -1704,73 +1753,112 @@
     return `<table class="fig-table"><tr><th>Figure number</th><th>Number of ${emoji}</th></tr>${[1, 2, 3, 4, 5].map((n) => `<tr><td>${n}</td><td>${asked.includes(n) ? bx(`f${n}`) : start + (n - 1) * d}</td></tr>`).join('')}</table>`;
   }
 
-  function codeBoard(s, d, r, opts = {}) {
-    const outs = Array.from({ length: r }, (_, i) => s + (i + 1) * d);
+  // SET / REPEAT / ADD or SUBTRACT / OUTPUT, like the book.
+  function codeBoard(s, k, r, opts = {}) {
+    const outs = Array.from({ length: r }, (_, i) => s + (i + 1) * k);
     const val = (id, v, show) => (show ? `<b>${v}</b>` : bx(id));
+    const op = k > 0 ? `ADD ${val('cd', k, !opts.askAdd)} to <i>Value</i>` : `SUBTRACT ${val('cd', -k, !opts.askAdd)} from <i>Value</i>`;
     return `<div class="code">
       <div class="code-block set">SET <i>Value</i> to ${val('cs', s, !opts.askSet)}</div>
-      <div class="code-loop"><div class="code-repeat">REPEAT <b>${r}</b></div>
-        <div class="code-body"><div class="code-block add">ADD ${val('cd', d, !opts.askAdd)} to <i>Value</i></div><div class="code-block out">OUTPUT <i>Value</i></div></div></div>
+      <div class="code-loop"><div class="code-repeat">REPEAT ${opts.askRepeat ? bx('rr') : `<b>${r}</b>`}</div>
+        <div class="code-body"><div class="code-block add">${op}</div><div class="code-block out">OUTPUT <i>Value</i></div></div></div>
       ${opts.outputs === false ? '' : `<div class="code-outs"><small>Outputs:</small>${outs.map((o, i) => `<span class="seq-term">${(opts.shownOuts || []).includes(i) ? o : bx(`o${i}`)}</span>`).join('')}</div>`}
     </div>`;
   }
 
+  // Story problems that use a subtraction pattern (Lesson 6).
+  const PAT_STORIES = [
+    (s, d, n) => ({ text: `The bakery has ${s} cupcakes at the start of the day. Every hour, it sells ${d} cupcakes. How many cupcakes will be left in ${n} hours?`, unit: 'cupcakes' }),
+    (s, d, n) => ({ text: `The toy store has ${s} balloons. Every day, it gives away ${d} balloons. How many balloons will be left after ${n} days?`, unit: 'balloons' }),
+    (s, d, n) => ({ text: `${pick(['Hannah', 'Mia', 'Zoe', 'Nia'])} has ${s} arcade tickets. Each game costs ${d} tickets. How many tickets will she have left after ${n} games?`, unit: 'tickets' }),
+    (s, d, n) => ({ text: `The food court has ${s} paper cups. Every hour, shoppers use ${d} cups. How many cups will be left in ${n} hours?`, unit: 'cups' }),
+    (s, d, n) => ({ text: `The gift card desk has ${s} gift cards. Every day, it sells ${d} of them. How many gift cards will be left after ${n} days?`, unit: 'gift cards' }),
+  ];
+
   function patternQuestion(level) {
-    const type = level <= 1 ? pick(['num', 'num', 'shape', 'code']) : level === 2 ? 'num' : pick(['shape', 'code', 'code']);
+    const down = Math.random() < 0.6; // subtraction patterns are this week's lesson
+    const type = level <= 1 ? pick(['num', 'num', 'num', 'code', 'code', 'shape']) : level === 2 ? (Math.random() < 0.25 ? 'story' : 'num') : pick(['shape', 'code', 'code', 'code']);
 
     if (type === 'num') {
-      const d = pick(level <= 1 ? [2, 3, 4, 5, 10, 20, 25, 30, 50, 100] : [3, 4, 6, 7, 8, 9, 11, 12, 13, 15, 18, 20, 25, 30, 40, 50, 75, 100, 150]);
-      let s;
-      do { s = level <= 1 ? pick([0, rand(1, 60), rand(100, 400), rand(1, 8) * 100]) : rand(0, 800); } while (s + d * 6 > 999);
-      const terms = Array.from({ length: 7 }, (_, i) => s + i * d);
-      const rule = `Pattern rule: Start at ${s}, and add ${d} each time.`;
-      const explain = `${rule}<br>${terms.join(', ')}`;
+      const d = pick(level <= 1 ? [2, 3, 4, 5, 10, 20, 25, 50, 100] : [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 20, 25, 30, 40, 50, 75, 100, 150]);
+      const k = down ? -d : d, s = patStart(k, 7, level), terms = patTerms(s, k, 7);
+      const rule = patRule(s, k), explain = `${rule}<br>${terms.join(', ')}`;
       if (level <= 1) {
+        const up = k > 0, more = up ? 'more' : 'less';
         const steps = [
           {
-            text: `How much is added each time?<br>${terms[0]} + ${bx('d')} = ${terms[1]}`, blanks: [{ id: 'd', ans: d }],
-            voice: ['line/pat-jump'], speak: 'How much is added each time?',
-            hint: `Count on from ${terms[0]} to ${terms[1]}. Try counting by tens first, then by ones.`, reveal: `${terms[0]} + ${d} = ${terms[1]}. The jump is ${d}.`,
+            text: `<b>Is this pattern increasing or decreasing?</b><br>Compare the numbers.${choiceBtns(['⬆ Increasing: the numbers get bigger', '⬇ Decreasing: the numbers get smaller'])}`,
+            blanks: [], choice: up ? 0 : 1, voice: ['line/pat-updown'], speak: 'Is this pattern increasing or decreasing?',
+            hint: `Compare the first two numbers: ${terms[0]} and ${terms[1]}. Is ${terms[1]} more or less than ${terms[0]}?`,
+            reveal: `${terms[1]} is ${more} than ${terms[0]}. Each number is ${more} than the number before it, so this is ${up ? 'an increasing' : 'a decreasing'} pattern.`,
           },
           {
-            text: `Pattern rule: Start at ${bx('rs')}, and add ${bx('rd')} each time.`, blanks: [{ id: 'rs', ans: s }, { id: 'rd', ans: d }],
+            text: `<b>Find the jump.</b><br>Each number is ${bx('d')} ${more} than the number before it.`, blanks: [{ id: 'd', ans: d }],
+            voice: [up ? 'line/pat-more' : 'line/pat-less'], speak: `Each number is how much ${more} than the number before it?`,
+            hint: `Count ${up ? 'on' : 'back'} from ${terms[0]} to ${terms[1]} on the number line. Try counting by tens first, then by ones.`,
+            reveal: `${terms[0]} ${opSign(k)} ${d} = ${terms[1]}. Each number is ${d} ${more} than the number before it.`,
+          },
+          {
+            text: `Pattern rule: Start at ${bx('rs')}, and ${opWord(k)} ${bx('rd')} each time.`, blanks: [{ id: 'rs', ans: s }, { id: 'rd', ans: d }],
             voice: ['line/pat-rule'], speak: 'Write the pattern rule.',
-            hint: 'The pattern starts with the first number on the line. You found the jump in the last step.', reveal: rule,
+            hint: `The pattern starts with the first number: ${terms[0]}. You found the jump in the last step.`, reveal: rule,
           },
           {
-            text: `Continue the pattern. Add ${d} each time.`, blanks: [4, 5, 6].map((i) => ({ id: `n${i}`, ans: terms[i] })),
+            text: `Continue the pattern. ${up ? 'Add' : 'Subtract'} ${d} each time.`, blanks: [4, 5, 6].map((i) => ({ id: `n${i}`, ans: terms[i] })),
             voice: ['line/pat-next'], speak: 'What numbers come next?',
-            hint: `Add ${d} to the last number. Then add ${d} again.`, reveal: terms.slice(4).join(', '),
+            hint: `${up ? `Add ${d} to` : `Subtract ${d} from`} the last number: ${terms[3]} ${opSign(k)} ${d}. Then do it again.`, reveal: terms.slice(4).join(', '),
           },
         ];
         return {
-          kind: 'steps', guided: true, steps, pat: { s, d }, prompt: pick(PAT_PLACES),
-          board: (st) => seqBoard(terms, d, [0, 1, 2, 3], { hideJump: st < 1 }), explain,
+          kind: 'steps', guided: true, steps, pat: { s, d: k }, prompt: pick(up ? PAT_UP : PAT_DOWN),
+          board: (st) => `${seqBoard(terms, k, [0, 1, 2, 3], { hideJump: st < 2 })}${patLine(terms, k, [0, 1, 2, 3], st < 2)}`, explain,
         };
       }
-      const hidden = shuffle([1, 2, 3, 4, 5, 6]).slice(0, rand(2, 4)).sort((x, y) => x - y);
-      const askRule = Math.random() < 0.5;
+      // On her own: missing numbers at the end, in the middle, or at the start (work backwards).
+      const where = pick(['end', 'middle', 'start', 'mixed']);
+      const hidden = where === 'end' ? [4, 5, 6] : where === 'start' ? [0, 1, 2] : where === 'middle' ? shuffle([1, 2, 3, 4, 5]).slice(0, 2)
+        : shuffle([1, 2, 3, 4, 5, 6]).slice(0, rand(2, 4));
+      hidden.sort((x, y) => x - y);
+      const askRule = where !== 'start' && Math.random() < 0.5;
+      const shown = [0, 1, 2, 3, 4, 5, 6].filter((i) => !hidden.includes(i)), withLine = Math.random() < 0.5;
       return {
-        kind: 'steps', guided: false, pat: { s, d }, prompt: 'What are the missing numbers in the pattern?',
+        kind: 'steps', guided: false, pat: { s, d: k }, prompt: where === 'start' ? 'What are the missing numbers? Hint: work backwards!' : 'Fill in the blanks to complete the number pattern.',
         steps: [{
-          text: askRule ? `Pattern rule: Start at ${s}, and add ${bx('rd')} each time.` : 'Fill in the missing numbers.',
+          text: askRule ? `Pattern rule: Start at ${s}, and ${opWord(k)} ${bx('rd')} each time.` : 'Fill in the missing numbers.',
           blanks: [...hidden.map((i) => ({ id: `n${i}`, ans: terms[i] })), ...(askRule ? [{ id: 'rd', ans: d }] : [])],
           voice: ['line/pat-missing'], speak: 'What are the missing numbers in the pattern?',
         }],
-        board: () => seqBoard(terms, d, [0, 1, 2, 3, 4, 5, 6].filter((i) => !hidden.includes(i)), { hideJump: true }), explain,
+        board: () => `${seqBoard(terms, k, shown, { hideJump: true })}${withLine ? patLine(terms, k, shown, true) : ''}`,
+        explain: `${explain}${where === 'start' ? `<br>To go backwards in a pattern that ${k > 0 ? 'adds' : 'subtracts'} ${d}, ${k > 0 ? 'subtract' : 'add'} ${d}.` : ''}`,
+      };
+    }
+
+    if (type === 'story') {
+      const d = pick([2, 5, 10, 20, 25, 50, 100]), n = rand(3, 6);
+      let s; do { s = pick([rand(n * d, n * d + 90), rand(2, 9) * 100 + pick([0, 20, 50, 70])]); } while (s - n * d < 0 || s > 999);
+      const terms = patTerms(s, -d, n + 1), story = pick(PAT_STORIES)(s, d, n);
+      return {
+        kind: 'steps', guided: false, pat: { s, d: -d, ans: terms[n] }, prompt: 'Continue the subtraction pattern. Use it to solve the problem.',
+        steps: [{
+          text: `<p class="story">${story.text}</p>${seqBoard(terms, -d, [0, 1, 2], { hideJump: true })}<div class="story-ans">Answer: ${bx('ans')} ${story.unit}</div>`,
+          blanks: [...terms.slice(3).map((t, i) => ({ id: `n${i + 3}`, ans: t })), { id: 'ans', ans: terms[n] }],
+          voice: ['line/pat-story'], speak: story.text,
+        }],
+        board: () => '',
+        explain: `${patRule(s, -d)}<br>${terms.join(', ')}<br>After ${n}, there are <b>${terms[n]}</b> ${story.unit} left.`,
       };
     }
 
     if (type === 'shape') {
       const start = rand(1, level <= 1 ? 5 : 7), d = rand(1, level <= 1 ? 3 : 5), emoji = pick(PAT_EMOJI);
-      const rule = `Pattern rule: Start at ${start}, and add ${d} each time.`;
+      const rule = patRule(start, d);
       const counts = [1, 2, 3, 4, 5].map((n) => start + (n - 1) * d);
       const explain = `${rule}<br>Figures 1 to 5: ${counts.join(', ')}.`;
       if (level <= 1) {
         const steps = [
           { text: `How many ${emoji} are in Figure 1? ${bx('c1')}`, blanks: [{ id: 'c1', ans: start }], voice: ['line/pat-count1'], speak: 'How many are in Figure 1?', hint: 'Touch each one as you count it.', reveal: `Figure 1 has ${start}.` },
           { text: `How many ${emoji} are in Figure 2? ${bx('c2')}`, blanks: [{ id: 'c2', ans: start + d }], voice: ['line/pat-count2'], speak: 'How many are in Figure 2?', hint: 'Count the ones from Figure 1, then count on the new ones.', reveal: `Figure 2 has ${start + d}.` },
-          { text: `How many ${emoji} are added each time? ${start} + ${bx('dd')} = ${start + d}`, blanks: [{ id: 'dd', ans: d }], voice: ['line/pat-added'], speak: 'How many are added each time?', hint: `Look at the colored ones that are new in each figure. Or count on from ${start} to ${start + d}.`, reveal: `${d} are added each time.` },
+          { text: `How many ${emoji} are added each time? ${start} + ${bx('dd')} = ${start + d}`, blanks: [{ id: 'dd', ans: d }], voice: ['line/pat-added'], speak: 'How many are added each time?', hint: `Look at the coloured ones that are new in each figure. Or count on from ${start} to ${start + d}.`, reveal: `${d} are added each time.` },
           { text: `Pattern rule: Start at ${bx('rs')}, and add ${bx('rd')} each time.`, blanks: [{ id: 'rs', ans: start }, { id: 'rd', ans: d }], voice: ['line/pat-rule'], speak: 'Write the pattern rule.', hint: 'Start with the number in Figure 1. Add the number you found in the last step.', reveal: rule },
           { text: 'Use the pattern rule to complete the table.', blanks: [{ id: 'f4', ans: counts[3] }, { id: 'f5', ans: counts[4] }], voice: ['line/pat-table'], speak: 'Use the pattern rule to complete the table.', hint: `Figure 3 has ${counts[2]}. Add ${d} to get Figure 4, then add ${d} again.`, reveal: `Figure 4 has ${counts[3]} and Figure 5 has ${counts[4]}.` },
         ];
@@ -1790,45 +1878,67 @@
       };
     }
 
-    // Robot cashier code.
-    const r = pick([3, 4, 5, 5, 6]), d = pick((level <= 1 ? [2, 5, 10, 20, 25, 50, 100] : [2, 3, 4, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 200]).filter((x) => x * r <= 800));
-    const job = pick(CODE_JOBS);
+    // Robot cashier code: SET, then REPEAT (ADD or SUBTRACT, OUTPUT).
+    const r = pick([3, 4, 4, 5, 5, 6]);
+    const d = pick((level <= 1 ? [2, 5, 10, 20, 25, 50, 100] : [2, 3, 4, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 200]).filter((x) => x * r <= 800));
+    const k = down ? -d : d, job = pick(CODE_JOBS);
     let s;
-    do { s = pick([0, 50, 100, 150, 200, 250, 300, 450, 500, 600, 750, rand(1, 60) * 5, rand(1, 99)]); } while (s + d * r > 999);
-    const outs = Array.from({ length: r }, (_, i) => s + (i + 1) * d);
-    const explain = `SET starts the Value at ${s}. Each time through the loop, ADD ${d}, then OUTPUT.<br>Pattern: ${[s, ...outs].join(', ')}.`;
+    if (k > 0) { do { s = pick([0, 50, 100, 150, 200, 250, 300, 450, 500, 600, 750, rand(1, 60) * 5, rand(1, 99)]); } while (s + d * r > 999); }
+    else { do { s = pick([1000, 900, 800, 750, 699, 600, 500, 450, 300, rand(d * r, 999)]); } while (s - d * r < 0); }
+    const outs = Array.from({ length: r }, (_, i) => s + (i + 1) * k);
+    const pattern = [s, ...outs];
+    const verb = k > 0 ? 'ADD' : 'SUBTRACT', added = k > 0 ? 'added' : 'subtracted';
+    const explain = `SET starts the Value at ${s}. Each time through the loop, ${verb} ${d}, then OUTPUT the Value. The loop repeats ${r} times.<br>The pattern is ${pattern.join(', ')}.`;
     if (level <= 1) {
       const steps = [
-        { text: `The starting number is ${bx('cs1')}.`, blanks: [{ id: 'cs1', ans: s }], voice: ['line/code-set'], speak: 'What is the starting number?', hint: 'The SET block tells you the starting number.', reveal: `SET Value to ${s}, so it starts at ${s}.` },
-        { text: `The number added each time is ${bx('cd1')}.`, blanks: [{ id: 'cd1', ans: d }], voice: ['line/code-add'], speak: 'What number is added each time?', hint: 'The ADD block inside the loop tells you what to add.', reveal: `ADD ${d} to Value, so ${d} is added each time.` },
-        { text: `The first output is ${s} + ${d} = ${bx('o0x')}.`, blanks: [{ id: 'o0x', ans: outs[0] }], voice: ['line/code-first'], speak: 'What is the first output?', hint: `Start with ${s}, then add ${d}.`, reveal: `${s} + ${d} = ${outs[0]}.` },
-        { text: `The loop repeats ${r} times. What are the other outputs?`, blanks: outs.slice(1).map((o, i) => ({ id: `o${i + 1}`, ans: o })), voice: ['line/code-outputs'], speak: 'Follow the code. What are the outputs?', hint: `Each output is ${d} more than the one before.`, reveal: outs.slice(1).join(', ') },
+        { text: `The starting number in the pattern is ${bx('cs1')}.`, blanks: [{ id: 'cs1', ans: s }], voice: ['line/code-set'], speak: 'What is the starting number?', hint: 'The SET block tells you the starting number.', reveal: `SET Value to ${s}, so the pattern starts at ${s}.` },
+        { text: `The number ${added} each time is ${bx('cd1')}.`, blanks: [{ id: 'cd1', ans: d }], voice: [k > 0 ? 'line/code-add' : 'line/code-sub'], speak: `What number is ${added} each time?`, hint: `The ${verb} block inside the loop tells you the number.`, reveal: `${verb} ${d} ${k > 0 ? 'to' : 'from'} Value, so ${d} is ${added} each time.` },
+        { text: `The first output in the pattern is ${s} ${opSign(k)} ${d} = ${bx('o0x')}.`, blanks: [{ id: 'o0x', ans: outs[0] }], voice: ['line/code-first'], speak: 'What is the first output?', hint: `Start with ${s}, then ${opWord(k)} ${d}.`, reveal: `${s} ${opSign(k)} ${d} = ${outs[0]}.` },
+        { text: `Repeat the loop ${bx('rr')} times.`, blanks: [{ id: 'rr', ans: r }], voice: ['line/code-repeat'], speak: 'How many times does the loop repeat?', hint: 'Look at the number in the REPEAT box.', reveal: `REPEAT ${r}, so the loop runs ${r} times and makes ${r} outputs.` },
+        { text: `Loop back and ${opWord(k)} ${d} again. What are the other outputs?`, blanks: outs.slice(1).map((o, i) => ({ id: `o${i + 1}`, ans: o })), voice: ['line/code-outputs'], speak: 'Follow the code. What are the outputs?', hint: `Each output is ${d} ${k > 0 ? 'more' : 'less'} than the one before.`, reveal: outs.slice(1).join(', ') },
       ];
       return {
-        kind: 'steps', guided: true, steps, pat: { s, d }, prompt: `🤖 The robot cashier follows this code to ${job}.`,
-        board: (st) => codeBoard(s, d, r, { shownOuts: st >= 3 ? [0] : [], outputs: st >= 2 }), explain,
+        kind: 'steps', guided: true, steps, pat: { s, d: k, r }, prompt: `🤖 The robot cashier follows this code to ${job}.`,
+        board: (st) => codeBoard(s, k, r, { shownOuts: st >= 3 ? [0] : [], outputs: st >= 2 }), explain,
       };
     }
-    const form = pick(['run', 'make', 'missing']);
+    const form = pick(['run', 'make', 'missing', 'change']);
     if (form === 'make') {
       return {
-        kind: 'steps', guided: false, pat: { s, d }, prompt: `🤖 Make a pattern that starts at ${s} and increases by ${d} each time.`,
-        steps: [{ text: 'Fill in the code.', blanks: [{ id: 'cs', ans: s }, { id: 'cd', ans: d }], voice: ['line/code-make'], speak: 'Fill in the code to make this pattern.' }],
-        board: () => codeBoard(s, d, r, { askSet: true, askAdd: true, outputs: false }), explain,
+        kind: 'steps', guided: false, pat: { s, d: k, r }, prompt: `🤖 Write code for the pattern rule: Start at ${s}, and ${opWord(k)} ${d} each time.`,
+        steps: [{ text: 'What is each missing number in the code?', blanks: [{ id: 'cs', ans: s }, { id: 'cd', ans: d }], voice: ['line/code-make'], speak: 'Fill in the code to make this pattern.' }],
+        board: () => codeBoard(s, k, r, { askSet: true, askAdd: true, outputs: false }), explain,
+      };
+    }
+    if (form === 'change') {
+      // "To make a pattern that starts with 600 and decreases by 50 each time, set the starting value to __."
+      const newStart = Math.random() < 0.5;
+      let s2 = s, d2 = d;
+      if (newStart) { do { s2 = k > 0 ? rand(0, 999 - d * r) : rand(d * r, 1000); } while (s2 === s); }
+      else { const opts = [2, 5, 10, 20, 25, 50, 100].filter((x) => x !== d && (k > 0 ? s + x * r <= 999 : s - x * r >= 0)); d2 = opts.length ? pick(opts) : d; }
+      const id = newStart ? 'cn' : 'dn', ans = newStart ? s2 : d2;
+      return {
+        kind: 'steps', guided: false, pat: { s: s2, d: k > 0 ? d2 : -d2, r }, prompt: '🤖 Change the code to make a new pattern.',
+        steps: [{
+          text: `To make a pattern that starts with ${s2} and ${k > 0 ? 'increases' : 'decreases'} by ${d2} each time, ${newStart ? 'set the starting value to' : `change the number being ${added} to`} ${bx(id)}.`,
+          blanks: [{ id, ans }], voice: ['line/code-change'], speak: 'How should you change the code?',
+        }],
+        board: () => codeBoard(s, k, r, { outputs: false }),
+        explain: `${newStart ? `The SET block sets the starting value, so SET Value to <b>${s2}</b>.` : `The ${verb} block sets the jump, so ${verb} <b>${d2}</b>.`}<br>Pattern rule: Start at ${s2}, and ${opWord(k)} ${d2} each time.`,
       };
     }
     if (form === 'missing') {
-      const pattern = [s, ...outs], hidden = shuffle(outs.map((_, i) => i + 1)).slice(0, rand(2, 3));
+      const hidden = shuffle(outs.map((_, i) => i + 1)).slice(0, rand(2, 3));
       return {
-        kind: 'steps', guided: false, pat: { s, d }, prompt: `🤖 The robot uses this code to ${job}. What are the missing numbers?`,
+        kind: 'steps', guided: false, pat: { s, d: k, r }, prompt: `🤖 The robot uses this code to ${job}. What are the missing numbers in the pattern?`,
         steps: [{ text: 'Fill in the missing numbers.', blanks: hidden.sort((x, y) => x - y).map((i) => ({ id: `n${i}`, ans: pattern[i] })), voice: ['line/pat-missing'], speak: 'What are the missing numbers in the pattern?' }],
-        board: () => `${codeBoard(s, d, r, { outputs: false })}${seqBoard(pattern, d, pattern.map((_, i) => i).filter((i) => !hidden.includes(i)), { hideJump: true })}`, explain,
+        board: () => `${codeBoard(s, k, r, { outputs: false })}${seqBoard(pattern, k, pattern.map((_, i) => i).filter((i) => !hidden.includes(i)), { hideJump: true })}`, explain,
       };
     }
     return {
-      kind: 'steps', guided: false, pat: { s, d }, prompt: `🤖 The robot uses this code to ${job}. What are the outputs?`,
+      kind: 'steps', guided: false, pat: { s, d: k, r }, prompt: `🤖 The robot uses this code to ${job}. What are the outputs?`,
       steps: [{ text: 'Write every output.', blanks: outs.map((o, i) => ({ id: `o${i}`, ans: o })), voice: ['line/code-outputs'], speak: 'Follow the code. What are the outputs?' }],
-      board: () => codeBoard(s, d, r, {}), explain,
+      board: () => codeBoard(s, k, r, {}), explain,
     };
   }
 

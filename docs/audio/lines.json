@@ -62,6 +62,9 @@
 "line/code-add": {
 "text": "What number is added each time?"
 },
+"line/code-change": {
+"text": "How should you change the code to make the new pattern?"
+},
 "line/code-first": {
 "text": "What is the first output?"
 },
@@ -71,8 +74,14 @@
 "line/code-outputs": {
 "text": "Follow the code. What are the outputs?"
 },
+"line/code-repeat": {
+"text": "How many times does the loop repeat?"
+},
 "line/code-set": {
 "text": "What is the starting number?"
+},
+"line/code-sub": {
+"text": "What number is subtracted each time?"
 },
 "line/deal-least3": {
 "text": "Which of these three costs the least?"
@@ -285,11 +294,14 @@
 "line/pat-count2": {
 "text": "How many are in Figure 2?"
 },
-"line/pat-jump": {
-"text": "How much is added each time?"
+"line/pat-less": {
+"text": "Find the jump. Each number is how much less than the number before it?"
 },
 "line/pat-missing": {
 "text": "What are the missing numbers in the pattern?"
+},
+"line/pat-more": {
+"text": "Find the jump. Each number is how much more than the number before it?"
 },
 "line/pat-next": {
 "text": "What numbers come next?"
@@ -297,8 +309,14 @@
 "line/pat-rule": {
 "text": "Write the pattern rule."
 },
+"line/pat-story": {
+"text": "Continue the subtraction pattern. Use it to solve the problem."
+},
 "line/pat-table": {
 "text": "Use the pattern rule to complete the table."
+},
+"line/pat-updown": {
+"text": "Look at the numbers. Is this pattern increasing or decreasing?"
 },
 "line/register": {
 "next": "two hundred forty-eight dollars.",

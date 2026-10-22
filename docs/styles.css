@@ -790,3 +790,9 @@ mark { background: #ffd1e8; color: var(--pink-deep); border-radius: 6px; padding
   .fig-items { grid-template-columns: repeat(3, 26px); }
   .fig-item { font-size: 20px; line-height: 26px; }
 }
+
+/* Display Window number line (the book's) */
+.pat-line { width: 100%; max-width: 600px; height: auto; margin-top: 8px; }
+.pat-line .pl-num { font: 900 23px var(--font); fill: var(--ink); }
+.pat-line .pl-q { font: 900 25px var(--font); fill: #ec4899; }
+.pat-line .pl-jump { font: 900 20px var(--font); fill: #be185d; }
