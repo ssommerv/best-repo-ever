@@ -4483,199 +4483,199 @@
 "prev": "It costs exactly",
 "text": "nine hundred ninety-nine dollars."
 },
-"slow/added": {
+"slow/came": {
 "speed": 0.75,
-"text": "added."
+"text": "came."
 },
-"slow/balloon": {
+"slow/coming": {
 "speed": 0.75,
-"text": "balloon."
+"text": "coming."
 },
-"slow/carry": {
+"slow/doing": {
 "speed": 0.75,
-"text": "carry."
+"text": "doing."
 },
-"slow/different": {
+"slow/ended": {
 "speed": 0.75,
-"text": "different."
+"text": "ended."
 },
-"slow/letter": {
+"slow/getting": {
 "speed": 0.75,
-"text": "letter."
+"text": "getting."
 },
-"slow/middle": {
+"slow/happened": {
 "speed": 0.75,
-"text": "middle."
+"text": "happened."
 },
-"slow/missed": {
+"slow/happening": {
 "speed": 0.75,
-"text": "missed."
+"text": "happening."
 },
-"slow/mississippi": {
+"slow/having": {
 "speed": 0.75,
-"text": "mississippi."
+"text": "having."
 },
-"slow/off": {
+"slow/joked": {
 "speed": 0.75,
-"text": "off."
+"text": "joked."
 },
-"slow/pattern": {
+"slow/received": {
 "speed": 0.75,
-"text": "pattern."
+"text": "received."
 },
-"slow/pretty": {
+"slow/smiled": {
 "speed": 0.75,
-"text": "pretty."
+"text": "smiled."
 },
-"slow/spelling": {
+"slow/smiling": {
 "speed": 0.75,
-"text": "spelling."
+"text": "smiling."
 },
-"slow/still": {
+"slow/started": {
 "speed": 0.75,
-"text": "still."
+"text": "started."
 },
-"slow/willing": {
+"slow/swam": {
 "speed": 0.75,
-"text": "willing."
+"text": "swam."
 },
-"slow/zipper": {
+"slow/swimming": {
 "speed": 0.75,
-"text": "zipper."
+"text": "swimming."
 },
-"spell/added": {
-"text": "Added. I added a bow to the present. added."
+"spell/came": {
+"text": "Came. My friend came to the mall with me. came."
 },
-"spell/added-2": {
-"text": "Added. Mom added up all the prices. added."
+"spell/came-2": {
+"text": "Came. The ice cream truck came at lunch time. came."
 },
-"spell/added-3": {
-"text": "Added. We added sprinkles to our ice cream. added."
+"spell/came-3": {
+"text": "Came. We came home with lots of bags. came."
 },
-"spell/balloon": {
-"text": "Balloon. I got a red balloon at the toy store. balloon."
+"spell/coming": {
+"text": "Coming. Grandma is coming shopping with us. coming."
 },
-"spell/balloon-2": {
-"text": "Balloon. The balloon floated up to the mall ceiling. balloon."
+"spell/coming-2": {
+"text": "Coming. Are you coming to the toy store? coming."
 },
-"spell/balloon-3": {
-"text": "Balloon. Hold the balloon string tight! balloon."
+"spell/coming-3": {
+"text": "Coming. The bus is coming, so get your bags! coming."
 },
-"spell/carry": {
-"text": "Carry. Can you help me carry the shopping bags? carry."
+"spell/doing": {
+"text": "Doing. What are you doing after school? doing."
 },
-"spell/carry-2": {
-"text": "Carry. I carry my wallet in my purse. carry."
+"spell/doing-2": {
+"text": "Doing. I am doing my homework before we go shopping. doing."
 },
-"spell/carry-3": {
-"text": "Carry. The cart can carry lots of groceries. carry."
+"spell/doing-3": {
+"text": "Doing. The clowns are doing tricks at the mall. doing."
 },
-"spell/different": {
-"text": "Different. I want a different colour of shoes. different."
+"spell/ended": {
+"text": "Ended. The movie ended at three. ended."
 },
-"spell/different-2": {
-"text": "Different. Every store sells something different. different."
+"spell/ended-2": {
+"text": "Ended. The big sale ended yesterday. ended."
 },
-"spell/different-3": {
-"text": "Different. These two shirts look different. different."
+"spell/ended-3": {
+"text": "Ended. Our shopping trip ended with ice cream. ended."
 },
-"spell/letter": {
-"text": "Letter. I wrote a letter to Grandma. letter."
+"spell/getting": {
+"text": "Getting. I am getting a new backpack for school. getting."
 },
-"spell/letter-2": {
-"text": "Letter. The store sign starts with the letter H. letter."
+"spell/getting-2": {
+"text": "Getting. It is getting late, so the mall will close soon. getting."
 },
-"spell/letter-3": {
-"text": "Letter. Put the letter in the mailbox. letter."
+"spell/getting-3": {
+"text": "Getting. Mom is getting a pretzel at the food court. getting."
 },
-"spell/middle": {
-"text": "Middle. The fountain is in the middle of the mall. middle."
+"spell/happened": {
+"text": "Happened. What happened to your balloon? happened."
 },
-"spell/middle-2": {
-"text": "Middle. I sat in the middle seat. middle."
+"spell/happened-2": {
+"text": "Happened. Something funny happened at the toy store. happened."
 },
-"spell/middle-3": {
-"text": "Middle. Put the cherry in the middle of the cake. middle."
+"spell/happened-3": {
+"text": "Happened. Tell me what happened at school today. happened."
 },
-"spell/missed": {
-"text": "Missed. I missed the bus, so we got to the mall late. missed."
+"spell/happening": {
+"text": "Happening. Something exciting is happening at the mall today! happening."
 },
-"spell/missed-2": {
-"text": "Missed. She missed the big sale on sparkly shoes. missed."
+"spell/happening-2": {
+"text": "Happening. What is happening at the big sale? happening."
 },
-"spell/missed-3": {
-"text": "Missed. I missed you while you were shopping! missed."
+"spell/happening-3": {
+"text": "Happening. A magic show is happening at noon. happening."
 },
-"spell/mississippi": {
-"text": "Mississippi. The Mississippi is a very long river. mississippi."
+"spell/having": {
+"text": "Having. We are having pizza at the food court. having."
 },
-"spell/mississippi-2": {
-"text": "Mississippi. I found a map of the Mississippi River at the bookstore. mississippi."
+"spell/having-2": {
+"text": "Having. I am having so much fun shopping! having."
 },
-"spell/mississippi-3": {
-"text": "Mississippi. We saw a big boat on the Mississippi in a movie. mississippi."
+"spell/having-3": {
+"text": "Having. She is having a birthday party at the bowling alley. having."
 },
-"spell/off": {
-"text": "Off. Please turn off the light. off."
+"spell/joked": {
+"text": "Joked. Dad joked that he would buy the whole store. joked."
 },
-"spell/off-2": {
-"text": "Off. Everything is ten dollars off today! off."
+"spell/joked-2": {
+"text": "Joked. The cashier joked with us and made us laugh. joked."
 },
-"spell/off-3": {
-"text": "Off. I took off my wet boots at the door. off."
+"spell/joked-3": {
+"text": "Joked. My brother joked about my silly hat. joked."
 },
-"spell/pattern": {
-"text": "Pattern. My new dress has a flower pattern. pattern."
+"spell/received": {
+"text": "Received. I received a gift card for my birthday. received."
 },
-"spell/pattern-2": {
-"text": "Pattern. The floor tiles make a pattern. pattern."
+"spell/received-2": {
+"text": "Received. She received a thank-you letter in the mail. received."
 },
-"spell/pattern-3": {
-"text": "Pattern. Can you find the pattern on the wrapping paper? pattern."
+"spell/received-3": {
+"text": "Received. We received our package from the store. received."
 },
-"spell/pretty": {
-"text": "Pretty. That is a pretty dress! pretty."
+"spell/smiled": {
+"text": "Smiled. The baby smiled at me in the store. smiled."
 },
-"spell/pretty-2": {
-"text": "Pretty. She bought a pretty hair bow. pretty."
+"spell/smiled-2": {
+"text": "Smiled. I smiled when I saw the puppy in the pet shop. smiled."
 },
-"spell/pretty-3": {
-"text": "Pretty. The mall looks pretty with all the lights. pretty."
+"spell/smiled-3": {
+"text": "Smiled. The cashier smiled and said thank you. smiled."
 },
-"spell/spelling": {
-"text": "Spelling. I practise my spelling words in the car. spelling."
+"spell/smiling": {
+"text": "Smiling. Everyone was smiling at the birthday party. smiling."
 },
-"spell/spelling-2": {
-"text": "Spelling. The bookstore sells a fun spelling game. spelling."
+"spell/smiling-2": {
+"text": "Smiling. Why are you smiling so much? smiling."
 },
-"spell/spelling-3": {
-"text": "Spelling. My spelling test is on Friday. spelling."
+"spell/smiling-3": {
+"text": "Smiling. The clown at the mall is always smiling. smiling."
 },
-"spell/still": {
-"text": "Still. Are you still hungry after lunch? still."
+"spell/started": {
+"text": "Started. The sale started this morning. started."
 },
-"spell/still-2": {
-"text": "Still. Stand still while I take your picture. still."
+"spell/started-2": {
+"text": "Started. I started saving my coins for a new toy. started."
 },
-"spell/still-3": {
-"text": "Still. The toy store is still open! still."
+"spell/started-3": {
+"text": "Started. It started to rain when we left the mall. started."
 },
-"spell/willing": {
-"text": "Willing. Are you willing to share your popcorn? willing."
+"spell/swam": {
+"text": "Swam. Yesterday I swam ten laps at the pool. swam."
 },
-"spell/willing-2": {
-"text": "Willing. Dad was willing to carry all the bags. willing."
+"spell/swam-2": {
+"text": "Swam. The goldfish swam around the tank at the pet store. swam."
 },
-"spell/willing-3": {
-"text": "Willing. I am willing to wait in line for ice cream. willing."
+"spell/swam-3": {
+"text": "Swam. We swam before we went shopping. swam."
 },
-"spell/zipper": {
-"text": "Zipper. The zipper on my backpack is stuck! zipper."
+"spell/swimming": {
+"text": "Swimming. We went swimming at the hotel pool by the mall. swimming."
 },
-"spell/zipper-2": {
-"text": "Zipper. My new coat has a pink zipper. zipper."
+"spell/swimming-2": {
+"text": "Swimming. I bought new goggles for swimming. swimming."
 },
-"spell/zipper-3": {
-"text": "Zipper. Pull the zipper all the way up. zipper."
+"spell/swimming-3": {
+"text": "Swimming. My sister is swimming in the big pool. swimming."
 }
 }

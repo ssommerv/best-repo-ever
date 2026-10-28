@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '16 (Oct 22, 2026)';
+  const APP_VERSION = '17 (Oct 28, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -1239,36 +1239,36 @@
   // Each word has three sentences (each recorded), so she doesn't memorize them.
   // An optional 4th item is how to say the word on its own (“live” as in “I live here”, not “live music”).
   const SPELL_DEFAULT = [
-    ['mi[ss]ed', ['I missed the bus, so we got to the mall late.', 'She missed the big sale on sparkly shoes.', 'I missed you while you were shopping!'],
-      '<b>miss</b> + <b>ed</b>. Keep both s’s: m-i-s-s-e-d.'],
-    ['wi[ll]ing', ['Are you willing to share your popcorn?', 'Dad was willing to carry all the bags.', 'I am willing to wait in line for ice cream.'],
-      '<b>will</b> + <b>ing</b>. Keep both l’s: w-i-l-l-i-n-g.'],
-    ['ba[ll][oo]n', ['I got a red balloon at the toy store.', 'The balloon floated up to the mall ceiling.', 'Hold the balloon string tight!'],
-      'Double, double! Two <b>l</b>’s and two <b>o</b>’s: b-a-l-l-o-o-n.'],
-    ['spe[ll]ing', ['I practise my spelling words in the car.', 'The bookstore sells a fun spelling game.', 'My spelling test is on Friday.'],
-      '<b>spell</b> + <b>ing</b>. Keep both l’s: s-p-e-l-l-i-n-g.'],
-    ['pr[e][tt]y', ['That is a pretty dress!', 'She bought a pretty hair bow.', 'The mall looks pretty with all the lights.'],
-      'Tricky! It sounds like “prih-tee”, but it is spelled with an <b>e</b> and two <b>t</b>’s: p-r-e-t-t-y.'],
-    ['sti[ll]', ['Are you still hungry after lunch?', 'Stand still while I take your picture.', 'The toy store is still open!'],
-      'A short word with a short <b>i</b> ends with a double <b>l</b>: s-t-i-l-l.'],
-    ['o[ff]', ['Please turn off the light.', 'Everything is ten dollars off today!', 'I took off my wet boots at the door.'],
-      'Just three letters, with a double <b>f</b> at the end: o-f-f.'],
-    ['a[dd]ed', ['I added a bow to the present.', 'Mom added up all the prices.', 'We added sprinkles to our ice cream.'],
-      '<b>add</b> + <b>ed</b>. Keep both d’s: a-d-d-e-d.'],
-    ['le[tt]er', ['I wrote a letter to Grandma.', 'The store sign starts with the letter H.', 'Put the letter in the mailbox.'],
-      'Two <b>t</b>’s in the middle: let-ter.'],
-    ['di[ff]er[e]nt', ['I want a different colour of shoes.', 'Every store sells something different.', 'These two shirts look different.'],
-      'Two <b>f</b>’s, and don’t forget the <b>e</b> in the middle: dif-fer-ent.'],
-    ['pa[tt]ern', ['My new dress has a flower pattern.', 'The floor tiles make a pattern.', 'Can you find the pattern on the wrapping paper?'],
-      'Two <b>t</b>’s in the middle: pat-tern.'],
-    ['mi[dd]le', ['The fountain is in the middle of the mall.', 'I sat in the middle seat.', 'Put the cherry in the middle of the cake.'],
-      'Two <b>d</b>’s, and it ends with <b>l-e</b>: mid-dle.'],
-    ['Mi[ss]i[ss]i[pp]i', ['The Mississippi is a very long river.', 'I found a map of the Mississippi River at the bookstore.', 'We saw a big boat on the Mississippi in a movie.'],
-      'Say it in chunks: Mis-sis-sip-pi. Double <b>s</b>, double <b>s</b>, double <b>p</b>, and it starts with a capital <b>M</b>.'],
-    ['zi[pp]er', ['The zipper on my backpack is stuck!', 'My new coat has a pink zipper.', 'Pull the zipper all the way up.'],
-      'Two <b>p</b>’s in the middle: zip-per.'],
-    ['ca[rr]y', ['Can you help me carry the shopping bags?', 'I carry my wallet in my purse.', 'The cart can carry lots of groceries.'],
-      'Two <b>r</b>’s, and it ends with <b>y</b>: c-a-r-r-y.'],
+    ['swi[mm]ing', ['We went swimming at the hotel pool by the mall.', 'I bought new goggles for swimming.', 'My sister is swimming in the big pool.'],
+      '<b>Double</b> the last letter! swim + m + ing: s-w-i-m-m-i-n-g.'],
+    ['sw[a]m', ['Yesterday I swam ten laps at the pool.', 'The goldfish swam around the tank at the pet store.', 'We swam before we went shopping.'],
+      'Tricky! <b>Swim</b> changes to <b>swam</b> when it already happened. No ending at all: s-w-a-m.'],
+    ['ge[tt]ing', ['I am getting a new backpack for school.', 'It is getting late, so the mall will close soon.', 'Mom is getting a pretzel at the food court.'],
+      '<b>Double</b> the last letter! get + t + ing: g-e-t-t-i-n-g.'],
+    ['com[ing]', ['Grandma is coming shopping with us.', 'Are you coming to the toy store?', 'The bus is coming, so get your bags!'],
+      '<b>Drop the e</b>, then add ing: come → coming. Only one <b>m</b>: c-o-m-i-n-g.'],
+    ['c[a]m[e]', ['My friend came to the mall with me.', 'The ice cream truck came at lunch time.', 'We came home with lots of bags.'],
+      'Tricky! <b>Come</b> changes to <b>came</b> when it already happened. The silent e makes the a say its name: c-a-m-e.'],
+    ['hav[ing]', ['We are having pizza at the food court.', 'I am having so much fun shopping!', 'She is having a birthday party at the bowling alley.'],
+      '<b>Drop the e</b>, then add ing: have → having: h-a-v-i-n-g.'],
+    ['do[ing]', ['What are you doing after school?', 'I am doing my homework before we go shopping.', 'The clowns are doing tricks at the mall.'],
+      '<b>Just add</b> ing: do + ing = d-o-i-n-g.'],
+    ['end[ed]', ['The movie ended at three.', 'The big sale ended yesterday.', 'Our shopping trip ended with ice cream.'],
+      '<b>Just add</b> ed: end + ed = e-n-d-e-d.'],
+    ['ha[pp]en[ed]', ['What happened to your balloon?', 'Something funny happened at the toy store.', 'Tell me what happened at school today.'],
+      '<b>Just add</b> ed to happen. Two <b>p</b>’s: h-a-p-p-e-n-e-d.'],
+    ['ha[pp]en[ing]', ['Something exciting is happening at the mall today!', 'What is happening at the big sale?', 'A magic show is happening at noon.'],
+      '<b>Just add</b> ing to happen. Two <b>p</b>’s: h-a-p-p-e-n-i-n-g.'],
+    ['start[ed]', ['The sale started this morning.', 'I started saving my coins for a new toy.', 'It started to rain when we left the mall.'],
+      '<b>Just add</b> ed: start + ed = s-t-a-r-t-e-d.'],
+    ['jok[ed]', ['Dad joked that he would buy the whole store.', 'The cashier joked with us and made us laugh.', 'My brother joked about my silly hat.'],
+      'Joke already ends in <b>e</b>, so just add <b>d</b>: j-o-k-e-d.'],
+    ['rec[ei]ved', ['I received a gift card for my birthday.', 'She received a thank-you letter in the mail.', 'We received our package from the store.'],
+      'Receive already ends in e, so just add <b>d</b>. And remember: <b>i before e, except after c</b>: r-e-c-e-i-v-e-d.'],
+    ['smil[ed]', ['The baby smiled at me in the store.', 'I smiled when I saw the puppy in the pet shop.', 'The cashier smiled and said thank you.'],
+      'Smile already ends in <b>e</b>, so just add <b>d</b>: s-m-i-l-e-d.'],
+    ['smil[ing]', ['Everyone was smiling at the birthday party.', 'Why are you smiling so much?', 'The clown at the mall is always smiling.'],
+      '<b>Drop the e</b>, then add ing: smile → smiling: s-m-i-l-i-n-g.'],
   ];
   const plainWord = (marked) => marked.replace(/[[\]]/g, '');
   const SPELL_INFO = Object.fromEntries(SPELL_DEFAULT.map(([m, ss, tip, sayAs]) => [plainWord(m).toLowerCase(), { marked: m, sentences: ss, tip, sayAs }]));
