@@ -4483,199 +4483,199 @@
 "prev": "It costs exactly",
 "text": "nine hundred ninety-nine dollars."
 },
-"slow/came": {
+"slow/brain": {
 "speed": 0.75,
-"text": "came."
+"text": "brain."
 },
-"slow/coming": {
+"slow/close": {
 "speed": 0.75,
-"text": "coming."
+"text": "close."
 },
-"slow/doing": {
+"slow/cube": {
 "speed": 0.75,
-"text": "doing."
+"text": "cube."
 },
-"slow/ended": {
+"slow/float": {
 "speed": 0.75,
-"text": "ended."
+"text": "float."
 },
-"slow/getting": {
+"slow/mean": {
 "speed": 0.75,
-"text": "getting."
+"text": "mean."
 },
-"slow/happened": {
+"slow/might": {
 "speed": 0.75,
-"text": "happened."
+"text": "might."
 },
-"slow/happening": {
+"slow/niece": {
 "speed": 0.75,
-"text": "happening."
+"text": "niece."
 },
-"slow/having": {
+"slow/price": {
 "speed": 0.75,
-"text": "having."
+"text": "price."
 },
-"slow/joked": {
+"slow/show": {
 "speed": 0.75,
-"text": "joked."
+"text": "show."
 },
-"slow/received": {
+"slow/stayed": {
 "speed": 0.75,
-"text": "received."
+"text": "stayed."
 },
-"slow/smiled": {
+"slow/these": {
 "speed": 0.75,
-"text": "smiled."
+"text": "these."
 },
-"slow/smiling": {
+"slow/tried": {
 "speed": 0.75,
-"text": "smiling."
+"text": "tried."
 },
-"slow/started": {
+"slow/uniform": {
 "speed": 0.75,
-"text": "started."
+"text": "uniform."
 },
-"slow/swam": {
+"slow/usually": {
 "speed": 0.75,
-"text": "swam."
+"text": "usually."
 },
-"slow/swimming": {
+"slow/way": {
 "speed": 0.75,
-"text": "swimming."
+"text": "way."
 },
-"spell/came": {
-"text": "Came. My friend came to the mall with me. came."
+"spell/brain": {
+"text": "Brain. Use your brain to solve the puzzle. brain."
 },
-"spell/came-2": {
-"text": "Came. The ice cream truck came at lunch time. came."
+"spell/brain-2": {
+"text": "Brain. The toy store sells a brain teaser game. brain."
 },
-"spell/came-3": {
-"text": "Came. We came home with lots of bags. came."
+"spell/brain-3": {
+"text": "Brain. My brain is full of good ideas! brain."
 },
-"spell/coming": {
-"text": "Coming. Grandma is coming shopping with us. coming."
+"spell/close": {
+"text": "Close. Please close the door. close."
 },
-"spell/coming-2": {
-"text": "Coming. Are you coming to the toy store? coming."
+"spell/close-2": {
+"text": "Close. The mall will close at nine tonight. close."
 },
-"spell/coming-3": {
-"text": "Coming. The bus is coming, so get your bags! coming."
+"spell/close-3": {
+"text": "Close. Close the lid on the cookie jar. close."
 },
-"spell/doing": {
-"text": "Doing. What are you doing after school? doing."
+"spell/cube": {
+"text": "Cube. I put an ice cube in my drink. cube."
 },
-"spell/doing-2": {
-"text": "Doing. I am doing my homework before we go shopping. doing."
+"spell/cube-2": {
+"text": "Cube. The game comes with a cube to roll. cube."
 },
-"spell/doing-3": {
-"text": "Doing. The clowns are doing tricks at the mall. doing."
+"spell/cube-3": {
+"text": "Cube. A cube has six square faces. cube."
 },
-"spell/ended": {
-"text": "Ended. The movie ended at three. ended."
+"spell/float": {
+"text": "Float. The balloons float up to the ceiling. float."
 },
-"spell/ended-2": {
-"text": "Ended. The big sale ended yesterday. ended."
+"spell/float-2": {
+"text": "Float. My new pool toy can float. float."
 },
-"spell/ended-3": {
-"text": "Ended. Our shopping trip ended with ice cream. ended."
+"spell/float-3": {
+"text": "Float. Watch the bubbles float in the air! float."
 },
-"spell/getting": {
-"text": "Getting. I am getting a new backpack for school. getting."
+"spell/mean": {
+"text": "Mean. What does this sign mean? mean."
 },
-"spell/getting-2": {
-"text": "Getting. It is getting late, so the mall will close soon. getting."
+"spell/mean-2": {
+"text": "Mean. It is not nice to be mean to others. mean."
 },
-"spell/getting-3": {
-"text": "Getting. Mom is getting a pretzel at the food court. getting."
+"spell/mean-3": {
+"text": "Mean. Do you mean the red one or the blue one? mean."
 },
-"spell/happened": {
-"text": "Happened. What happened to your balloon? happened."
+"spell/might": {
+"text": "Might. We might go to the movies after shopping. might."
 },
-"spell/happened-2": {
-"text": "Happened. Something funny happened at the toy store. happened."
+"spell/might-2": {
+"text": "Might. It might rain, so bring an umbrella. might."
 },
-"spell/happened-3": {
-"text": "Happened. Tell me what happened at school today. happened."
+"spell/might-3": {
+"text": "Might. I might buy the blue backpack. might."
 },
-"spell/happening": {
-"text": "Happening. Something exciting is happening at the mall today! happening."
+"spell/niece": {
+"text": "Niece. My aunt bought a teddy bear for her niece. niece."
 },
-"spell/happening-2": {
-"text": "Happening. What is happening at the big sale? happening."
+"spell/niece-2": {
+"text": "Niece. Grandma took her niece to the mall. niece."
 },
-"spell/happening-3": {
-"text": "Happening. A magic show is happening at noon. happening."
+"spell/niece-3": {
+"text": "Niece. His niece loves the pet store. niece."
 },
-"spell/having": {
-"text": "Having. We are having pizza at the food court. having."
+"spell/price": {
+"text": "Price. What is the price of this dress? price."
 },
-"spell/having-2": {
-"text": "Having. I am having so much fun shopping! having."
+"spell/price-2": {
+"text": "Price. The price tag says ten dollars. price."
 },
-"spell/having-3": {
-"text": "Having. She is having a birthday party at the bowling alley. having."
+"spell/price-3": {
+"text": "Price. That is a great price for a bike! price."
 },
-"spell/joked": {
-"text": "Joked. Dad joked that he would buy the whole store. joked."
+"spell/show": {
+"text": "Show. There is a magic show at the mall today. show."
 },
-"spell/joked-2": {
-"text": "Joked. The cashier joked with us and made us laugh. joked."
+"spell/show-2": {
+"text": "Show. Can you show me the shoe store? show."
 },
-"spell/joked-3": {
-"text": "Joked. My brother joked about my silly hat. joked."
+"spell/show-3": {
+"text": "Show. Show the cashier your gift card. show."
 },
-"spell/received": {
-"text": "Received. I received a gift card for my birthday. received."
+"spell/stayed": {
+"text": "Stayed. We stayed at the mall until it closed. stayed."
 },
-"spell/received-2": {
-"text": "Received. She received a thank-you letter in the mail. received."
+"spell/stayed-2": {
+"text": "Stayed. I stayed home because I was sick. stayed."
 },
-"spell/received-3": {
-"text": "Received. We received our package from the store. received."
+"spell/stayed-3": {
+"text": "Stayed. Grandma stayed for dinner. stayed."
 },
-"spell/smiled": {
-"text": "Smiled. The baby smiled at me in the store. smiled."
+"spell/these": {
+"text": "These. I want these shoes, please! these."
 },
-"spell/smiled-2": {
-"text": "Smiled. I smiled when I saw the puppy in the pet shop. smiled."
+"spell/these-2": {
+"text": "These. These cookies are fresh from the bakery. these."
 },
-"spell/smiled-3": {
-"text": "Smiled. The cashier smiled and said thank you. smiled."
+"spell/these-3": {
+"text": "These. Can I buy these stickers? these."
 },
-"spell/smiling": {
-"text": "Smiling. Everyone was smiling at the birthday party. smiling."
+"spell/tried": {
+"text": "Tried. I tried on three pairs of shoes. tried."
 },
-"spell/smiling-2": {
-"text": "Smiling. Why are you smiling so much? smiling."
+"spell/tried-2": {
+"text": "Tried. She tried the new ice cream flavour. tried."
 },
-"spell/smiling-3": {
-"text": "Smiling. The clown at the mall is always smiling. smiling."
+"spell/tried-3": {
+"text": "Tried. We tried to find the toy store. tried."
 },
-"spell/started": {
-"text": "Started. The sale started this morning. started."
+"spell/uniform": {
+"text": "Uniform. My soccer uniform is blue and white. uniform."
 },
-"spell/started-2": {
-"text": "Started. I started saving my coins for a new toy. started."
+"spell/uniform-2": {
+"text": "Uniform. The cashier wears a red uniform. uniform."
 },
-"spell/started-3": {
-"text": "Started. It started to rain when we left the mall. started."
+"spell/uniform-3": {
+"text": "Uniform. The sports store sells a new hockey uniform. uniform."
 },
-"spell/swam": {
-"text": "Swam. Yesterday I swam ten laps at the pool. swam."
+"spell/usually": {
+"text": "Usually. I usually get a pretzel at the mall. usually."
 },
-"spell/swam-2": {
-"text": "Swam. The goldfish swam around the tank at the pet store. swam."
+"spell/usually-2": {
+"text": "Usually. We usually shop on Saturdays. usually."
 },
-"spell/swam-3": {
-"text": "Swam. We swam before we went shopping. swam."
+"spell/usually-3": {
+"text": "Usually. The store is usually busy before the holidays. usually."
 },
-"spell/swimming": {
-"text": "Swimming. We went swimming at the hotel pool by the mall. swimming."
+"spell/way": {
+"text": "Way. Which way is the toy store? way."
 },
-"spell/swimming-2": {
-"text": "Swimming. I bought new goggles for swimming. swimming."
+"spell/way-2": {
+"text": "Way. This is the way to the food court. way."
 },
-"spell/swimming-3": {
-"text": "Swimming. My sister is swimming in the big pool. swimming."
+"spell/way-3": {
+"text": "Way. We walked all the way to the end of the mall. way."
 }
 }
