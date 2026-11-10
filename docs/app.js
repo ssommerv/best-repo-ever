@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '18 (Nov 6, 2026)';
+  const APP_VERSION = '19 (Nov 10, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -655,7 +655,7 @@
   GAMES.patterns = {
     name: 'Display Window', emoji: '🎀', color: 'purple',
     skill: 'Add & subtract patterns and code',
-    maxLevel: 3, chip: 'New: Subtraction patterns',
+    maxLevel: 3, chip: 'Chapter 3',
     levels: {
       1: { label: 'Learn: find the pattern step by step', short: 'Learn it' },
       2: { label: 'On your own: number patterns & stories', short: 'On your own' },
@@ -675,6 +675,17 @@
     },
     make: (level) => subtractQuestion(level),
   };
+  GAMES.compare = {
+    name: 'Bar Model Boutique', emoji: '📊', color: 'blue',
+    skill: 'Compare two sets with bar models',
+    maxLevel: 3, chip: 'New: Chapter 4',
+    levels: {
+      1: { label: 'Learn: bar models step by step', short: 'Learn it' },
+      2: { label: 'Choose + or −, match the bar model', short: 'On your own' },
+      3: { label: 'Like the test: solve and check', short: 'Test style' },
+    },
+    make: (level) => compareQuestion(level),
+  };
   GAMES.sell = {
     name: 'Open for Business', emoji: '🛎️', color: 'yellow', hidden: true,
     skill: 'Sell to customers and make change (subtraction)',
@@ -689,7 +700,7 @@
   // Stores she has finished with. Their code stays, so they can come back: remove the id here.
   for (const id of ['register', 'tagmaker']) GAMES[id].archived = true;
   // What she's learning now comes first in the mall.
-  const CURRENT = ['patterns', 'subtract', 'receipt'];
+  const CURRENT = ['compare', 'patterns', 'subtract', 'receipt'];
   const GAME_IDS = [...CURRENT, ...Object.keys(GAMES).filter((id) => !CURRENT.includes(id) && !GAMES[id].featured && !GAMES[id].hidden && !GAMES[id].archived)];
   const ALL_IDS = ['spelling', ...GAME_IDS, 'sell'];
   const maxLevel = (id) => GAMES[id].maxLevel || 3;
@@ -2305,6 +2316,213 @@
     };
   }
 
+  // ----- Bar Model Boutique: comparing two sets (Chapter 4 Lesson 3) -----
+  // One set is known; the other is "d more" or "d fewer". Read who has more, draw the two bars,
+  // then add (to find the longer bar) or subtract (to find the shorter bar), and Check! with the
+  // opposite operation. The tricky ones are reversed: "300 is 126 more than Store B" means subtract.
+  const CMP_KIDS = ['Mia', 'Ava', 'Leo', 'Sam', 'Zoe', 'Nia', 'Ethan', 'Lily', 'Maya', 'Kai', 'Ruby', 'Finn', 'Hannah', 'Malik'];
+  const capFirst = (t) => t[0].toUpperCase() + t.slice(1);
+  const CMP_CONTEXTS = [
+    () => {
+      const [K, U] = shuffle(CMP_KIDS).slice(0, 2), unit = pick(['stickers', 'game tokens', 'beads', 'trading cards', 'arcade tickets', 'hair clips']);
+      return {
+        K, U, who: `Who has more ${unit}?`, known: (a) => `${K} has ${a} ${unit}.`,
+        more: (d) => `${U} has ${d} more ${unit} than ${K}.`, fewer: (d) => `${U} has ${d} fewer ${unit} than ${K}.`,
+        moreRev: (d) => `${K} has ${d} more ${unit} than ${U}.`, fewerRev: (d) => `${K} has ${d} fewer ${unit} than ${U}.`,
+        q: `How many ${unit} does ${U} have?`, ans: (x) => `${U} has ${x} ${unit}.`,
+      };
+    },
+    () => {
+      const [k, u] = shuffle(['toy store', 'book store', 'shoe store', 'candy shop', 'pet store', 'sports store', 'gift shop', 'craft store']).slice(0, 2);
+      const unit = pick(['balloons', 'gift cards', 'water bottles', 'key chains', 'posters', 'tote bags']);
+      return {
+        K: capFirst(k), U: capFirst(u), who: `Which store sold more ${unit}?`, known: (a) => `The ${k} sold ${a} ${unit} today.`,
+        more: (d) => `The ${u} sold ${d} more ${unit} than the ${k}.`, fewer: (d) => `The ${u} sold ${d} fewer ${unit} than the ${k}.`,
+        moreRev: (d) => `This is ${d} more ${unit} than the ${u} sold.`, fewerRev: (d) => `This is ${d} fewer ${unit} than the ${u} sold.`,
+        q: `How many ${unit} did the ${u} sell?`, ans: (x) => `The ${u} sold ${x} ${unit}.`,
+      };
+    },
+    () => {
+      const [K, U] = pick([['Saturday', 'Sunday'], ['Friday', 'Saturday'], ['Monday', 'Tuesday'], ['Sunday', 'Monday']]);
+      return {
+        K, U, who: 'Which day had more shoppers?', known: (a) => `${a} shoppers visited the mall on ${K}.`,
+        more: (d) => `${d} more shoppers visited on ${U} than on ${K}.`, fewer: (d) => `${d} fewer shoppers visited on ${U} than on ${K}.`,
+        moreRev: (d) => `That is ${d} more shoppers than on ${U}.`, fewerRev: (d) => `That is ${d} fewer shoppers than on ${U}.`,
+        q: `How many shoppers visited the mall on ${U}?`, ans: (x) => `${x} shoppers visited the mall on ${U}.`,
+      };
+    },
+    () => {
+      const [K, U] = shuffle(CMP_KIDS).slice(0, 2);
+      return {
+        K, U, who: 'Who scored more points?', known: (a) => `${K} scores ${a} points at the arcade.`,
+        more: (d) => `${U} scores ${d} more points than ${K}.`, fewer: (d) => `${U} scores ${d} fewer points than ${K}.`,
+        moreRev: (d) => `${K} scores ${d} more points than ${U}.`, fewerRev: (d) => `${K} scores ${d} fewer points than ${U}.`,
+        q: `How many points does ${U} score?`, ans: (x) => `${U} scores ${x} points.`,
+      };
+    },
+    () => {
+      const [k, u] = shuffle(['chocolate', 'vanilla', 'strawberry', 'lemon']).slice(0, 2);
+      return {
+        K: capFirst(k), U: capFirst(u), who: 'Which kind of cupcake did the bakery make more of?', known: (a) => `The bakery made ${a} ${k} cupcakes.`,
+        more: (d) => `It made ${d} more ${u} cupcakes than ${k} cupcakes.`, fewer: (d) => `It made ${d} fewer ${u} cupcakes than ${k} cupcakes.`,
+        moreRev: (d) => `That is ${d} more than the number of ${u} cupcakes.`, fewerRev: (d) => `That is ${d} fewer than the number of ${u} cupcakes.`,
+        q: `How many ${u} cupcakes did the bakery make?`, ans: (x) => `The bakery made ${x} ${u} cupcakes.`,
+      };
+    },
+  ];
+
+  // type: more | fewer (the unknown is more/fewer) or moreRev | fewerRev (the known is more/fewer).
+  function cmpStory(level, type) {
+    const c = pick(CMP_CONTEXTS)();
+    const add = type === 'more' || type === 'fewerRev';
+    let a, d;
+    for (;;) {
+      a = level <= 1 ? pick([rand(30, 99), rand(100, 499), rand(100, 899)]) : pick([rand(40, 99), rand(100, 899), rand(100, 899)]);
+      d = pick([rand(9, 99), rand(9, 99), rand(100, 399)]);
+      if (add ? a + d <= 999 && d < a + 60 : d <= a - 10) break;
+    }
+    const x = add ? a + d : a - d;
+    const word = type.startsWith('more') ? 'more' : 'fewer';
+    return { ...c, a, d, x, type, add, word, rev: type.endsWith('Rev'), uBig: add,
+      text: `${c.known(a)} ${c[type](d)}`, qText: c.q };
+  }
+
+  const brace = (x1, x2, y, up) => {
+    const m = (x1 + x2) / 2, s = up ? -1 : 1, h = 7;
+    return `<path d="M${x1} ${y - s * h} Q${x1} ${y} ${x1 + h} ${y} H${m - h} Q${m} ${y} ${m} ${y + s * h} Q${m} ${y} ${m + h} ${y} H${x2 - h} Q${x2} ${y} ${x2} ${y - s * h}" fill="none" stroke="#3b1f4a" stroke-width="2"/>`;
+  };
+  // The book's bar model: the known set on top with its number above, the set to find below
+  // with "?" under it, and the difference marked where the bars are different lengths.
+  function barModel(st, opts = {}) {
+    const W = 600, x0 = 136, maxL = W - x0 - 18, topY = 62, botY = 118, h = 34;
+    let r = Math.min(st.a, st.x) / Math.max(st.a, st.x);
+    r = Math.min(0.85, Math.max(0.35, r));
+    const topBig = !st.uBig !== !!opts.swap;
+    const topLen = topBig ? maxL : maxL * r, botLen = topBig ? maxL * r : maxL;
+    const topLabel = opts.qOnKnown ? '?' : st.a, botLabel = opts.qOnKnown ? st.a : '?';
+    const dLabel = opts.hideDiff ? '?' : st.d;
+    const t = (x, y, s, cls = 'bm-num') => `<text x="${x}" y="${y}" text-anchor="middle" class="${cls}">${s}</text>`;
+    let diff;
+    if (topLen < botLen) {
+      diff = `${brace(x0 + topLen, x0 + botLen, 48, true)}${t((2 * x0 + topLen + botLen) / 2, 34, dLabel)}
+        <line x1="${x0 + botLen}" y1="48" x2="${x0 + botLen}" y2="${botY}" stroke="#3b1f4a" stroke-width="2" stroke-dasharray="5 4"/>`;
+    } else {
+      diff = `${brace(x0 + botLen, x0 + topLen, 166, false)}${t((2 * x0 + topLen + botLen) / 2, 192, dLabel)}
+        <line x1="${x0 + topLen}" y1="${topY + h}" x2="${x0 + topLen}" y2="166" stroke="#3b1f4a" stroke-width="2" stroke-dasharray="5 4"/>`;
+    }
+    return `<svg class="bar-model" viewBox="0 0 ${W} 200" role="img" aria-label="Bar model">
+      <text x="${x0 - 10}" y="${topY + 23}" text-anchor="end" class="bm-name">${st.K}</text>
+      <text x="${x0 - 10}" y="${botY + 23}" text-anchor="end" class="bm-name">${st.U}</text>
+      <rect x="${x0}" y="${topY}" width="${topLen}" height="${h}" rx="3" fill="#fdba74" stroke="#9a3412" stroke-width="2"/>
+      <rect x="${x0}" y="${botY}" width="${botLen}" height="${h}" rx="3" fill="#fb923c" stroke="#9a3412" stroke-width="2"/>
+      ${brace(x0, x0 + topLen, 48, true)}${t(x0 + topLen / 2, 34, topLabel)}
+      ${brace(x0, x0 + botLen, 166, false)}${t(x0 + botLen / 2, 192, botLabel)}
+      ${diff}</svg>`;
+  }
+
+  const cmpStoryHTML = (st) => `<div class="cmp-story"><p>${st.text}</p><p><b>${st.qText}</b></p></div>`;
+  function cmpWorked(st) {
+    const longer = st.uBig ? `the bar for ${st.U} is <b>longer</b>` : `the bar for ${st.U} is <b>shorter</b>`;
+    const read = st.rev
+      ? `${st.K} has ${st.d} ${st.word} than ${st.U}, so ${longer}.`
+      : `${st.U} has ${st.d} ${st.word} than ${st.K}, so ${longer}.`;
+    const how = st.add ? `To find the longer bar, <b>add</b> the extra part: ${st.a} + ${st.d} = <b>${st.x}</b>.`
+      : `To find the shorter bar, <b>subtract</b> the extra part: ${st.a} − ${st.d} = <b>${st.x}</b>.`;
+    const check = st.add ? `${st.x} − ${st.d} = ${st.a} and ${st.x} − ${st.a} = ${st.d}` : `${st.x} + ${st.d} = ${st.a}`;
+    return `${barModel(st)}<ol class="worked"><li>${read}</li><li>${how}</li><li>${st.ans(`<b>${st.x}</b>`)}</li><li><b>Check!</b> ${check}. The answer is correct.</li></ol>`;
+  }
+
+  // Level 1: the book's steps.
+  function cmpLesson(st) {
+    const steps = [], push = (s) => steps.push(s);
+    push({
+      text: `<b>Read carefully.</b> ${st.who}${choiceBtns([st.K, st.U])}`, blanks: [], choice: st.uBig ? 1 : 0,
+      voice: ['line/cmp-who'], speak: `${st.text} ${st.who}`,
+      hint: `Find the words “${st.word} than” and read that sentence again slowly. Who is it about, and is it more or fewer?`,
+      reveal: `${st.rev ? `${st.K} has ${st.d} ${st.word} than ${st.U}` : `${st.U} has ${st.d} ${st.word} than ${st.K}`}, so <b>${st.uBig ? st.U : st.K}</b> has more. Their bar is longer.`,
+    });
+    push({
+      text: `<b>Look at the bar model.</b> To find the ?, do you add or subtract?${choiceBtns(['+ Add', '− Subtract'])}`, blanks: [], choice: st.add ? 0 : 1,
+      voice: ['line/cmp-op'], speak: 'Look at the bar model. To find the question mark, do you add or subtract?',
+      hint: 'Is the ? on the longer bar or the shorter bar? To find a longer bar, add the extra part. To find a shorter bar, take the extra part away.',
+      reveal: st.add ? `The ? is the longer bar: ${st.a} and ${st.d} more. So <b>add</b>.` : `The ? is the shorter bar: ${st.a} take away ${st.d}. So <b>subtract</b>.`,
+    });
+    push({
+      text: `<b>Write the number sentence.</b><br>${bx('s1')} ${st.add ? '+' : '−'} ${bx('s2')} = ${bx('s3')}`,
+      blanks: [{ id: 's1', ans: st.a }, { id: 's2', ans: st.d }, { id: 's3', ans: st.x }], anyOrder: st.add ? ['s1', 's2'] : null,
+      voice: ['line/cmp-sentence'], speak: 'Write the number sentence.',
+      hint: st.add ? `Use the two numbers on the bar model, then add. Start with the ones, and regroup if you need to.`
+        : 'Start with the number on the longer bar, then take away the extra part. Regroup if you need to!',
+      reveal: `${st.a} ${st.add ? '+' : '−'} ${st.d} = ${st.x}.`,
+    });
+    push({
+      text: `<b>Write the answer.</b><br>${st.ans(bx('an'))}`, blanks: [{ id: 'an', ans: st.x }],
+      voice: ['line/cmp-answer'], speak: 'Now finish the answer sentence.',
+      hint: 'Use the answer from your number sentence.', reveal: st.ans(st.x),
+    });
+    push(st.add ? {
+      text: `<b>Check!</b> Subtract to check.<br>${st.x} − ${st.d} = ${bx('c1')}<br>${st.x} − ${st.a} = ${bx('c2')}`,
+      blanks: [{ id: 'c1', ans: st.a }, { id: 'c2', ans: st.d }], voice: ['line/cmp-check'], speak: 'Check! Use subtraction to check your answer.',
+      hint: 'If your answer is right, taking away one part leaves the other part.', reveal: `${st.x} − ${st.d} = ${st.a} and ${st.x} − ${st.a} = ${st.d}. The answer is correct!`,
+    } : {
+      text: `<b>Check!</b> Add to check.<br>${st.x} + ${st.d} = ${bx('c1')}`,
+      blanks: [{ id: 'c1', ans: st.a }], voice: ['line/cmp-check'], speak: 'Check! Use addition to check your answer.',
+      hint: `If your answer is right, adding the ${st.d} back gives the longer bar.`, reveal: `${st.x} + ${st.d} = ${st.a}. The answer is correct!`,
+    });
+    return {
+      kind: 'steps', guided: true, steps, cmp: st, prompt: 'Solve. Use the bar model to help you.',
+      board: (i) => `${cmpStoryHTML(st)}${i >= 1 ? barModel(st) : '<div class="bm-wait">📊 The bar model appears when you know who has more.</div>'}`,
+      explain: cmpWorked(st),
+    };
+  }
+
+  function compareQuestion(level) {
+    const types = ['more', 'fewer', 'moreRev', 'fewerRev'];
+    const type = level >= 3 ? pick(['more', 'fewer', 'moreRev', 'moreRev', 'fewerRev', 'fewerRev']) : pick(types);
+    const st = cmpStory(level, type);
+    if (level <= 1) return cmpLesson(st);
+
+    if (level === 2 && Math.random() < 0.4) {
+      // Which bar model matches the story?
+      const opts = shuffle([['ok', {}], ['swap', { swap: true }], ['q', { qOnKnown: true }]]);
+      return {
+        kind: 'mc', layout: 'models', cmp: st, visual: cmpStoryHTML(st), prompt: 'Which bar model matches the story?',
+        speak: `${st.text} ${st.qText} Which bar model matches the story?`,
+        choices: opts.map(([v, o]) => ({ value: v, label: barModel(st, o) })), answer: 'ok',
+        hint: `Who has more? Their bar should be longer. The ? goes on the bar you need to find: ${st.U}.`,
+        explain: cmpWorked(st),
+      };
+    }
+    if (level === 2) {
+      // Choose + or −, then solve.
+      return {
+        kind: 'steps', guided: false, cmp: st, prompt: 'Solve. Choose + or − to solve the problem.',
+        steps: [
+          { text: `Do you add or subtract to find the answer?${choiceBtns(['+ Add', '− Subtract'])}`, blanks: [], choice: st.add ? 0 : 1, speak: `${st.text} ${st.qText} Do you add or subtract?` },
+          { text: `${st.ans(bx('ans'))}`, blanks: [{ id: 'ans', ans: st.x }], voice: ['line/cmp-answer'], speak: 'Now finish the answer sentence.' },
+        ],
+        board: () => cmpStoryHTML(st), explain: cmpWorked(st),
+      };
+    }
+    if (Math.random() < 0.25) {
+      // Is the answer correct? (the usual mistake: the wrong operation)
+      const wrongX = st.add ? st.a - st.d : st.a + st.d;
+      const shown = Math.random() < 0.5 || wrongX <= 0 || wrongX > 999 ? st.x : wrongX;
+      const kid = pick(CMP_KIDS.filter((n) => n !== st.K && n !== st.U));
+      return {
+        kind: 'steps', guided: false, cmp: { ...st, shown }, prompt: 'Is the answer correct? Use a bar model to check.',
+        steps: [{ text: `${kid} says the answer is <b>${shown}</b>. Is that correct?${choiceBtns(['✔ Yes, correct', '✖ No, not correct'])}`, blanks: [], choice: shown === st.x ? 0 : 1, speak: `${st.text} ${st.qText} ${kid} says the answer is ${shown}. Is that correct?` }],
+        board: () => cmpStoryHTML(st),
+        explain: `${shown === st.x ? `Yes! ${shown} is correct.` : `No. ${kid} ${st.add ? 'subtracted' : 'added'}, but this one needs you to ${st.add ? 'add' : 'subtract'}.`}${cmpWorked(st)}`,
+      };
+    }
+    return {
+      kind: 'steps', guided: false, cmp: st, prompt: 'Solve. Use a bar model to help you.',
+      steps: [{ text: `${st.ans(bx('ans'))}`, blanks: [{ id: 'ans', ans: st.x }], speak: `${st.text} ${st.qText}` }],
+      board: () => cmpStoryHTML(st), explain: cmpWorked(st),
+    };
+  }
+
   // ----- Shared "steps" player -----
   function stepsBody(q) {
     const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '⌫', '0'].map((k) =>
@@ -2404,7 +2622,10 @@
       if (step().choice != null) return toast('Tap an answer first!');
       const graded = step().blanks.filter((b) => b.ans != null);
       if (graded.some((b) => !R.vals[b.id] && !b.zeroOk)) return toast('Fill in every box first!');
-      const wrong = graded.filter((b) => +(R.vals[b.id] || 0) !== b.ans);
+      // In an addition sentence the two parts can go in either order (213 + 78 or 78 + 213).
+      const pair = step().anyOrder && step().anyOrder.map((id) => graded.find((b) => b.id === id));
+      const swapped = pair && +R.vals[pair[0].id] === pair[1].ans && +R.vals[pair[1].id] === pair[0].ans;
+      const wrong = graded.filter((b) => !(swapped && step().anyOrder.includes(b.id)) && +(R.vals[b.id] || 0) !== b.ans);
       screen.querySelectorAll('.bx.bad').forEach((el) => el.classList.remove('bad'));
       if (!wrong.length) {
         sfx.coin();

@@ -124,6 +124,12 @@
     'line/sub-missing': { text: 'Thinking cap time! What are the missing digits?' },
     'line/sub-missing-2': { text: 'Thinking cap time! Some digits rubbed off the gift card. Which digits are missing?' },
     'line/sub-missing-3': { text: 'Thinking cap time! Find the hidden digits that make the subtraction true.' },
+    // Bar Model Boutique (comparing two sets).
+    'line/cmp-who': { text: 'Read carefully. Which one has more?' },
+    'line/cmp-op': { text: 'Look at the bar model. To find the question mark, do you add or subtract?' },
+    'line/cmp-sentence': { text: 'Write the number sentence.' },
+    'line/cmp-answer': { text: 'Now finish the answer sentence.' },
+    'line/cmp-check': { text: 'Check! Use the opposite operation to check your answer.' },
     // Display Window (addition patterns and code).
     'line/pat-updown': { text: 'Look at the numbers. Is this pattern increasing or decreasing?' },
     'line/pat-more': { text: 'Find the jump. Each number is how much more than the number before it?' },

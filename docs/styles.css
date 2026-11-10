@@ -796,3 +796,19 @@ mark { background: #ffd1e8; color: var(--pink-deep); border-radius: 6px; padding
 .pat-line .pl-num { font: 900 23px var(--font); fill: var(--ink); }
 .pat-line .pl-q { font: 900 25px var(--font); fill: #ec4899; }
 .pat-line .pl-jump { font: 900 20px var(--font); fill: #be185d; }
+
+/* Bar Model Boutique (comparing two sets) */
+.cmp-story { background: #fffef8; border: 2px dashed #e5d9b6; border-radius: 14px; padding: 10px 16px; font-size: 20px; line-height: 1.45; text-align: left; width: 100%; max-width: 600px; }
+.cmp-story p { margin: 4px 0; }
+.bar-model { width: 100%; max-width: 600px; height: auto; background: #fff; border-radius: 14px; }
+.bar-model .bm-name { font: 800 19px var(--font); fill: var(--ink); }
+.bar-model .bm-num { font: 900 25px var(--font); fill: var(--ink); }
+.bm-wait { width: 100%; max-width: 600px; padding: 28px 12px; color: var(--ink-soft); font-weight: 700; text-align: center; border: 2px dashed #ddd0ff; border-radius: 14px; }
+.choices.models { grid-template-columns: 1fr; }
+.choices.models .choice { min-height: 0; padding: 6px 12px; background: #fff; }
+.choices.models .bar-model { max-width: 520px; }
+@media (max-width: 600px) {
+  .bar-model .bm-name { font-size: 21px; }
+  .bar-model .bm-num { font-size: 28px; }
+  .cmp-story { font-size: 18px; }
+}
