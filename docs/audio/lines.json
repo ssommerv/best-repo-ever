@@ -59,6 +59,21 @@
 "line/add-total": {
 "text": "Now write the total."
 },
+"line/cmp-answer": {
+"text": "Now finish the answer sentence."
+},
+"line/cmp-check": {
+"text": "Check! Use the opposite operation to check your answer."
+},
+"line/cmp-op": {
+"text": "Look at the bar model. To find the question mark, do you add or subtract?"
+},
+"line/cmp-sentence": {
+"text": "Write the number sentence."
+},
+"line/cmp-who": {
+"text": "Read carefully. Which one has more?"
+},
 "line/code-add": {
 "text": "What number is added each time?"
 },
