@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const APP_VERSION = '19 (Nov 10, 2026)';
+  const APP_VERSION = '20 (Nov 19, 2026)';
 
   // ---------- Helpers ----------
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -1250,36 +1250,36 @@
   // Each word has three sentences (each recorded), so she doesn't memorize them.
   // An optional 4th item is how to say the word on its own (“live” as in “I live here”, not “live music”).
   const SPELL_DEFAULT = [
-    ['w[ay]', ['Which way is the toy store?', 'This is the way to the food court.', 'We walked all the way to the end of the mall.'],
-      'At the end of a word, the long <b>a</b> sound is often spelled <b>a-y</b>: w-a-y.'],
-    ['th[e]s[e]', ['I want these shoes, please!', 'These cookies are fresh from the bakery.', 'Can I buy these stickers?'],
-      'The silent <b>e</b> at the end makes the first <b>e</b> say its name: t-h-e-s-e.'],
-    ['n[ie]ce', ['My aunt bought a teddy bear for her niece.', 'Grandma took her niece to the mall.', 'His niece loves the pet store.'],
-      'The long <b>e</b> sound is spelled <b>i-e</b>. Remember: i before e! n-i-e-c-e.'],
-    ['m[igh]t', ['We might go to the movies after shopping.', 'It might rain, so bring an umbrella.', 'I might buy the blue backpack.'],
-      '<b>i-g-h</b> says a long <b>i</b>, and the g and h are quiet: m-i-g-h-t.'],
-    ['sh[ow]', ['There is a magic show at the mall today.', 'Can you show me the shoe store?', 'Show the cashier your gift card.'],
-      '<b>o-w</b> at the end can say a long <b>o</b>, like in snow and grow: s-h-o-w.'],
-    ['fl[oa]t', ['The balloons float up to the ceiling.', 'My new pool toy can float.', 'Watch the bubbles float in the air!'],
-      '<b>o-a</b> together says a long <b>o</b>, like in boat and coat: f-l-o-a-t.'],
-    ['br[ai]n', ['Use your brain to solve the puzzle.', 'The toy store sells a brain teaser game.', 'My brain is full of good ideas!'],
-      '<b>a-i</b> together says a long <b>a</b>, like in rain and paint: b-r-a-i-n.'],
-    ['m[ea]n', ['What does this sign mean?', 'It is not nice to be mean to others.', 'Do you mean the red one or the blue one?'],
-      '<b>e-a</b> together says a long <b>e</b>, like in eat and seat: m-e-a-n.'],
-    ['cl[o]s[e]', ['Please close the door.', 'The mall will close at nine tonight.', 'Close the lid on the cookie jar.'],
-      'The silent <b>e</b> makes the <b>o</b> say its name: c-l-o-s-e.'],
-    ['tr[ie]d', ['I tried on three pairs of shoes.', 'She tried the new ice cream flavour.', 'We tried to find the toy store.'],
-      '<b>try</b> + ed: change the <b>y</b> to <b>i</b>, then add ed: t-r-i-e-d.'],
-    ['c[u]b[e]', ['I put an ice cube in my drink.', 'The game comes with a cube to roll.', 'A cube has six square faces.'],
-      'The silent <b>e</b> makes the <b>u</b> say its name: c-u-b-e.'],
-    ['[u]n[i]form', ['My soccer uniform is blue and white.', 'The cashier wears a red uniform.', 'The sports store sells a new hockey uniform.'],
-      'It starts with a <b>u</b> that says its name. “Uni” means one: u-n-i-f-o-r-m.'],
-    ['st[ay]ed', ['We stayed at the mall until it closed.', 'I stayed home because I was sick.', 'Grandma stayed for dinner.'],
-      '<b>stay</b> + ed. Keep the <b>y</b> and just add ed: s-t-a-y-e-d.'],
-    ['pr[i]c[e]', ['What is the price of this dress?', 'The price tag says ten dollars.', 'That is a great price for a bike!'],
-      'The silent <b>e</b> makes the <b>i</b> say its name, and the <b>c</b> says “s”: p-r-i-c-e.'],
-    ['usu[all]y', ['I usually get a pretzel at the mall.', 'We usually shop on Saturdays.', 'The store is usually busy before the holidays.'],
-      'Tricky word! Say it in chunks: u-su-al-ly. It has two <b>l</b>’s: u-s-u-a-l-l-y.'],
+    ['in[to]', ['We walked into the toy store.', 'Put the new shoes into the bag.', 'The puppy ran into the pet shop.'],
+      '<b>Compound word!</b> Two small words make one big word: <b>in</b> + <b>to</b> = into.'],
+    ['to[day]', ['The big sale is today!', 'Today we are going to the mall.', 'What should we buy today?'],
+      '<b>Compound word!</b> Two small words make one big word: <b>to</b> + <b>day</b> = today.'],
+    ['with[out]', ['Do not leave without your shopping bag.', 'I went to the mall without my coat.', 'Ice cream without sprinkles is still yummy.'],
+      '<b>Compound word!</b> Two small words make one big word: <b>with</b> + <b>out</b> = without.'],
+    ['some[thing]', ['I want to buy something special for Mom.', 'Something smells good at the bakery!', 'Is there something you need at the store?'],
+      '<b>Compound word!</b> Two small words make one big word: <b>some</b> + <b>thing</b> = something.'],
+    ['be[come]', ['When I grow up, I want to become a store owner.', 'The empty shop will become a bakery.', 'The puddle will become ice tonight.'],
+      '<b>Compound word!</b> Two small words make one big word: <b>be</b> + <b>come</b> = become.'],
+    ['up[on]', ['Once upon a time, there was a magic mall.', 'The cat jumped upon the counter.', 'The star sits upon the top of the tree.'],
+      '<b>Compound word!</b> Two small words make one big word: <b>up</b> + <b>on</b> = upon.'],
+    ['my[self]', ['I bought myself a new book.', 'I can carry this bag by myself.', 'I made myself a snack at the food court.'],
+      '<b>Compound word!</b> Two small words make one big word: <b>my</b> + <b>self</b> = myself.'],
+    ['every[body]', ['Everybody loves the ice cream shop.', 'Everybody got a balloon at the party.', 'Is everybody ready to go shopping?'],
+      '<b>Compound word!</b> <b>every</b> + <b>body</b> = everybody. Don’t forget the <b>r</b> in every: e-v-e-r-y-b-o-d-y.'],
+    ['every[one]', ['Everyone in line got a free sticker.', 'Everyone clapped at the magic show.', 'Say hello to everyone at the store.'],
+      '<b>Compound word!</b> Two small words make one big word: <b>every</b> + <b>one</b> = everyone.'],
+    ['may[be]', ['Maybe we can get pizza after shopping.', 'Maybe the toy store has a sale today.', 'I might buy the red one, or maybe the blue one.'],
+      '<b>Compound word!</b> Two small words make one big word: <b>may</b> + <b>be</b> = maybe.'],
+    ['out[side]', ['It is snowing outside the mall.', 'Dad is waiting outside the store.', 'Let us eat our lunch outside.'],
+      '<b>Compound word!</b> Two small words make one big word: <b>out</b> + <b>side</b> = outside.'],
+    ['basket[ball]', ['The sports store sells a new basketball.', 'I play basketball after school.', 'My brother wants new basketball shoes.'],
+      '<b>Compound word!</b> <b>basket</b> + <b>ball</b> = basketball. It is one word, with no space and no capital letter.'],
+    ['home[work]', ['I finish my homework before we go shopping.', 'I bought a new pencil for my homework.', 'Is your homework done yet?'],
+      '<b>Compound word!</b> Two small words make one big word: <b>home</b> + <b>work</b> = homework.'],
+    ['skate[board]', ['I want a pink skateboard for my birthday.', 'The skateboard has bright, shiny wheels.', 'He rode his skateboard to the park.'],
+      '<b>Compound word!</b> Two small words make one big word: <b>skate</b> + <b>board</b> = skateboard.'],
+    ['earth[qu]ake', ['An earthquake makes the ground shake.', 'We found a book about an earthquake at the bookstore.', 'The tall building is built strong for an earthquake.'],
+      '<b>Compound word!</b> <b>earth</b> + <b>quake</b> = earthquake. Quake starts with <b>q-u</b>, like queen.'],
   ];
   const plainWord = (marked) => marked.replace(/[[\]]/g, '');
   const SPELL_INFO = Object.fromEntries(SPELL_DEFAULT.map(([m, ss, tip, sayAs]) => [plainWord(m).toLowerCase(), { marked: m, sentences: ss, tip, sayAs }]));

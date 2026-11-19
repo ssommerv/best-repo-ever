@@ -4498,199 +4498,199 @@
 "prev": "It costs exactly",
 "text": "nine hundred ninety-nine dollars."
 },
-"slow/brain": {
+"slow/basketball": {
 "speed": 0.75,
-"text": "brain."
+"text": "basketball."
 },
-"slow/close": {
+"slow/become": {
 "speed": 0.75,
-"text": "close."
+"text": "become."
 },
-"slow/cube": {
+"slow/earthquake": {
 "speed": 0.75,
-"text": "cube."
+"text": "earthquake."
 },
-"slow/float": {
+"slow/everybody": {
 "speed": 0.75,
-"text": "float."
+"text": "everybody."
 },
-"slow/mean": {
+"slow/everyone": {
 "speed": 0.75,
-"text": "mean."
+"text": "everyone."
 },
-"slow/might": {
+"slow/homework": {
 "speed": 0.75,
-"text": "might."
+"text": "homework."
 },
-"slow/niece": {
+"slow/into": {
 "speed": 0.75,
-"text": "niece."
+"text": "into."
 },
-"slow/price": {
+"slow/maybe": {
 "speed": 0.75,
-"text": "price."
+"text": "maybe."
 },
-"slow/show": {
+"slow/myself": {
 "speed": 0.75,
-"text": "show."
+"text": "myself."
 },
-"slow/stayed": {
+"slow/outside": {
 "speed": 0.75,
-"text": "stayed."
+"text": "outside."
 },
-"slow/these": {
+"slow/skateboard": {
 "speed": 0.75,
-"text": "these."
+"text": "skateboard."
 },
-"slow/tried": {
+"slow/something": {
 "speed": 0.75,
-"text": "tried."
+"text": "something."
 },
-"slow/uniform": {
+"slow/today": {
 "speed": 0.75,
-"text": "uniform."
+"text": "today."
 },
-"slow/usually": {
+"slow/upon": {
 "speed": 0.75,
-"text": "usually."
+"text": "upon."
 },
-"slow/way": {
+"slow/without": {
 "speed": 0.75,
-"text": "way."
+"text": "without."
 },
-"spell/brain": {
-"text": "Brain. Use your brain to solve the puzzle. brain."
+"spell/basketball": {
+"text": "Basketball. The sports store sells a new basketball. basketball."
 },
-"spell/brain-2": {
-"text": "Brain. The toy store sells a brain teaser game. brain."
+"spell/basketball-2": {
+"text": "Basketball. I play basketball after school. basketball."
 },
-"spell/brain-3": {
-"text": "Brain. My brain is full of good ideas! brain."
+"spell/basketball-3": {
+"text": "Basketball. My brother wants new basketball shoes. basketball."
 },
-"spell/close": {
-"text": "Close. Please close the door. close."
+"spell/become": {
+"text": "Become. When I grow up, I want to become a store owner. become."
 },
-"spell/close-2": {
-"text": "Close. The mall will close at nine tonight. close."
+"spell/become-2": {
+"text": "Become. The empty shop will become a bakery. become."
 },
-"spell/close-3": {
-"text": "Close. Close the lid on the cookie jar. close."
+"spell/become-3": {
+"text": "Become. The puddle will become ice tonight. become."
 },
-"spell/cube": {
-"text": "Cube. I put an ice cube in my drink. cube."
+"spell/earthquake": {
+"text": "Earthquake. An earthquake makes the ground shake. earthquake."
 },
-"spell/cube-2": {
-"text": "Cube. The game comes with a cube to roll. cube."
+"spell/earthquake-2": {
+"text": "Earthquake. We found a book about an earthquake at the bookstore. earthquake."
 },
-"spell/cube-3": {
-"text": "Cube. A cube has six square faces. cube."
+"spell/earthquake-3": {
+"text": "Earthquake. The tall building is built strong for an earthquake. earthquake."
 },
-"spell/float": {
-"text": "Float. The balloons float up to the ceiling. float."
+"spell/everybody": {
+"text": "Everybody. Everybody loves the ice cream shop. everybody."
 },
-"spell/float-2": {
-"text": "Float. My new pool toy can float. float."
+"spell/everybody-2": {
+"text": "Everybody. Everybody got a balloon at the party. everybody."
 },
-"spell/float-3": {
-"text": "Float. Watch the bubbles float in the air! float."
+"spell/everybody-3": {
+"text": "Everybody. Is everybody ready to go shopping? everybody."
 },
-"spell/mean": {
-"text": "Mean. What does this sign mean? mean."
+"spell/everyone": {
+"text": "Everyone. Everyone in line got a free sticker. everyone."
 },
-"spell/mean-2": {
-"text": "Mean. It is not nice to be mean to others. mean."
+"spell/everyone-2": {
+"text": "Everyone. Everyone clapped at the magic show. everyone."
 },
-"spell/mean-3": {
-"text": "Mean. Do you mean the red one or the blue one? mean."
+"spell/everyone-3": {
+"text": "Everyone. Say hello to everyone at the store. everyone."
 },
-"spell/might": {
-"text": "Might. We might go to the movies after shopping. might."
+"spell/homework": {
+"text": "Homework. I finish my homework before we go shopping. homework."
 },
-"spell/might-2": {
-"text": "Might. It might rain, so bring an umbrella. might."
+"spell/homework-2": {
+"text": "Homework. I bought a new pencil for my homework. homework."
 },
-"spell/might-3": {
-"text": "Might. I might buy the blue backpack. might."
+"spell/homework-3": {
+"text": "Homework. Is your homework done yet? homework."
 },
-"spell/niece": {
-"text": "Niece. My aunt bought a teddy bear for her niece. niece."
+"spell/into": {
+"text": "Into. We walked into the toy store. into."
 },
-"spell/niece-2": {
-"text": "Niece. Grandma took her niece to the mall. niece."
+"spell/into-2": {
+"text": "Into. Put the new shoes into the bag. into."
 },
-"spell/niece-3": {
-"text": "Niece. His niece loves the pet store. niece."
+"spell/into-3": {
+"text": "Into. The puppy ran into the pet shop. into."
 },
-"spell/price": {
-"text": "Price. What is the price of this dress? price."
+"spell/maybe": {
+"text": "Maybe. Maybe we can get pizza after shopping. maybe."
 },
-"spell/price-2": {
-"text": "Price. The price tag says ten dollars. price."
+"spell/maybe-2": {
+"text": "Maybe. Maybe the toy store has a sale today. maybe."
 },
-"spell/price-3": {
-"text": "Price. That is a great price for a bike! price."
+"spell/maybe-3": {
+"text": "Maybe. I might buy the red one, or maybe the blue one. maybe."
 },
-"spell/show": {
-"text": "Show. There is a magic show at the mall today. show."
+"spell/myself": {
+"text": "Myself. I bought myself a new book. myself."
 },
-"spell/show-2": {
-"text": "Show. Can you show me the shoe store? show."
+"spell/myself-2": {
+"text": "Myself. I can carry this bag by myself. myself."
 },
-"spell/show-3": {
-"text": "Show. Show the cashier your gift card. show."
+"spell/myself-3": {
+"text": "Myself. I made myself a snack at the food court. myself."
 },
-"spell/stayed": {
-"text": "Stayed. We stayed at the mall until it closed. stayed."
+"spell/outside": {
+"text": "Outside. It is snowing outside the mall. outside."
 },
-"spell/stayed-2": {
-"text": "Stayed. I stayed home because I was sick. stayed."
+"spell/outside-2": {
+"text": "Outside. Dad is waiting outside the store. outside."
 },
-"spell/stayed-3": {
-"text": "Stayed. Grandma stayed for dinner. stayed."
+"spell/outside-3": {
+"text": "Outside. Let us eat our lunch outside. outside."
 },
-"spell/these": {
-"text": "These. I want these shoes, please! these."
+"spell/skateboard": {
+"text": "Skateboard. I want a pink skateboard for my birthday. skateboard."
 },
-"spell/these-2": {
-"text": "These. These cookies are fresh from the bakery. these."
+"spell/skateboard-2": {
+"text": "Skateboard. The skateboard has bright, shiny wheels. skateboard."
 },
-"spell/these-3": {
-"text": "These. Can I buy these stickers? these."
+"spell/skateboard-3": {
+"text": "Skateboard. He rode his skateboard to the park. skateboard."
 },
-"spell/tried": {
-"text": "Tried. I tried on three pairs of shoes. tried."
+"spell/something": {
+"text": "Something. I want to buy something special for Mom. something."
 },
-"spell/tried-2": {
-"text": "Tried. She tried the new ice cream flavour. tried."
+"spell/something-2": {
+"text": "Something. Something smells good at the bakery! something."
 },
-"spell/tried-3": {
-"text": "Tried. We tried to find the toy store. tried."
+"spell/something-3": {
+"text": "Something. Is there something you need at the store? something."
 },
-"spell/uniform": {
-"text": "Uniform. My soccer uniform is blue and white. uniform."
+"spell/today": {
+"text": "Today. The big sale is today! today."
 },
-"spell/uniform-2": {
-"text": "Uniform. The cashier wears a red uniform. uniform."
+"spell/today-2": {
+"text": "Today. Today we are going to the mall. today."
 },
-"spell/uniform-3": {
-"text": "Uniform. The sports store sells a new hockey uniform. uniform."
+"spell/today-3": {
+"text": "Today. What should we buy today? today."
 },
-"spell/usually": {
-"text": "Usually. I usually get a pretzel at the mall. usually."
+"spell/upon": {
+"text": "Upon. Once upon a time, there was a magic mall. upon."
 },
-"spell/usually-2": {
-"text": "Usually. We usually shop on Saturdays. usually."
+"spell/upon-2": {
+"text": "Upon. The cat jumped upon the counter. upon."
 },
-"spell/usually-3": {
-"text": "Usually. The store is usually busy before the holidays. usually."
+"spell/upon-3": {
+"text": "Upon. The star sits upon the top of the tree. upon."
 },
-"spell/way": {
-"text": "Way. Which way is the toy store? way."
+"spell/without": {
+"text": "Without. Do not leave without your shopping bag. without."
 },
-"spell/way-2": {
-"text": "Way. This is the way to the food court. way."
+"spell/without-2": {
+"text": "Without. I went to the mall without my coat. without."
 },
-"spell/way-3": {
-"text": "Way. We walked all the way to the end of the mall. way."
+"spell/without-3": {
+"text": "Without. Ice cream without sprinkles is still yummy. without."
 }
 }
